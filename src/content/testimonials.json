@@ -1,0 +1,92 @@
+{
+  "testimonials": [
+    {
+      "id": "testimonial-1",
+      "name": "Sarah Johnson",
+      "position": "CEO",
+      "company": "TechMart Solutions",
+      "image": "/testimonials/sarah-johnson.jpg",
+      "rating": 5,
+      "text": "QuadraCore transformed our e-commerce platform completely. The team's expertise in React and Laravel development exceeded our expectations. The results speak for themselves - 300% increase in conversion rate and 150% improvement in user engagement. Their attention to detail and commitment to delivering quality is unmatched.",
+      "service": "Web Development",
+      "project": "E-commerce Platform Redesign"
+    },
+    {
+      "id": "testimonial-2",
+      "name": "Michael Chen",
+      "position": "Product Manager",
+      "company": "DataFlow Analytics",
+      "image": "/testimonials/michael-chen.jpg",
+      "rating": 5,
+      "text": "Working with QuadraCore on our SaaS dashboard redesign was a game-changer. Their user research approach and intuitive design solutions have revolutionized how our users interact with data. The 80% faster onboarding and 120% increase in feature adoption exceeded our wildest expectations.",
+      "service": "UI/UX Design",
+      "project": "SaaS Analytics Dashboard"
+    },
+    {
+      "id": "testimonial-3",
+      "name": "Chef Maria Rodriguez",
+      "position": "Owner",
+      "company": "Fusion Bistro",
+      "image": "/testimonials/maria-rodriguez.jpg",
+      "rating": 5,
+      "text": "Our online presence has completely transformed our business. The website is beautiful and the online ordering system has opened up a whole new revenue stream. QuadraCore understood our needs perfectly and delivered a solution that exceeded our expectations. Highly recommended!",
+      "service": "Web Development",
+      "project": "Restaurant Website & Online Ordering"
+    },
+    {
+      "id": "testimonial-4",
+      "name": "Tom Wilson",
+      "position": "Owner",
+      "company": "Green Thumb Landscaping",
+      "image": "/testimonials/tom-wilson.jpg",
+      "rating": 5,
+      "text": "Our phone has been ringing off the hook since QuadraCore started our SEO campaign. We're now the top result for landscaping services in our area. The team's expertise in local SEO and their strategic approach has made all the difference. Phenomenal results!",
+      "service": "SEO Optimization",
+      "project": "Local SEO Campaign"
+    },
+    {
+      "id": "testimonial-5",
+      "name": "Lisa Thompson",
+      "position": "Marketing Director",
+      "company": "FitLife Gym",
+      "image": "/testimonials/lisa-thompson.jpg",
+      "rating": 5,
+      "text": "Our social media presence has exploded since working with QuadraCore. We're connecting with our community in ways we never thought possible. The strategic approach and engaging content have resulted in incredible growth in brand awareness and member acquisition.",
+      "service": "Social Media Marketing",
+      "project": "Social Media Marketing Campaign"
+    },
+    {
+      "id": "testimonial-6",
+      "name": "David Park",
+      "position": "Founder",
+      "company": "InnovateTech",
+      "image": "/testimonials/david-park.jpg",
+      "rating": 5,
+      "text": "QuadraCore's branding expertise helped us establish a strong market presence. Their strategic approach to brand positioning and visual identity design has given us a competitive edge. The brand guidelines and implementation support have been invaluable.",
+      "service": "Branding & Identity",
+      "project": "Complete Brand Overhaul"
+    },
+    {
+      "id": "testimonial-7",
+      "name": "Amanda Foster",
+      "position": "Marketing Manager",
+      "company": "EcoSolutions",
+      "image": "/testimonials/amanda-foster.jpg",
+      "rating": 5,
+      "text": "The team at QuadraCore delivered exceptional results for our digital marketing campaign. Their data-driven approach and creative solutions resulted in significant improvements across all our KPIs. They truly understand how to drive results.",
+      "service": "Digital Marketing",
+      "project": "Multi-Channel Marketing Campaign"
+    },
+    {
+      "id": "testimonial-8",
+      "name": "Robert Kim",
+      "position": "CTO",
+      "company": "CloudScale",
+      "image": "/testimonials/robert-kim.jpg",
+      "rating": 5,
+      "text": "QuadraCore's technical expertise and attention to detail are outstanding. They built us a scalable cloud infrastructure that has grown with our business. The performance optimizations and security measures they implemented are top-notch.",
+      "service": "Web Development",
+      "project": "Cloud Infrastructure & Web Platform"
+    }
+  ]
+}

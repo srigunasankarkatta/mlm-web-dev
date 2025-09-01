@@ -1,0 +1,508 @@
+@use "./color-palette" as *;
+
+// Ensure proper height for admin layout
+:global(html),
+:global(body) {
+  height: 100%;
+  overflow: hidden;
+}
+
+:global(body) {
+  margin: 0;
+  padding: 0;
+}
+
+// Admin Dashboard Content Styling
+:global(.admin-dashboard-content) {
+  padding: 1.5rem;
+  background: transparent;
+  min-height: auto;
+  height: auto;
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin-bottom: 1rem;
+  }
+
+  > div {
+    margin-bottom: 1.5rem;
+  }
+
+  // Ensure content can expand naturally
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Admin Dashboard Layout Container
+.admin-layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  height: 100vh;
+  background: $bg-primary; // Light teal background for entire page
+  position: relative;
+  padding: 1rem; // Add space outside page content
+  overflow: hidden;
+}
+
+// Main Content Area
+.admin-main-content {
+  display: flex;
+  flex: 1;
+  min-height: 100vh; // Full viewport height
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+// Sidebar Container - Fixed width and position, full viewport height
+.admin-sidebar-container {
+  width: 280px;
+  min-width: 280px;
+  max-width: 280px;
+  height: 100vh; // Full viewport height
+  @include dark-gradient;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 4px 0 20px $shadow-dark;
+  position: fixed; // Fixed positioning for full height
+  top: 1rem; // Account for container padding
+  left: 1rem; // Account for container padding
+  z-index: 100;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 16px; // Rounded corners for sidebar
+
+  // Custom scrollbar for sidebar
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+  }
+}
+
+// Collapsed sidebar state
+.admin-sidebar-collapsed {
+  width: 80px;
+  min-width: 80px;
+  max-width: 80px;
+
+  .adminSidebar {
+    .sidebarHeader {
+      padding: 0.5rem;
+      text-align: center;
+
+      h3 {
+        display: none;
+      }
+    }
+
+    .sectionTitle {
+      display: none;
+    }
+
+    .menuItem {
+      justify-content: center;
+      padding: 0.75rem;
+
+      .menuIcon {
+        margin-right: 0;
+      }
+
+      .menuLabel {
+        display: none;
+      }
+    }
+  }
+}
+
+// Page Content Container - Contains navbar and main content
+.admin-page-content {
+  flex: 1;
+  min-width: 0;
+  padding: 0; // Remove padding to allow navbar to extend full width
+  background: $bg-primary; // Light teal background for page content
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  border-radius: 16px; // Rounded corners for page content
+  box-shadow: 0 4px 20px $shadow-light; // Light shadow for light background
+  margin-left: 300px; // Add left margin to account for fixed sidebar + container padding
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 2, 1); // Smooth transition for margin
+  height: calc(100vh - 2rem);
+  max-height: none;
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px; // Account for sticky elements (adjusted for smaller nav)
+
+  // Custom scrollbar for content
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $shadow-light;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $shadow-medium;
+    border-radius: 4px;
+
+    &:hover {
+      background: $shadow-dark;
+    }
+  }
+}
+
+// Adjust content margin when sidebar is collapsed
+.admin-sidebar-collapsed + .admin-page-content {
+  margin-left: 100px; // Account for collapsed sidebar + container padding
+}
+
+// Navbar container within page content - STICKY
+.admin-page-content .navbar {
+  margin: 0; // Remove margins for sticky positioning
+  border-radius: 12px 12px 0 0; // Rounded top corners only
+  @include dark-gradient; // Keep navbar with sidebar dark colors
+  position: sticky; // Make navbar sticky
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px $shadow-medium;
+}
+
+// Top Navigation Card - Sticky
+.navbar-card {
+  background: $white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px $shadow-light;
+  overflow: visible;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border: 1px solid $border-light;
+}
+
+// Top navigation container within page content
+.admin-page-content .top-navigation {
+  margin: 0; // Remove margins for sticky positioning
+  @include primary-gradient; // Keep top navigation with primary colors
+  position: sticky; // Make top navigation sticky
+  top: 60px; // Position below sticky navbar
+  z-index: 999;
+  box-shadow: 0 2px 10px $shadow-medium;
+}
+
+// Breadcrumb container within page content - STICKY
+.admin-page-content .breadcrumb {
+  margin: 0; // Remove margins for sticky positioning
+  position: sticky; // Make breadcrumb sticky
+  top: 70px; // Position below sticky top navigation (adjusted for smaller nav)
+  z-index: 998; // Below navbar but above content
+  background: $bg-primary; // Match page background
+}
+
+// Card Styles for Navbar, Breadcrumb, and Content
+.navbar-card {
+  background: $white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px $shadow-light;
+  margin-bottom: 1rem;
+  overflow: visible;
+}
+
+// Breadcrumb styles removed - now using direct .breadcrumb class
+
+.content-card {
+  background: $white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px $shadow-light;
+  padding: 1.5rem;
+  min-height: 400px;
+  height: auto;
+  overflow: visible;
+  margin-top: 1rem; // Add space from sticky breadcrumb
+  margin-bottom: 0;
+  flex: 1;
+}
+
+// Content Header
+.admin-content-header {
+  margin: 1rem 1rem 1rem 1rem; // Add margins around content header
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $text-primary; // Use primary text for light background
+    margin-bottom: 0.5rem;
+
+    strong {
+      color: $primary-500; // Primary color for emphasis
+    }
+  }
+
+  p {
+    color: $text-secondary; // Use secondary text for light background
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 1024px) {
+  .admin-layout-container {
+    padding: 0.75rem; // Reduce padding for smaller screens
+  }
+
+  .admin-sidebar-container {
+    width: 240px;
+    min-width: 240px;
+    max-width: 240px;
+    top: 0.75rem;
+    left: 0.75rem;
+  }
+
+  .admin-sidebar-collapsed {
+    width: 70px;
+    min-width: 70px;
+    max-width: 70px;
+  }
+
+  .admin-page-content {
+    margin-left: 260px; // Adjust margin for smaller sidebar + container padding
+  }
+
+  .admin-sidebar-collapsed + .admin-page-content {
+    margin-left: 90px;
+  }
+
+  // Adjust margins for smaller screens
+  .admin-page-content .breadcrumb {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .admin-content-header {
+    margin: 0.75rem 0.75rem 0.75rem 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-layout-container {
+    padding: 0.5rem; // Further reduce padding for mobile
+  }
+
+  .admin-main-content {
+    flex-direction: column;
+  }
+
+  .admin-sidebar-container {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    height: auto;
+    position: relative;
+    top: 0;
+    left: 0;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px 12px 0 0; // Rounded top corners only
+  }
+
+  .admin-sidebar-collapsed {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+
+    .adminSidebar {
+      .sidebarHeader {
+        padding: 0 1.5rem 1rem;
+        text-align: left;
+
+        h3 {
+          display: block;
+        }
+      }
+
+      .sectionTitle {
+        display: block;
+      }
+
+      .menuItem {
+        justify-content: flex-start;
+        padding: 0.75rem 1.5rem;
+
+        .menuIcon {
+          margin-right: 0.75rem;
+        }
+
+        .menuLabel {
+          display: block;
+        }
+      }
+    }
+  }
+
+  .admin-page-content {
+    padding: 0;
+    border-radius: 0 0 12px 12px; // Rounded bottom corners only
+    margin-left: 0; // Remove margin on mobile
+    margin-top: 0.5rem; // Add top margin for spacing from sidebar
+  }
+
+  // Adjust sticky positioning for mobile
+  .navbar-card {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .admin-page-content .breadcrumb {
+    position: sticky;
+    top: 70px; // Adjust for mobile top navigation height
+    z-index: 998;
+  }
+
+  .admin-sidebar-collapsed + .admin-page-content {
+    margin-left: 0;
+  }
+
+  // Adjust margins for mobile
+  .admin-page-content .breadcrumb {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.5rem;
+  }
+
+  .admin-content-header {
+    margin: 0.5rem 0.5rem 0.5rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-layout-container {
+    padding: 0.25rem; // Minimal padding for small mobile
+  }
+
+  .admin-sidebar-container {
+    border-radius: 8px 8px 0 0;
+  }
+
+  .admin-page-content {
+    border-radius: 0 0 8px 8px;
+    margin-top: 0.25rem;
+  }
+
+  // Adjust sticky positioning for small mobile
+  .admin-page-content .breadcrumb {
+    position: sticky;
+    top: 60px; // Adjust for small mobile top navigation height
+    z-index: 998;
+  }
+
+  // Adjust margins for small mobile
+  .admin-page-content .breadcrumb {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    padding-top: 0.25rem;
+  }
+
+  .admin-content-header {
+    margin: 0.25rem 0.25rem 0.25rem 0.25rem;
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+  }
+}
+
+// Content Body
+.admin-content-body {
+  background: $bg-primary; // Light background for content body
+  border-radius: 12px;
+  box-shadow: 0 2px 8px $shadow-light; // Light shadow for light background
+  border: 1px solid $border-light; // Light border for light background
+  overflow: hidden;
+  margin: 0 1rem 1rem 1rem; // Add margin to content body
+}
+
+// Layout utilities
+.admin-layout-flex {
+  display: flex;
+}
+
+.admin-layout-column {
+  flex-direction: column;
+}
+
+.admin-layout-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.admin-layout-space-between {
+  justify-content: space-between;
+}
+
+.admin-layout-space-around {
+  justify-content: space-around;
+}
+
+// Z-index management
+.admin-layout-container {
+  z-index: 1;
+}
+
+.admin-sidebar-container {
+  z-index: 100;
+}
+
+.admin-page-content {
+  z-index: 10;
+}
+
+// Sticky elements z-index
+.admin-page-content .navbar {
+  z-index: 1000; // Highest priority
+}
+
+.admin-page-content .top-navigation {
+  z-index: 999; // Below navbar
+}
+
+.admin-page-content .breadcrumb {
+  z-index: 998; // Below navigation, above content
+}
+
+// Print styles
+@media print {
+  .admin-sidebar-container {
+    display: none;
+  }
+
+  .admin-page-content {
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+    border: none;
+  }
+}

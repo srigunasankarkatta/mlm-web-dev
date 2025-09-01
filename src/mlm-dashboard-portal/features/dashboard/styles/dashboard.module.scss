@@ -1,0 +1,639 @@
+@use "@styles/variables" as *;
+
+// General Layout
+.app-container {
+  display: flex;
+  flex-direction: column;
+  background-color: $background-light;
+}
+
+.app-main {
+  display: flex;
+  flex-grow: 1;
+  // border-top: 1px solid $border-dark;
+  // height: 100vh;
+  background-color: $background-light;
+  margin-bottom: 50px;
+}
+
+.app-main__content {
+  flex-grow: 1;
+  padding: 0 20px;
+}
+
+// Sidebar Styles
+.sidebar {
+  width: 250px;
+  background-color: #fff;
+  // padding: 1rem;
+  height: 100vh;
+
+  &--collapsed {
+    width: 80px;
+  }
+
+  &__section {
+    margin-bottom: 1.5rem;
+
+    &-title {
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: #aaa;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    &-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    // border-radius: 6px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background 0.3s;
+    color: #333;
+    cursor: pointer;
+
+    &-icon {
+      margin-right: 10px;
+    }
+
+    a {
+      color: #333;
+      text-decoration: none;
+    }
+
+    &:hover {
+      background: #e9ecef;
+    }
+
+    &--active {
+      background: $silver-gray-4;
+    }
+  }
+}
+
+.content-header {
+  margin-bottom: 20px;
+
+  h1 {
+    font-size: 24px;
+    // font-weight: bold;
+    color: $text-dark;
+
+    strong {
+      color: $text-dark;
+    }
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h1 {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 30px;
+    color: #333333;
+
+    strong {
+      font-style: normal;
+      font-weight: 600;
+      font-size: 22px;
+      line-height: 27px;
+      color: #333333;
+    }
+  }
+
+  .add-property-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: $primary-color;
+    color: #fff;
+    padding: 5px 12px;
+    border-radius: $border-radius;
+    border: none;
+    text-decoration: none;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+
+    color: #ffffff;
+
+    &:hover {
+      background-color: #c5303e;
+    }
+
+    svg {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+// 📌 Tabs Styling
+.tabs {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+
+  button {
+    background: none;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    color: $text-muted;
+    cursor: pointer;
+    position: relative;
+
+    &.active {
+      color: $primary-color;
+      font-weight: 500;
+    }
+
+    &.active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -2px;
+      height: 3px;
+      background: $primary-color;
+    }
+
+    &:hover {
+      color: $primary-color;
+    }
+  }
+}
+
+// 📌 Property List Styling
+.propertyList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  max-height: 80vh;
+  overflow-y: auto;
+
+  &.centered {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    min-height: 500px;
+  }
+}
+
+// 📌 Property Card Styling
+.propertyCard {
+  background: $background-white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: $shadow-light;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &:hover {
+    box-shadow: $shadow-medium;
+  }
+
+  .imageContainer {
+    position: relative;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-bottom: 1px solid $border-light;
+    }
+
+    .label {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: $primary-dark;
+      color: white;
+      padding: 4px 8px;
+      font-size: 12px;
+      border-radius: 3px;
+      font-weight: bold;
+    }
+  }
+
+  .details {
+    padding: 15px;
+
+    h3 {
+      font-size: 18px;
+      font-weight: bold;
+      color: $text-dark;
+    }
+
+    .location {
+      font-size: 14px;
+      color: $text-muted;
+    }
+
+    .size {
+      font-size: 14px;
+      color: $text-muted;
+    }
+
+    .price {
+      font-size: 18px;
+      font-weight: bold;
+      color: $primary-dark;
+      margin-top: 8px;
+    }
+
+    .info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 14px;
+
+      .iconGroup {
+        display: flex;
+        gap: 10px;
+        color: $text-muted;
+
+        svg {
+          cursor: pointer;
+        }
+      }
+
+      .active {
+        color: green;
+        font-weight: bold;
+      }
+
+      .inactive {
+        color: $primary-color;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+// 📌 Add Property Button
+.addCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $silver-gray-4;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 40px;
+  color: $text-muted;
+  transition: all 0.3s ease;
+  min-height: 300px;
+  min-width: 300px;
+}
+
+// Footer Styles
+.app-footer {
+  background-color: #f8f9fa;
+  text-align: center;
+  padding: 10px;
+  font-size: 14px;
+  color: #666;
+  border-top: 1px solid #ddd;
+}
+
+// Buttons & Utilities
+.btn {
+  display: inline-block;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &.btn-primary {
+    background-color: #007bff;
+    color: white;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+
+  &.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+
+    &:hover {
+      background-color: #5a6268;
+    }
+  }
+
+  &.btn-danger {
+    background-color: $primary-color;
+    color: white;
+
+    &:hover {
+      background-color: $primary-color;
+    }
+  }
+
+  &.btn-success {
+    background-color: #28a745;
+    color: white;
+
+    &:hover {
+      background-color: #218838;
+    }
+  }
+}
+
+// Widget Styles
+.widget-content {
+  background: white;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.widget-heading {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.widget-subheading {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.widget-numbers {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+// Progress Bar Styles
+.progress {
+  width: 100%;
+  height: 5px;
+  background-color: #e9ecef;
+  border-radius: 5px;
+  overflow: hidden;
+
+  .progress-bar {
+    height: 100%;
+    transition: width 0.5s ease-in-out;
+  }
+
+  .bg-primary {
+    background-color: #007bff;
+  }
+
+  .bg-success {
+    background-color: #28a745;
+  }
+
+  .bg-danger {
+    background-color: #dc3545;
+  }
+
+  .bg-warning {
+    background-color: #ffc107;
+  }
+
+  .bg-info {
+    background-color: #17a2b8;
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .app-sidebar {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    min-height: auto;
+  }
+
+  .app-main {
+    flex-direction: column;
+  }
+
+  .app-main__content {
+    padding: 10px;
+  }
+}
+
+
+// bottom bar
+.bottomBarWrapper {
+  margin-top: 8px;
+  background-color: #fff;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 5px;
+}
+
+.selectionInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  font-size: 14px;
+
+  .textRegular {
+    color: #333;
+  }
+
+  .count {
+    color: $primary-color; // Pink color for count
+    font-weight: 600;
+  }
+
+  .textBold {
+    font-weight: 600;
+  }
+
+  .clearText {
+    margin-left: 16px;
+    color: $primary-color;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s ease-in-out;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+}
+
+.choosePlanButton {
+  background-color: $primary-color;
+  border-radius: 6px;
+  padding: 10px 20px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $primary-color;
+  }
+}
+
+.choosePlanBtn {
+  display: flex;
+  background-color: $primary-color;
+  color: #fff;
+  gap: 42px;
+  padding: 9px 16px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+
+  &:focus-visible {
+    outline: 2px solid #000;
+  }
+}
+
+.rightArrow {
+  width: 12px;
+  height: 12px;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(-45deg);
+  margin-left: 4px;
+}
+
+.payment-history {
+  &__table {
+    font-size: 0.95rem;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+
+    tbody tr td {
+      background: $silver-gray-4 !important;
+    }
+  }
+
+  &__header-row {
+    background-color: transparent;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+
+  &__row {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    background: $silver-gray-4;
+  }
+
+  &__cell {
+    padding: 1rem;
+    vertical-align: middle;
+  }
+
+  &__card-type {
+    color: #0066cc;
+    font-weight: bold;
+    margin-right: 0.5rem;
+  }
+
+  &__invoice-link {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    color: #333;
+
+    i {
+      font-size: 1rem;
+    }
+  }
+
+  &__invoice-detail {
+    font-size: 0.85rem;
+  }
+
+  &__total {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+}
+
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 3rem !important;
+
+  .pageItem {
+    // Your styles
+  }
+
+  .pageLink {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #f4004d;
+  }
+
+  .active {
+    .pageLink {
+      background-color: #f4004d;
+      color: #fff;
+    }
+  }
+
+  .prevLink,
+  .nextLink {
+    padding: 0.5rem;
+    background-color: #f4004d;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+
+  .disabled {
+    opacity: 0.5;
+    pointer-events: none;
+
+    .prevLink {
+      background-color: #ebebeb;
+      color: #333;
+    }
+
+    .nextLink {
+      color: #333;
+      background-color: #ebebeb;
+    }
+  }
+
+  .pageLink:focus-visible,
+  .prevLink:focus-visible,
+  .nextLink:focus-visible {
+    outline: 2px solid #000;
+  }
+}

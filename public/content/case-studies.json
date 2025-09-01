@@ -1,0 +1,187 @@
+{
+  "caseStudies": [
+    {
+      "id": "ecommerce-platform",
+      "title": "E-commerce Platform Redesign",
+      "client": "TechMart Solutions",
+      "industry": "E-commerce",
+      "duration": "12 weeks",
+      "budget": "$45,000",
+      "category": "web-development",
+      "image": "/case-studies/ecommerce-platform.jpg",
+      "video": "/case-studies/ecommerce-platform.mp4",
+      "excerpt": "Complete redesign of an e-commerce platform resulting in 300% increase in conversion rate and 150% improvement in user engagement.",
+      "problem": "TechMart's existing e-commerce platform suffered from poor user experience, slow loading times, and low conversion rates. The platform was built on outdated technology and lacked mobile optimization.",
+      "solution": "We redesigned the entire platform using React and Laravel, implementing modern UX patterns, mobile-first design, and performance optimizations. Added advanced features like AI-powered product recommendations and streamlined checkout process.",
+      "results": [
+        "300% increase in conversion rate",
+        "150% improvement in user engagement",
+        "40% reduction in page load time",
+        "200% increase in mobile revenue",
+        "95% customer satisfaction score"
+      ],
+      "technologies": ["React", "Laravel", "MySQL", "Redis", "AWS", "Stripe"],
+      "metrics": {
+        "conversionRate": "300%",
+        "userEngagement": "150%",
+        "pageLoadTime": "40%",
+        "mobileRevenue": "200%",
+        "satisfactionScore": "95%"
+      },
+      "testimonial": {
+        "text": "QuadraCore transformed our e-commerce platform completely. The results exceeded our expectations with significant improvements in conversion and user experience.",
+        "author": "Sarah Johnson",
+        "position": "CEO, TechMart Solutions"
+      }
+    },
+    {
+      "id": "saas-dashboard",
+      "title": "SaaS Analytics Dashboard",
+      "client": "DataFlow Analytics",
+      "industry": "SaaS",
+      "duration": "8 weeks",
+      "budget": "$32,000",
+      "category": "ui-ux-design",
+      "image": "/case-studies/saas-dashboard.jpg",
+      "video": "/case-studies/saas-dashboard.mp4",
+      "excerpt": "Redesigned analytics dashboard with intuitive data visualization, resulting in 80% faster user onboarding and 120% increase in feature adoption.",
+      "problem": "DataFlow's analytics dashboard was complex and difficult to navigate, leading to low user adoption and high support ticket volume. Users struggled to find insights quickly.",
+      "solution": "We conducted extensive user research and redesigned the dashboard with a focus on simplicity and actionable insights. Implemented intuitive data visualization, personalized dashboards, and streamlined navigation.",
+      "results": [
+        "80% faster user onboarding",
+        "120% increase in feature adoption",
+        "60% reduction in support tickets",
+        "90% improvement in user satisfaction",
+        "3x increase in daily active users"
+      ],
+      "technologies": ["Figma", "React", "D3.js", "TypeScript", "Tailwind CSS"],
+      "metrics": {
+        "onboardingTime": "80%",
+        "featureAdoption": "120%",
+        "supportTickets": "60%",
+        "userSatisfaction": "90%",
+        "dailyActiveUsers": "300%"
+      },
+      "testimonial": {
+        "text": "The new dashboard design has revolutionized how our users interact with data. The intuitive interface has significantly improved user engagement and satisfaction.",
+        "author": "Michael Chen",
+        "position": "Product Manager, DataFlow Analytics"
+      }
+    },
+    {
+      "id": "restaurant-website",
+      "title": "Restaurant Website & Online Ordering",
+      "client": "Fusion Bistro",
+      "industry": "Restaurant",
+      "duration": "6 weeks",
+      "budget": "$18,000",
+      "category": "web-development",
+      "image": "/case-studies/restaurant-website.jpg",
+      "video": "/case-studies/restaurant-website.mp4",
+      "excerpt": "Modern restaurant website with online ordering system, resulting in 200% increase in online orders and 150% improvement in customer engagement.",
+      "problem": "Fusion Bistro had no online presence and was losing customers to competitors with online ordering capabilities. They needed a modern website that could handle online orders and reservations.",
+      "solution": "We built a responsive website with online ordering system, reservation management, and integrated payment processing. Added features like menu customization, delivery tracking, and customer reviews.",
+      "results": [
+        "200% increase in online orders",
+        "150% improvement in customer engagement",
+        "100% mobile-responsive design",
+        "50% reduction in phone orders",
+        "New revenue stream from online sales"
+      ],
+      "technologies": ["React", "Node.js", "MongoDB", "Stripe", "Twilio"],
+      "metrics": {
+        "onlineOrders": "200%",
+        "customerEngagement": "150%",
+        "mobileResponsiveness": "100%",
+        "phoneOrders": "50%",
+        "newRevenueStream": "Established"
+      },
+      "testimonial": {
+        "text": "Our online presence has completely transformed our business. The website is beautiful and the online ordering system has opened up a whole new revenue stream.",
+        "author": "Chef Maria Rodriguez",
+        "position": "Owner, Fusion Bistro"
+      }
+    },
+    {
+      "id": "seo-campaign",
+      "title": "Local SEO Campaign",
+      "client": "Green Thumb Landscaping",
+      "industry": "Landscaping",
+      "duration": "Ongoing",
+      "budget": "$3,500/month",
+      "category": "seo",
+      "image": "/case-studies/seo-campaign.jpg",
+      "video": "/case-studies/seo-campaign.mp4",
+      "excerpt": "Comprehensive local SEO campaign resulting in 400% increase in organic traffic and 300% improvement in local search rankings.",
+      "problem": "Green Thumb Landscaping was invisible in local search results, losing potential customers to competitors with better online visibility. They needed to improve their local SEO presence.",
+      "solution": "We implemented a comprehensive local SEO strategy including Google My Business optimization, local keyword targeting, content creation, and citation building. Added local business schema markup and review management.",
+      "results": [
+        "400% increase in organic traffic",
+        "300% improvement in local rankings",
+        "200% increase in phone inquiries",
+        "150% improvement in online reviews",
+        "Top 3 rankings for target keywords"
+      ],
+      "technologies": [
+        "Google Analytics",
+        "Google Search Console",
+        "SEMrush",
+        "BrightLocal",
+        "Schema Markup"
+      ],
+      "metrics": {
+        "organicTraffic": "400%",
+        "localRankings": "300%",
+        "phoneInquiries": "200%",
+        "onlineReviews": "150%",
+        "keywordRankings": "Top 3"
+      },
+      "testimonial": {
+        "text": "Our phone has been ringing off the hook since QuadraCore started our SEO campaign. We're now the top result for landscaping services in our area.",
+        "author": "Tom Wilson",
+        "position": "Owner, Green Thumb Landscaping"
+      }
+    },
+    {
+      "id": "social-media-campaign",
+      "title": "Social Media Marketing Campaign",
+      "client": "FitLife Gym",
+      "industry": "Fitness",
+      "duration": "Ongoing",
+      "budget": "$4,200/month",
+      "category": "social-media-marketing",
+      "image": "/case-studies/social-media-campaign.jpg",
+      "video": "/case-studies/social-media-campaign.mp4",
+      "excerpt": "Strategic social media campaign across multiple platforms, resulting in 250% increase in brand awareness and 180% improvement in member acquisition.",
+      "problem": "FitLife Gym had minimal social media presence and was struggling to attract new members. They needed a comprehensive social media strategy to build brand awareness and engage with their community.",
+      "solution": "We developed a multi-platform social media strategy with engaging content, influencer partnerships, and targeted advertising campaigns. Created consistent brand messaging and community engagement initiatives.",
+      "results": [
+        "250% increase in brand awareness",
+        "180% improvement in member acquisition",
+        "300% increase in social media engagement",
+        "200% growth in online community",
+        "50% increase in referral sign-ups"
+      ],
+      "technologies": [
+        "Facebook Ads",
+        "Instagram",
+        "TikTok",
+        "Hootsuite",
+        "Canva",
+        "Later"
+      ],
+      "metrics": {
+        "brandAwareness": "250%",
+        "memberAcquisition": "180%",
+        "socialEngagement": "300%",
+        "communityGrowth": "200%",
+        "referralSignups": "50%"
+      },
+      "testimonial": {
+        "text": "Our social media presence has exploded since working with QuadraCore. We're connecting with our community in ways we never thought possible.",
+        "author": "Lisa Thompson",
+        "position": "Marketing Director, FitLife Gym"
+      }
+    }
+  ]
+}

@@ -1,0 +1,264 @@
+{
+  "services": [
+    {
+      "id": "web-development",
+      "title": "Web Development",
+      "description": "Custom web applications built with modern technologies",
+      "icon": "Globe",
+      "features": [
+        "React/Next.js Applications",
+        "Laravel Backend Development",
+        "API Development & Integration",
+        "Database Design & Optimization",
+        "Performance Optimization",
+        "SEO-Friendly Architecture"
+      ],
+      "packages": [
+        {
+          "name": "Starter",
+          "price": "$5,000",
+          "duration": "4-6 weeks",
+          "features": [
+            "5-10 page responsive website",
+            "Basic SEO optimization",
+            "Contact form integration",
+            "Mobile-first design",
+            "Basic analytics setup"
+          ]
+        },
+        {
+          "name": "Growth",
+          "price": "$12,000",
+          "duration": "8-10 weeks",
+          "features": [
+            "15-20 page website",
+            "Advanced SEO optimization",
+            "CMS integration",
+            "E-commerce functionality",
+            "Advanced analytics & tracking"
+          ]
+        },
+        {
+          "name": "Custom",
+          "price": "Custom",
+          "duration": "12+ weeks",
+          "features": [
+            "Full-stack web application",
+            "Custom features & integrations",
+            "Advanced user management",
+            "API development",
+            "Performance optimization"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ui-ux-design",
+      "title": "UI/UX Design",
+      "description": "User-centered design that drives engagement and conversions",
+      "icon": "Palette",
+      "features": [
+        "User Research & Personas",
+        "Wireframing & Prototyping",
+        "Visual Design & Branding",
+        "User Testing & Iteration",
+        "Design Systems",
+        "Accessibility Compliance"
+      ],
+      "packages": [
+        {
+          "name": "Starter",
+          "price": "$3,000",
+          "duration": "3-4 weeks",
+          "features": [
+            "5-8 page wireframes",
+            "Basic visual design",
+            "Mobile & desktop layouts",
+            "Basic user testing",
+            "Design handoff"
+          ]
+        },
+        {
+          "name": "Growth",
+          "price": "$8,000",
+          "duration": "6-8 weeks",
+          "features": [
+            "15-20 page wireframes",
+            "Complete visual design",
+            "Interactive prototypes",
+            "User research & testing",
+            "Design system creation"
+          ]
+        },
+        {
+          "name": "Custom",
+          "price": "Custom",
+          "duration": "10+ weeks",
+          "features": [
+            "Full user research",
+            "Complete design system",
+            "Advanced prototyping",
+            "Multiple user testing rounds",
+            "Ongoing design support"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "seo",
+      "title": "SEO Optimization",
+      "description": "Search engine optimization to improve visibility and rankings",
+      "icon": "Search",
+      "features": [
+        "Technical SEO Audit",
+        "Keyword Research & Strategy",
+        "On-Page Optimization",
+        "Content Strategy",
+        "Link Building",
+        "Performance Monitoring"
+      ],
+      "packages": [
+        {
+          "name": "Starter",
+          "price": "$2,500",
+          "duration": "Ongoing",
+          "features": [
+            "Monthly SEO audit",
+            "Basic keyword optimization",
+            "Content recommendations",
+            "Monthly reporting",
+            "Basic technical fixes"
+          ]
+        },
+        {
+          "name": "Growth",
+          "price": "$5,000",
+          "duration": "Ongoing",
+          "features": [
+            "Comprehensive SEO audit",
+            "Advanced keyword strategy",
+            "Content creation & optimization",
+            "Technical SEO improvements",
+            "Weekly monitoring & reporting"
+          ]
+        },
+        {
+          "name": "Custom",
+          "price": "Custom",
+          "duration": "Ongoing",
+          "features": [
+            "Full SEO strategy",
+            "Content marketing",
+            "Advanced technical SEO",
+            "Competitive analysis",
+            "Custom reporting dashboard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "social-media-marketing",
+      "title": "Social Media Marketing",
+      "description": "Strategic social media management to build brand presence",
+      "icon": "Share2",
+      "features": [
+        "Platform Strategy",
+        "Content Creation & Curation",
+        "Community Management",
+        "Paid Advertising",
+        "Analytics & Reporting",
+        "Influencer Partnerships"
+      ],
+      "packages": [
+        {
+          "name": "Starter",
+          "price": "$2,000",
+          "duration": "Ongoing",
+          "features": [
+            "3 social media platforms",
+            "12 posts per month",
+            "Basic community management",
+            "Monthly reporting",
+            "Basic content creation"
+          ]
+        },
+        {
+          "name": "Growth",
+          "price": "$4,500",
+          "duration": "Ongoing",
+          "features": [
+            "5 social media platforms",
+            "20 posts per month",
+            "Advanced community management",
+            "Paid advertising management",
+            "Weekly reporting & optimization"
+          ]
+        },
+        {
+          "name": "Custom",
+          "price": "Custom",
+          "duration": "Ongoing",
+          "features": [
+            "Full social media strategy",
+            "Custom content creation",
+            "Advanced advertising campaigns",
+            "Influencer partnerships",
+            "Custom analytics dashboard"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "branding",
+      "title": "Branding & Identity",
+      "description": "Comprehensive brand development and visual identity systems",
+      "icon": "Star",
+      "features": [
+        "Brand Strategy & Positioning",
+        "Visual Identity Design",
+        "Logo & Brand Guidelines",
+        "Marketing Collateral",
+        "Brand Voice & Messaging",
+        "Brand Implementation"
+      ],
+      "packages": [
+        {
+          "name": "Starter",
+          "price": "$4,000",
+          "duration": "4-5 weeks",
+          "features": [
+            "Logo design (3 concepts)",
+            "Basic brand guidelines",
+            "Business card design",
+            "Letterhead & envelope",
+            "Brand style guide"
+          ]
+        },
+        {
+          "name": "Growth",
+          "price": "$8,500",
+          "duration": "6-8 weeks",
+          "features": [
+            "Complete brand identity",
+            "Comprehensive guidelines",
+            "Marketing collateral",
+            "Brand voice & messaging",
+            "Implementation support"
+          ]
+        },
+        {
+          "name": "Custom",
+          "price": "Custom",
+          "duration": "10+ weeks",
+          "features": [
+            "Full brand strategy",
+            "Complete identity system",
+            "Brand architecture",
+            "Internal brand training",
+            "Ongoing brand support"
+          ]
+        }
+      ]
+    }
+  ]
+}
