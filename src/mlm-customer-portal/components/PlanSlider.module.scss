@@ -1,0 +1,289 @@
+@use "../../styles/color-palette" as *;
+
+// Professional PlanSlider Design with Teal/Green Color Palette
+.planSlider {
+  width: 100%;
+  padding: 2rem 0;
+  
+  .sliderHeader {
+    text-align: center;
+    margin-bottom: 3rem;
+    
+    .sliderTitle {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: $text-primary;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+      
+      @media (min-width: 768px) {
+        font-size: 3rem;
+      }
+    }
+    
+    .sliderSubtitle {
+      font-size: 1.125rem;
+      color: $text-secondary;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+  }
+  
+  .swiperContainer {
+    position: relative;
+    padding: 0 1rem;
+    
+    .swiper {
+      padding: 1rem 0;
+      
+      .swiperSlide {
+        height: auto;
+        
+        .planCard {
+          background: $white;
+          border-radius: 1.5rem;
+          padding: 2rem;
+          height: 100%;
+          box-shadow: 
+            0 10px 40px rgba($primary-500, 0.1),
+            0 1px 0 rgba($primary-100, 0.1);
+          border: 2px solid rgba($primary-200, 0.2);
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
+          
+          &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: $gradient-primary;
+            transform: scaleX(0);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          
+          &:hover {
+            transform: translateY(-8px);
+            box-shadow: 
+              0 20px 60px rgba($primary-500, 0.2),
+              0 1px 0 rgba($primary-100, 0.2);
+            border-color: rgba($primary-300, 0.4);
+            
+            &::before {
+              transform: scaleX(1);
+            }
+          }
+          
+          .planHeader {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            
+            .planName {
+              font-size: 1.25rem;
+              font-weight: 700;
+              color: $text-primary;
+              margin-bottom: 0.75rem;
+              line-height: 1.3;
+            }
+            
+            .planPrice {
+              font-size: 2.5rem;
+              font-weight: 800;
+              background: $gradient-primary;
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+              margin-bottom: 1rem;
+              line-height: 1;
+            }
+            
+            .requiredBadge {
+              display: inline-block;
+              background: $gradient-primary;
+              color: $white;
+              font-size: 0.75rem;
+              font-weight: 700;
+              padding: 0.5rem 1rem;
+              border-radius: 20px;
+              text-transform: uppercase;
+              letter-spacing: 0.05em;
+              box-shadow: 
+                0 4px 15px rgba($primary-500, 0.3),
+                inset 0 1px 0 rgba($white, 0.2);
+            }
+          }
+          
+          .planBenefits {
+            margin-bottom: 2rem;
+            
+            .benefitItem {
+              display: flex;
+              align-items: flex-start;
+              gap: 0.75rem;
+              margin-bottom: 0.75rem;
+              
+              &:last-child {
+                margin-bottom: 0;
+              }
+              
+              .benefitIcon {
+                width: 1.25rem;
+                height: 1.25rem;
+                background: $gradient-primary;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: $white;
+                font-size: 0.75rem;
+                flex-shrink: 0;
+                margin-top: 0.125rem;
+                box-shadow: 
+                  0 2px 8px rgba($primary-500, 0.3),
+                  inset 0 1px 0 rgba($white, 0.2);
+              }
+              
+              .benefitText {
+                font-size: 0.875rem;
+                color: $text-secondary;
+                line-height: 1.5;
+                flex: 1;
+              }
+            }
+          }
+          
+          .selectButton {
+            width: 100%;
+            background: $gradient-primary;
+            color: $white;
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+              0 8px 25px rgba($primary-500, 0.25),
+              inset 0 1px 0 rgba($white, 0.2);
+            cursor: pointer;
+            
+            &:hover {
+              transform: translateY(-2px);
+              box-shadow: 
+                0 12px 35px rgba($primary-500, 0.35),
+                inset 0 1px 0 rgba($white, 0.3);
+              background: linear-gradient(135deg, $primary-600 0%, $primary-700 100%);
+            }
+            
+            &:active {
+              transform: translateY(0);
+            }
+          }
+        }
+      }
+    }
+    
+    // Custom Swiper Navigation
+    .swiperButtonNext,
+    .swiperButtonPrev {
+      color: $primary-600;
+      background: $white;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      box-shadow: 
+        0 8px 25px rgba($primary-500, 0.2),
+        0 1px 0 rgba($primary-100, 0.1);
+      border: 2px solid rgba($primary-200, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      &::after {
+        font-size: 1rem;
+        font-weight: 700;
+      }
+      
+      &:hover {
+        background: $primary-50;
+        border-color: $primary-300;
+        transform: scale(1.1);
+        box-shadow: 
+          0 12px 35px rgba($primary-500, 0.3),
+          0 1px 0 rgba($primary-200, 0.2);
+      }
+      
+      &:active {
+        transform: scale(1.05);
+      }
+    }
+    
+    .swiperButtonNext {
+      right: 0.5rem;
+    }
+    
+    .swiperButtonPrev {
+      left: 0.5rem;
+    }
+    
+    // Custom Swiper Pagination
+    .swiperPagination {
+      position: relative;
+      margin-top: 2rem;
+      
+      .swiperPaginationBullet {
+        width: 0.75rem;
+        height: 0.75rem;
+        background: rgba($primary-300, 0.5);
+        border-radius: 50%;
+        margin: 0 0.25rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        
+        &.swiperPaginationBulletActive {
+          background: $primary-500;
+          transform: scale(1.2);
+          box-shadow: 0 0 0 3px rgba($primary-500, 0.2);
+        }
+        
+        &:hover {
+          background: $primary-400;
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .planSlider {
+    .sliderHeader {
+      .sliderTitle {
+        font-size: 2rem;
+      }
+      
+      .sliderSubtitle {
+        font-size: 1rem;
+      }
+    }
+    
+    .swiperContainer {
+      .swiper {
+        .swiperSlide {
+          .planCard {
+            padding: 1.5rem;
+            
+            .planHeader {
+              .planPrice {
+                font-size: 2rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

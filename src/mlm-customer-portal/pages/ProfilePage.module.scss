@@ -1,0 +1,430 @@
+@use "../../styles/color-palette" as *;
+
+// Professional ProfilePage Design with Teal/Green Color Palette
+
+.profilePage {
+  min-height: 100vh;
+  background: linear-gradient(135deg, rgba($primary-50, 0.3) 0%, rgba($primary-100, 0.1) 100%);
+  padding: 2rem 0;
+  
+  .profileHeader {
+    background: $white;
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 
+      0 10px 40px rgba($primary-500, 0.1),
+      0 1px 0 rgba($primary-100, 0.1);
+    border: 1px solid rgba($primary-200, 0.2);
+    text-align: center;
+    
+    .profileInfo {
+      margin-bottom: 2rem;
+      
+      .profileAvatar {
+        width: 6rem;
+        height: 6rem;
+        background: $gradient-primary;
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 
+          0 8px 25px rgba($primary-500, 0.3),
+          inset 0 1px 0 rgba($white, 0.2);
+        border: 3px solid rgba($white, 0.8);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 
+            0 12px 35px rgba($primary-500, 0.4),
+            inset 0 1px 0 rgba($white, 0.3);
+        }
+        
+        .avatarText {
+          color: $white;
+          font-size: 2rem;
+          font-weight: 800;
+          text-shadow: 0 2px 4px rgba($primary-700, 0.3);
+        }
+      }
+      
+      .profileName {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: $text-primary;
+        margin-bottom: 0.5rem;
+        line-height: 1.2;
+        
+        @media (min-width: 768px) {
+          font-size: 3rem;
+        }
+      }
+      
+      .memberSince {
+        font-size: 1.125rem;
+        color: $text-secondary;
+        line-height: 1.6;
+      }
+    }
+    
+    .profileStats {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+      }
+      
+      .statItem {
+        text-align: center;
+        padding: 1.5rem;
+        background: rgba($primary-50, 0.3);
+        border-radius: 1rem;
+        border: 1px solid rgba($primary-200, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        &:hover {
+          background: rgba($primary-100, 0.4);
+          border-color: rgba($primary-300, 0.4);
+          transform: translateY(-2px);
+          box-shadow: 
+            0 8px 25px rgba($primary-500, 0.15),
+            inset 0 1px 0 rgba($primary-200, 0.2);
+        }
+        
+        .statLabel {
+          font-size: 0.875rem;
+          color: $text-secondary;
+          margin-bottom: 0.5rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+        
+        .statValue {
+          font-size: 1.75rem;
+          font-weight: 800;
+          line-height: 1;
+          
+          &.walletBalance {
+            color: $primary-600;
+          }
+          
+          &.totalEarnings {
+            color: $success-600;
+          }
+          
+          &.referralCode {
+            color: $secondary-600;
+            font-size: 1.5rem;
+          }
+        }
+      }
+    }
+  }
+  
+  .packageHistory {
+    background: $white;
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 
+      0 10px 40px rgba($primary-500, 0.1),
+      0 1px 0 rgba($primary-100, 0.1);
+    border: 1px solid rgba($primary-200, 0.2);
+    
+    .sectionTitle {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: $text-primary;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      
+      .sectionIcon {
+        width: 2rem;
+        height: 2rem;
+        background: $gradient-primary;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $white;
+        font-size: 1rem;
+        box-shadow: 
+          0 4px 15px rgba($primary-500, 0.3),
+          inset 0 1px 0 rgba($white, 0.2);
+      }
+    }
+    
+    .packagesList {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      
+      .packageItem {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem;
+        background: rgba($primary-50, 0.5);
+        border-radius: 1rem;
+        border: 1px solid rgba($primary-200, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        &:hover {
+          background: rgba($primary-100, 0.6);
+          border-color: rgba($primary-300, 0.4);
+          transform: translateX(4px);
+          box-shadow: 
+            0 8px 25px rgba($primary-500, 0.15),
+            inset 0 1px 0 rgba($primary-200, 0.2);
+        }
+        
+        .packageInfo {
+          .packageName {
+            font-weight: 700;
+            color: $text-primary;
+            margin-bottom: 0.25rem;
+            font-size: 1.125rem;
+          }
+          
+          .packageLevel {
+            font-size: 0.875rem;
+            color: $text-secondary;
+            font-weight: 500;
+          }
+        }
+        
+        .packageDetails {
+          text-align: right;
+          
+          .packagePrice {
+            color: $primary-600;
+            font-weight: 800;
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+          }
+          
+          .packageStatus {
+            font-size: 0.75rem;
+            color: $text-secondary;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+    
+    .upgradeButton {
+      width: 100%;
+      background: $gradient-primary;
+      color: $white;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 1rem 1.5rem;
+      border-radius: 1rem;
+      border: 2px solid transparent;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 
+        0 8px 25px rgba($primary-500, 0.25),
+        inset 0 1px 0 rgba($white, 0.2);
+      cursor: pointer;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 
+          0 12px 35px rgba($primary-500, 0.35),
+          inset 0 1px 0 rgba($white, 0.3);
+        background: linear-gradient(135deg, $primary-600 0%, $primary-700 100%);
+      }
+      
+      &:active {
+        transform: translateY(-1px);
+      }
+    }
+  }
+  
+  .accountDetails {
+    background: $white;
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    box-shadow: 
+      0 10px 40px rgba($primary-500, 0.1),
+      0 1px 0 rgba($primary-100, 0.1);
+    border: 1px solid rgba($primary-200, 0.2);
+    
+    .sectionTitle {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: $text-primary;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      
+      .sectionIcon {
+        width: 2rem;
+        height: 2rem;
+        background: $gradient-primary;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $white;
+        font-size: 1rem;
+        box-shadow: 
+          0 4px 15px rgba($primary-500, 0.3),
+          inset 0 1px 0 rgba($white, 0.2);
+      }
+    }
+    
+    .detailsList {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      
+      .detailItem {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 0;
+        border-bottom: 1px solid rgba($primary-200, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        &:last-child {
+          border-bottom: none;
+        }
+        
+        &:hover {
+          background: rgba($primary-50, 0.3);
+          padding-left: 1rem;
+          padding-right: 1rem;
+          margin-left: -1rem;
+          margin-right: -1rem;
+          border-radius: 0.75rem;
+        }
+        
+        .detailLabel {
+          color: $text-secondary;
+          font-weight: 500;
+          font-size: 0.875rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+        
+        .detailValue {
+          font-weight: 600;
+          color: $text-primary;
+          font-size: 0.875rem;
+          text-align: right;
+          max-width: 60%;
+          word-break: break-word;
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .profilePage {
+    padding: 1rem 0;
+    
+    .profileHeader {
+      padding: 2rem 1.5rem;
+      
+      .profileInfo {
+        .profileAvatar {
+          width: 5rem;
+          height: 5rem;
+          
+          .avatarText {
+            font-size: 1.75rem;
+          }
+        }
+        
+        .profileName {
+          font-size: 2rem;
+        }
+        
+        .memberSince {
+          font-size: 1rem;
+        }
+      }
+      
+      .profileStats {
+        gap: 1rem;
+        
+        .statItem {
+          padding: 1.25rem;
+          
+          .statValue {
+            font-size: 1.5rem;
+            
+            &.referralCode {
+              font-size: 1.25rem;
+            }
+          }
+        }
+      }
+    }
+    
+    .packageHistory,
+    .accountDetails {
+      padding: 2rem 1.5rem;
+      
+      .sectionTitle {
+        font-size: 1.5rem;
+        
+        .sectionIcon {
+          width: 1.75rem;
+          height: 1.75rem;
+          font-size: 0.875rem;
+        }
+      }
+    }
+    
+    .packageHistory {
+      .packagesList {
+        .packageItem {
+          padding: 1rem;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.75rem;
+          
+          .packageDetails {
+            text-align: left;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+        }
+      }
+    }
+    
+    .accountDetails {
+      .detailsList {
+        .detailItem {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.5rem;
+          
+          .detailValue {
+            text-align: left;
+            max-width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,526 @@
+@use "../../styles/color-palette" as *;
+
+// Professional DashboardPage Design with Teal/Green Color Palette
+
+.dashboardPage {
+  min-height: 100vh;
+  background: linear-gradient(135deg, rgba($primary-50, 0.3) 0%, rgba($primary-100, 0.1) 100%);
+  padding: 2rem 0;
+  
+  .dashboardHeader {
+    background: $white;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 
+      0 10px 40px rgba($primary-500, 0.1),
+      0 1px 0 rgba($primary-100, 0.1);
+    border: 1px solid rgba($primary-200, 0.2);
+    
+    .headerContent {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      
+      @media (min-width: 768px) {
+        flex-direction: row;
+        align-items: center;
+      }
+      
+      .userInfo {
+        text-align: center;
+        
+        @media (min-width: 768px) {
+          text-align: left;
+        }
+        
+        .welcomeTitle {
+          font-size: 2.5rem;
+          font-weight: 800;
+          color: $text-primary;
+          margin-bottom: 0.5rem;
+          line-height: 1.2;
+          
+          @media (min-width: 768px) {
+            font-size: 3rem;
+          }
+        }
+        
+        .userDetails {
+          font-size: 1.125rem;
+          color: $text-secondary;
+          line-height: 1.6;
+        }
+      }
+      
+      .financialStats {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        
+        .statCard {
+          text-align: center;
+          min-width: 120px;
+          
+          .statLabel {
+            font-size: 0.875rem;
+            color: $text-secondary;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+          }
+          
+          .statValue {
+            font-size: 1.75rem;
+            font-weight: 800;
+            line-height: 1;
+            
+            &.walletBalance {
+              color: $primary-600;
+            }
+            
+            &.totalEarnings {
+              color: $success-600;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  .quickStats {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    
+    @media (min-width: 640px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+    
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    
+    .statItem {
+      background: $white;
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      box-shadow: 
+        0 8px 25px rgba($primary-500, 0.08),
+        0 1px 0 rgba($primary-100, 0.1);
+      border: 1px solid rgba($primary-200, 0.15);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 
+          0 15px 40px rgba($primary-500, 0.15),
+          0 1px 0 rgba($primary-200, 0.2);
+        border-color: rgba($primary-300, 0.3);
+      }
+      
+      .statContent {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        
+        .statInfo {
+          .statLabel {
+            font-size: 0.875rem;
+            color: $text-secondary;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+          }
+          
+          .statValue {
+            font-size: 2rem;
+            font-weight: 800;
+            color: $text-primary;
+            line-height: 1;
+          }
+        }
+        
+        .statIcon {
+          width: 3rem;
+          height: 3rem;
+          border-radius: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: $white;
+          box-shadow: 
+            0 4px 15px rgba($primary-500, 0.2),
+            inset 0 1px 0 rgba($white, 0.2);
+          
+          &.plansIcon {
+            background: $gradient-primary;
+          }
+          
+          &.referralsIcon {
+            background: linear-gradient(135deg, $secondary-500 0%, $secondary-600 100%);
+          }
+          
+          &.networkIcon {
+            background: linear-gradient(135deg, $success-500 0%, $success-600 100%);
+          }
+          
+          &.poolIcon {
+            background: linear-gradient(135deg, $accent-500 0%, $accent-600 100%);
+          }
+        }
+      }
+    }
+  }
+  
+  .mainContent {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    
+    @media (min-width: 1024px) {
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+    }
+    
+    .chartsSection {
+      min-height: 400px;
+    }
+    
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      
+      .sidebarCard {
+        background: $white;
+        border-radius: 1.25rem;
+        padding: 1.5rem;
+        box-shadow: 
+          0 8px 25px rgba($primary-500, 0.08),
+          0 1px 0 rgba($primary-100, 0.1);
+        border: 1px solid rgba($primary-200, 0.15);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 
+            0 12px 35px rgba($primary-500, 0.12),
+            0 1px 0 rgba($primary-200, 0.2);
+        }
+        
+        .cardTitle {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: $text-primary;
+          margin-bottom: 1rem;
+          line-height: 1.3;
+        }
+        
+        // Plans List
+        .plansList {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+          margin-bottom: 1rem;
+          
+          .planItem {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: rgba($primary-50, 0.5);
+            border-radius: 0.75rem;
+            border: 1px solid rgba($primary-200, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            &:hover {
+              background: rgba($primary-100, 0.6);
+              border-color: rgba($primary-300, 0.4);
+              transform: translateX(4px);
+            }
+            
+            .planInfo {
+              .planName {
+                font-weight: 600;
+                color: $text-primary;
+                margin-bottom: 0.25rem;
+                font-size: 0.875rem;
+              }
+              
+              .planLevel {
+                font-size: 0.75rem;
+                color: $text-secondary;
+              }
+            }
+            
+            .planPrice {
+              color: $primary-600;
+              font-weight: 700;
+              font-size: 0.875rem;
+            }
+          }
+        }
+        
+        .upgradeButton {
+          width: 100%;
+          background: $gradient-primary;
+          color: $white;
+          font-weight: 600;
+          font-size: 0.875rem;
+          padding: 0.75rem 1rem;
+          border-radius: 0.75rem;
+          border: 2px solid transparent;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 
+            0 4px 15px rgba($primary-500, 0.25),
+            inset 0 1px 0 rgba($white, 0.2);
+          cursor: pointer;
+          
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+              0 8px 25px rgba($primary-500, 0.35),
+              inset 0 1px 0 rgba($white, 0.3);
+            background: linear-gradient(135deg, $primary-600 0%, $primary-700 100%);
+          }
+          
+          &:active {
+            transform: translateY(0);
+          }
+        }
+        
+        // Notifications List
+        .notificationsList {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+          margin-bottom: 1rem;
+          
+          .notificationItem {
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            border-left: 4px solid;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            &.incomeNotification {
+              border-left-color: $success-500;
+              background: rgba($success-50, 0.6);
+            }
+            
+            &.memberNotification {
+              border-left-color: $secondary-500;
+              background: rgba($secondary-50, 0.6);
+            }
+            
+            &.upgradeNotification {
+              border-left-color: $accent-500;
+              background: rgba($accent-50, 0.6);
+            }
+            
+            &.defaultNotification {
+              border-left-color: $text-secondary;
+              background: rgba($text-secondary, 0.05);
+            }
+            
+            &:hover {
+              transform: translateX(4px);
+              box-shadow: 0 4px 15px rgba($primary-500, 0.1);
+            }
+            
+            .notificationContent {
+              display: flex;
+              align-items: flex-start;
+              justify-content: space-between;
+              
+              .notificationText {
+                flex: 1;
+                
+                .notificationTitle {
+                  font-weight: 600;
+                  color: $text-primary;
+                  font-size: 0.875rem;
+                  margin-bottom: 0.25rem;
+                  line-height: 1.3;
+                }
+                
+                .notificationMessage {
+                  color: $text-secondary;
+                  font-size: 0.75rem;
+                  margin-bottom: 0.5rem;
+                  line-height: 1.4;
+                }
+                
+                .notificationTime {
+                  color: $text-secondary;
+                  font-size: 0.75rem;
+                  opacity: 0.8;
+                }
+              }
+              
+              .unreadIndicator {
+                width: 0.5rem;
+                height: 0.5rem;
+                background: $error-500;
+                border-radius: 50%;
+                margin-left: 0.5rem;
+                flex-shrink: 0;
+                margin-top: 0.25rem;
+              }
+            }
+          }
+        }
+        
+        .viewAllButton {
+          width: 100%;
+          color: $primary-600;
+          font-weight: 500;
+          font-size: 0.875rem;
+          text-align: center;
+          padding: 0.5rem;
+          border-radius: 0.5rem;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: pointer;
+          
+          &:hover {
+            color: $primary-700;
+            background: rgba($primary-100, 0.3);
+          }
+        }
+        
+        // Quick Actions
+        .quickActions {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+          
+          .actionButton {
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem;
+            background: rgba($primary-50, 0.5);
+            border-radius: 0.75rem;
+            border: 1px solid rgba($primary-200, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            
+            &:hover {
+              background: rgba($primary-100, 0.6);
+              border-color: rgba($primary-300, 0.4);
+              transform: translateX(4px);
+            }
+            
+            .actionContent {
+              display: flex;
+              align-items: center;
+              gap: 0.75rem;
+              
+              .actionIcon {
+                width: 2rem;
+                height: 2rem;
+                border-radius: 0.5rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: $white;
+                box-shadow: 
+                  0 2px 8px rgba($primary-500, 0.2),
+                  inset 0 1px 0 rgba($white, 0.2);
+                
+                &.inviteIcon {
+                  background: $gradient-primary;
+                }
+                
+                &.reportsIcon {
+                  background: linear-gradient(135deg, $secondary-500 0%, $secondary-600 100%);
+                }
+                
+                &.withdrawIcon {
+                  background: linear-gradient(135deg, $success-500 0%, $success-600 100%);
+                }
+              }
+              
+              .actionText {
+                color: $text-primary;
+                font-weight: 500;
+                font-size: 0.875rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .dashboardPage {
+    padding: 1rem 0;
+    
+    .dashboardHeader {
+      padding: 1.5rem;
+      
+      .headerContent {
+        .userInfo {
+          .welcomeTitle {
+            font-size: 2rem;
+          }
+          
+          .userDetails {
+            font-size: 1rem;
+          }
+        }
+        
+        .financialStats {
+          gap: 1rem;
+          
+          .statCard {
+            min-width: 100px;
+            
+            .statValue {
+              font-size: 1.5rem;
+            }
+          }
+        }
+      }
+    }
+    
+    .quickStats {
+      gap: 1rem;
+      
+      .statItem {
+        padding: 1.25rem;
+        
+        .statContent {
+          .statInfo {
+            .statValue {
+              font-size: 1.75rem;
+            }
+          }
+          
+          .statIcon {
+            width: 2.5rem;
+            height: 2.5rem;
+          }
+        }
+      }
+    }
+    
+    .mainContent {
+      gap: 1.5rem;
+      
+      .sidebar {
+        gap: 1.25rem;
+        
+        .sidebarCard {
+          padding: 1.25rem;
+        }
+      }
+    }
+  }
+}

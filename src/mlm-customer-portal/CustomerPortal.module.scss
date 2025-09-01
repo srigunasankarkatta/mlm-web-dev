@@ -1,0 +1,566 @@
+@use "../styles/color-palette" as *;
+
+// Professional Customer Portal Design with Teal/Green Color Palette
+
+.customerPortalContainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, $bg-primary 0%, $bg-secondary 20%, $bg-tertiary 100%);
+  position: relative;
+  overflow-x: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba($primary-200, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba($primary-300, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba($primary-100, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+  }
+}
+
+// Professional Navigation Bar
+  .navigation {
+    background: rgba($white, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 2px solid $border-light;
+    box-shadow: 
+      0 4px 20px $shadow-light,
+      0 1px 0 rgba($primary-100, 0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+  
+  .navContainer {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    
+    @media (min-width: 768px) {
+      padding: 0 2rem;
+    }
+  }
+  
+  .navContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 4.5rem;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    
+    .logoIcon {
+      width: 3rem;
+      height: 3rem;
+      background: $gradient-primary;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 
+        0 8px 25px rgba($primary-500, 0.25),
+        inset 0 1px 0 rgba($white, 0.2);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      &:hover {
+        transform: scale(1.05) rotate(5deg);
+        box-shadow: 
+          0 12px 35px rgba($primary-500, 0.35),
+          inset 0 1px 0 rgba($white, 0.3);
+      }
+    }
+    
+    .logoText {
+      font-size: 1.75rem;
+      font-weight: 800;
+      background: $gradient-primary;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.025em;
+    }
+  }
+  
+  .navItems {
+    display: none;
+    
+    @media (min-width: 768px) {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .navItem {
+      position: relative;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: $text-secondary;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      background: transparent;
+      border: 2px solid transparent;
+      
+      &:hover {
+        color: $primary-600;
+        background: rgba($primary-50, 0.8);
+        border-color: rgba($primary-200, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 
+          0 8px 25px rgba($primary-500, 0.15),
+          inset 0 1px 0 rgba($primary-100, 0.2);
+      }
+      
+      &.active {
+        color: $primary-700;
+        background: rgba($primary-100, 0.9);
+        border-color: $primary-300;
+        box-shadow: 
+          0 8px 25px rgba($primary-500, 0.2),
+          inset 0 1px 0 rgba($primary-200, 0.3);
+        
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -2px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 70%;
+          height: 3px;
+          background: $gradient-primary;
+          border-radius: 2px;
+          box-shadow: 0 2px 8px rgba($primary-500, 0.3);
+        }
+      }
+    }
+  }
+  
+  .authButtons {
+    display: none;
+    
+    @media (min-width: 768px) {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .loginBtn {
+      color: $primary-600;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      background: rgba($primary-50, 0.8);
+      border: 2px solid rgba($primary-200, 0.5);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      
+      &:hover {
+        color: $primary-700;
+        background: rgba($primary-100, 0.9);
+        border-color: $primary-300;
+        transform: translateY(-2px);
+        box-shadow: 
+          0 8px 25px rgba($primary-500, 0.15),
+          inset 0 1px 0 rgba($primary-200, 0.2);
+      }
+    }
+    
+    .getStartedBtn {
+      background: $gradient-primary;
+      color: $white;
+      padding: 0.75rem 1.75rem;
+      border-radius: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 2px solid transparent;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 
+        0 8px 25px rgba($primary-500, 0.25),
+        inset 0 1px 0 rgba($white, 0.2);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 
+          0 12px 35px rgba($primary-500, 0.35),
+          inset 0 1px 0 rgba($white, 0.3);
+        background: linear-gradient(135deg, $primary-600 0%, $primary-700 100%);
+      }
+    }
+  }
+  
+  .mobileMenuButton {
+    display: block;
+    
+    @media (min-width: 768px) {
+      display: none;
+    }
+    
+    color: $primary-600;
+    padding: 0.75rem;
+    border-radius: 12px;
+    background: rgba($primary-50, 0.8);
+    border: 2px solid rgba($primary-200, 0.5);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    &:hover {
+      color: $primary-700;
+      background: rgba($primary-100, 0.9);
+      border-color: $primary-300;
+      transform: scale(1.05);
+      box-shadow: 
+        0 8px 25px rgba($primary-500, 0.15),
+        inset 0 1px 0 rgba($primary-200, 0.2);
+    }
+  }
+  
+  .mobileMenu {
+    border-top: 2px solid $border-light;
+    background: rgba($white, 0.98);
+    backdrop-filter: blur(20px);
+    
+    .mobileNavItems {
+      padding: 1.5rem 1rem;
+      
+      .mobileNavItem {
+        display: block;
+        padding: 1rem 1.25rem;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba($primary-50, 0.5);
+        border: 2px solid transparent;
+        
+        &.active {
+          color: $primary-700;
+          background: rgba($primary-100, 0.9);
+          border-color: $primary-300;
+          box-shadow: 
+            0 8px 25px rgba($primary-500, 0.15),
+            inset 0 1px 0 rgba($primary-200, 0.2);
+        }
+        
+        &:not(.active) {
+          color: $text-secondary;
+          
+          &:hover {
+            color: $primary-600;
+            background: rgba($primary-100, 0.8);
+            border-color: rgba($primary-200, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 
+              0 8px 25px rgba($primary-500, 0.1),
+              inset 0 1px 0 rgba($primary-100, 0.1);
+          }
+        }
+      }
+      
+      .mobileAuthButtons {
+        padding-top: 1.5rem;
+        border-top: 2px solid $border-light;
+        margin-top: 1.5rem;
+        
+        .mobileLoginBtn {
+          width: 100%;
+          text-align: left;
+          padding: 1rem 1.25rem;
+          color: $primary-600;
+          font-weight: 600;
+          border-radius: 12px;
+          background: rgba($primary-50, 0.8);
+          border: 2px solid rgba($primary-200, 0.5);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          text-decoration: none;
+          display: block;
+          
+          &:hover {
+            color: $primary-700;
+            background: rgba($primary-100, 0.9);
+            border-color: $primary-300;
+            transform: translateY(-2px);
+          }
+        }
+        
+        .mobileGetStartedBtn {
+          width: 100%;
+          background: $gradient-primary;
+          color: $white;
+          padding: 1rem 1.25rem;
+          border-radius: 12px;
+          font-weight: 700;
+          text-align: center;
+          margin-top: 0.75rem;
+          border: 2px solid transparent;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          text-decoration: none;
+          display: block;
+          
+          &:hover {
+            background: linear-gradient(135deg, $primary-600 0%, $primary-700 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba($primary-500, 0.25);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Professional Main Content Area
+.mainContent {
+  flex: 1;
+  width: 100%;
+  padding: 2rem 1rem;
+  padding-top: 6rem; // Account for fixed navbar
+  position: relative;
+  z-index: 1;
+  
+  @media (min-width: 768px) {
+    padding: 3rem 2rem;
+    padding-top: 6.5rem;
+  }
+  
+  @media (min-width: 1024px) {
+    padding: 4rem 2rem;
+    padding-top: 7rem;
+  }
+}
+
+// Professional Footer
+.footer {
+  background: $gradient-dark;
+  color: $text-light;
+  flex-shrink: 0;
+  margin-top: auto;
+  border-top: 2px solid rgba($primary-300, 0.3);
+  box-shadow: 
+    0 -8px 32px rgba($primary-800, 0.3),
+    inset 0 1px 0 rgba($primary-200, 0.1);
+  
+  .footerContent {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 2rem;
+    
+    @media (min-width: 768px) {
+      padding: 4rem 2rem 3rem;
+    }
+  }
+  
+  .footerGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3rem;
+    }
+    
+    .companyInfo {
+      @media (min-width: 768px) {
+        grid-column: span 2;
+      }
+      
+      .companyLogo {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        
+        .footerLogoIcon {
+          width: 3rem;
+          height: 3rem;
+          background: $gradient-primary;
+          border-radius: 16px;
+          box-shadow: 
+            0 8px 25px rgba($primary-500, 0.3),
+            inset 0 1px 0 rgba($white, 0.2);
+        }
+        
+        .footerLogoText {
+          font-size: 1.75rem;
+          font-weight: 800;
+          color: $text-light;
+          text-shadow: 0 2px 4px rgba($primary-900, 0.3);
+        }
+      }
+      
+      .companyDescription {
+        color: rgba($text-light, 0.9);
+        margin-bottom: 2rem;
+        line-height: 1.7;
+        max-width: 28rem;
+        font-size: 1rem;
+      }
+      
+      .socialLinks {
+        display: flex;
+        gap: 1rem;
+        
+        .socialLink {
+          color: rgba($text-light, 0.7);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          padding: 0.75rem;
+          border-radius: 12px;
+          background: rgba($primary-300, 0.1);
+          border: 1px solid rgba($primary-300, 0.2);
+          
+          &:hover {
+            color: $primary-100;
+            background: rgba($primary-300, 0.2);
+            border-color: rgba($primary-300, 0.4);
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 
+              0 8px 25px rgba($primary-300, 0.3),
+              inset 0 1px 0 rgba($primary-200, 0.1);
+          }
+        }
+      }
+    }
+    
+    .footerSection {
+      .sectionTitle {
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        color: $text-light;
+        text-shadow: 0 2px 4px rgba($primary-900, 0.3);
+        position: relative;
+        
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -0.5rem;
+          left: 0;
+          width: 2rem;
+          height: 2px;
+          background: $gradient-primary;
+          border-radius: 1px;
+        }
+      }
+      
+      .sectionLinks {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        
+        .footerLink {
+          color: rgba($text-light, 0.8);
+          text-decoration: none;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          padding: 0.5rem 0.75rem;
+          border-radius: 8px;
+          border: 1px solid transparent;
+          
+          &:hover {
+            color: $primary-100;
+            background: rgba($primary-300, 0.1);
+            border-color: rgba($primary-300, 0.2);
+            transform: translateX(8px);
+            padding-left: 1rem;
+          }
+        }
+      }
+    }
+  }
+  
+  .footerBottom {
+    border-top: 1px solid rgba($primary-300, 0.2);
+    margin-top: 3rem;
+    padding-top: 2rem;
+    
+    .bottomContent {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      
+      @media (min-width: 768px) {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .copyright {
+        color: rgba($text-light, 0.7);
+        font-size: 0.875rem;
+      }
+      
+      .legalLinks {
+        display: flex;
+        gap: 2rem;
+        font-size: 0.875rem;
+        
+        .legalLink {
+          color: rgba($text-light, 0.7);
+          text-decoration: none;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          padding: 0.5rem 0.75rem;
+          border-radius: 8px;
+          border: 1px solid transparent;
+          
+          &:hover {
+            color: $primary-100;
+            background: rgba($primary-300, 0.1);
+            border-color: rgba($primary-300, 0.2);
+            transform: translateY(-2px);
+          }
+        }
+      }
+    }
+  }
+  
+  .businessInfo {
+    border-top: 1px solid rgba($primary-300, 0.2);
+    margin-top: 2rem;
+    padding-top: 2rem;
+    text-align: center;
+    
+    .businessText {
+      color: rgba($text-light, 0.7);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    
+    .businessEmail {
+      color: $primary-100;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      background: rgba($primary-300, 0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba($primary-300, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      &:hover {
+        background: rgba($primary-300, 0.25);
+        border-color: rgba($primary-300, 0.5);
+        transform: translateY(-3px);
+        box-shadow: 
+          0 8px 25px rgba($primary-300, 0.3),
+          inset 0 1px 0 rgba($primary-200, 0.1);
+      }
+    }
+  }
+}

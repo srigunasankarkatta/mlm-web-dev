@@ -13,6 +13,11 @@ import AdminDashboard from "../mlm-dashboard-portal/features/dashboard/AdminDash
 import AdminUsers from "../mlm-dashboard-portal/features/users/AdminUsers";
 import AdminDashboardLayout from "../mlm-dashboard-portal/components/layouts/admin-dashboard-layout";
 
+// Import Customer Portal components
+import CustomerPortal from "../mlm-customer-portal/CustomerPortal";
+import CustomerLoginPage from "../mlm-customer-portal/pages/LoginPage";
+import CustomerRegisterPage from "../mlm-customer-portal/pages/RegisterPage";
+
 // Import existing components
 import Home from "../features/home/Home";
 import Services from "../features/services/Services";
@@ -45,7 +50,14 @@ const AppRouter: React.FC<AppRouterProps> = ({ currentUserRole }) => {
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
 
-      {/* Authentication Routes - Public access */}
+      {/* Customer Portal Routes - Public access */}
+      <Route path="/customer/*" element={<CustomerPortal />} />
+
+      {/* Customer Authentication Routes - Public access */}
+      <Route path="/login" element={<CustomerLoginPage />} />
+      <Route path="/register" element={<CustomerRegisterPage />} />
+
+      {/* Admin Authentication Routes - Public access */}
       <Route path="/admin/login" element={<Login />} />
       <Route path="/admin/forgot-password" element={<ForgotPassword />} />
       <Route path="/admin/reset-password" element={<ResetPassword />} />

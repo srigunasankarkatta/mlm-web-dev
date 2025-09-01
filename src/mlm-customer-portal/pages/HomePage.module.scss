@@ -1,0 +1,257 @@
+@use "../../styles/color-palette" as *;
+
+// Professional HomePage Design with Teal/Green Color Palette
+
+.homePage {
+  .heroSection {
+    text-align: center;
+    padding: 4rem 0 6rem;
+    position: relative;
+    
+    @media (min-width: 768px) {
+      padding: 6rem 0 8rem;
+    }
+    
+    .heroContent {
+      max-width: 800px;
+      margin: 0 auto;
+      
+      .heroTitle {
+        font-size: 3rem;
+        font-weight: 800;
+        color: $text-primary;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+        letter-spacing: -0.025em;
+        
+        @media (min-width: 768px) {
+          font-size: 4rem;
+        }
+        
+        .highlight {
+          background: $gradient-primary;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+      }
+      
+      .heroSubtitle {
+        font-size: 1.25rem;
+        color: $text-secondary;
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        
+        @media (min-width: 768px) {
+          font-size: 1.5rem;
+        }
+      }
+      
+      .heroButtons {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        
+        @media (min-width: 640px) {
+          flex-direction: row;
+          justify-content: center;
+        }
+        
+        .primaryButton {
+          background: $gradient-primary;
+          color: $white;
+          padding: 1rem 2rem;
+          border-radius: 16px;
+          font-weight: 700;
+          font-size: 1.125rem;
+          text-decoration: none;
+          border: 2px solid transparent;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          box-shadow: 
+            0 8px 25px rgba($primary-500, 0.25),
+            inset 0 1px 0 rgba($white, 0.2);
+          
+          &:hover {
+            transform: translateY(-4px);
+            box-shadow: 
+              0 16px 40px rgba($primary-500, 0.35),
+              inset 0 1px 0 rgba($white, 0.3);
+            background: linear-gradient(135deg, $primary-600 0%, $primary-700 100%);
+          }
+        }
+        
+        .secondaryButton {
+          color: $primary-600;
+          padding: 1rem 2rem;
+          border-radius: 16px;
+          font-weight: 600;
+          font-size: 1.125rem;
+          text-decoration: none;
+          background: rgba($primary-50, 0.8);
+          border: 2px solid rgba($primary-200, 0.5);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          
+          &:hover {
+            color: $primary-700;
+            background: rgba($primary-100, 0.9);
+            border-color: $primary-300;
+            transform: translateY(-2px);
+            box-shadow: 
+              0 8px 25px rgba($primary-500, 0.15),
+              inset 0 1px 0 rgba($primary-200, 0.2);
+          }
+        }
+      }
+    }
+  }
+  
+  .plansSection {
+    padding: 4rem 0;
+    background: rgba($primary-50, 0.3);
+    
+    .sectionHeader {
+      text-align: center;
+      margin-bottom: 3rem;
+      
+      .sectionTitle {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: $text-primary;
+        margin-bottom: 1rem;
+        
+        @media (min-width: 768px) {
+          font-size: 3rem;
+        }
+      }
+      
+      .sectionSubtitle {
+        font-size: 1.125rem;
+        color: $text-secondary;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+    }
+  }
+  
+  .incomeTypesSection {
+    padding: 6rem 0;
+    
+    .sectionHeader {
+      text-align: center;
+      margin-bottom: 4rem;
+      
+      .sectionTitle {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: $text-primary;
+        margin-bottom: 1rem;
+        
+        @media (min-width: 768px) {
+          font-size: 3rem;
+        }
+      }
+      
+      .sectionSubtitle {
+        font-size: 1.125rem;
+        color: $text-secondary;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+    }
+    
+    .incomeGrid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2.5rem;
+      }
+      
+      @media (min-width: 1024px) {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+      }
+    }
+  }
+  
+  .ctaSection {
+    padding: 6rem 0;
+    background: $gradient-primary;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba($white, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba($white, 0.08) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    
+    .ctaContent {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+      
+      .ctaTitle {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: $white;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+        
+        @media (min-width: 768px) {
+          font-size: 3rem;
+        }
+      }
+      
+      .ctaSubtitle {
+        font-size: 1.25rem;
+        color: rgba($white, 0.9);
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+      }
+      
+      .ctaButton {
+        background: $white;
+        color: $primary-600;
+        padding: 1.25rem 3rem;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 1.25rem;
+        text-decoration: none;
+        border: 2px solid transparent;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 
+          0 8px 25px rgba($white, 0.3),
+          inset 0 1px 0 rgba($primary-100, 0.1);
+        
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: 
+            0 16px 40px rgba($white, 0.4),
+            inset 0 1px 0 rgba($primary-100, 0.2);
+          background: rgba($primary-50, 0.95);
+          color: $primary-700;
+        }
+      }
+    }
+  }
+}

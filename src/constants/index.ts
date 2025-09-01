@@ -37,6 +37,11 @@ export const NAVIGATION = [
         href: '/contact',
         description: 'Get in touch to start your project',
     },
+    {
+        name: 'Customer Portal',
+        href: '/customer',
+        description: 'Access your MLM dashboard and purchase plans',
+    },
 ] as const;
 
 export const SOCIAL_LINKS = [

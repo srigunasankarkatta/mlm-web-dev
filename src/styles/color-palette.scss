@@ -61,7 +61,10 @@ $error-500: #c72522;
 $error-600: #c72522;
 $error-700: #c72522;
 
+$success-50:#75baa2;
 $success-500:#75baa2;
+$success-600:#75baa2;
+$success-600:#75baa2;
 $success-700:#75baa2;
 // Shadow Colors
 $shadow-light: rgba(15, 54, 41, 0.1); // Light teal shadow
@@ -85,6 +88,7 @@ $gradient-accent: linear-gradient(135deg, $accent-500 0%, $accent-600 100%);
 $gradient-light: linear-gradient(135deg, $primary-50 0%, $primary-100 100%);
 $gradient-dark: linear-gradient(135deg, $secondary-800 0%, $secondary-900 100%);
 $white: #ffffff;
+$black: #000000;
 // Mixins
 @mixin primary-gradient {
   background: $gradient-primary;
