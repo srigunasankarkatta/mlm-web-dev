@@ -36,8 +36,7 @@ const AllUsers: React.FC = () => {
   } = useUsers({
     search: searchTerm || undefined,
     package_id: packageFilter !== "all" ? parseInt(packageFilter) : undefined,
-    sort_by: sortBy,
-    sort_order: sortOrder,
+    role: statusFilter !== "all" ? statusFilter : undefined,
     per_page: perPage,
     page: currentPage,
   });
@@ -47,20 +46,12 @@ const AllUsers: React.FC = () => {
   const toggleUserStatusMutation = useToggleUserStatus();
 
   // Extract users and pagination from response
-  const users = usersResponse || [];
+  const users = usersResponse?.users || [];
   const pagination = usersResponse?.pagination;
   console.log("users", users);
-  // Filter users based on search and filters (API handles most filtering)
-  const filteredUsers = useMemo(() => {
-    return users.filter((user) => {
-      const matchesStatus =
-        statusFilter === "all" ||
-        (statusFilter === "Active" && user.is_active) ||
-        (statusFilter === "Inactive" && !user.is_active);
-
-      return matchesStatus;
-    });
-  }, [users, statusFilter]);
+  console.log("usersResponse", usersResponse);
+  // API handles filtering, so we can use users directly
+  const filteredUsers = users;
 
   // Event handlers - Define these BEFORE columnDefs
   const handleViewUser = useCallback(
@@ -71,15 +62,22 @@ const AllUsers: React.FC = () => {
     [navigate]
   );
 
-  const handleEditUser = useCallback((user: any) => {
-    console.log("Edit user:", user);
-    // Implement edit user logic
-  }, []);
+  const handleEditUser = useCallback(
+    (user: any) => {
+      console.log("Edit user:", user);
+      navigate(`/admin/users/${user.id}/edit`);
+    },
+    [navigate]
+  );
 
-  const handleDeleteUser = useCallback((user: any) => {
-    console.log("Delete user:", user);
-    // Implement delete user logic
-  }, []);
+  const handleDeleteUser = useCallback(
+    (user: any) => {
+      if (window.confirm(`Are you sure you want to delete ${user.name}?`)) {
+        deleteUserMutation.mutate(user.id);
+      }
+    },
+    [deleteUserMutation]
+  );
 
   const handleRowSelected = useCallback((event: any) => {
     const selectedRows = event.api.getSelectedRows();
@@ -97,9 +95,8 @@ const AllUsers: React.FC = () => {
   }, []);
 
   const handleAddUser = useCallback(() => {
-    console.log("Add new user");
-    // Implement add user logic
-  }, []);
+    navigate("/admin/users/create");
+  }, [navigate]);
 
   const handleBulkAction = useCallback(
     (action: string) => {
@@ -132,11 +129,14 @@ const AllUsers: React.FC = () => {
       },
       {
         headerName: "Status",
-        field: "is_active",
+        field: "roles",
         cellRenderer: StatusBadgeCell,
         cellRendererParams: {
           type: "status",
-          getValue: (params: any) => (params.is_active ? "Active" : "Inactive"),
+          getValue: (params: any) =>
+            params.roles && params.roles.includes("customer")
+              ? "Active"
+              : "Admin",
         },
         width: 120,
         minWidth: 100,
@@ -146,16 +146,17 @@ const AllUsers: React.FC = () => {
       },
       {
         headerName: "Package",
-        field: "current_package.name",
+        field: "package.name",
         width: 150,
         minWidth: 120,
         sortable: true,
         filter: true,
         resizable: true,
+        valueFormatter: (params: any) => params.value || "No Package",
       },
       {
-        headerName: "Referrals",
-        field: "referrals_count",
+        headerName: "Directs",
+        field: "directs_count",
         width: 100,
         minWidth: 80,
         sortable: true,
@@ -164,16 +165,15 @@ const AllUsers: React.FC = () => {
         type: "numericColumn",
       },
       {
-        headerName: "Balance",
-        field: "wallet.balance",
+        headerName: "Total Income",
+        field: "total_income",
         width: 120,
         minWidth: 100,
         sortable: true,
         filter: true,
         resizable: true,
         cellStyle: { color: "#059669", fontWeight: "600" },
-        valueFormatter: (params: any) =>
-          `$${params.value?.toFixed(2) || "0.00"}`,
+        valueFormatter: (params: any) => `₹${params.value || "0.00"}`,
       },
       {
         headerName: "Joined",
@@ -288,8 +288,9 @@ const AllUsers: React.FC = () => {
                   Active Users
                 </p>
                 <p className="text-2xl font-semibold text-gray-900">
-                  {userStats?.active_users ||
-                    users.filter((u) => u.is_active).length}
+                  {userStats?.customer_users ||
+                    users.filter((u) => u.roles && u.roles.includes("customer"))
+                      .length}
                 </p>
               </div>
             </div>
@@ -317,7 +318,7 @@ const AllUsers: React.FC = () => {
                   New This Month
                 </p>
                 <p className="text-2xl font-semibold text-gray-900">
-                  {userStats?.new_users_this_month || 0}
+                  {userStats?.users_with_packages || 0}
                 </p>
               </div>
             </div>
@@ -341,10 +342,12 @@ const AllUsers: React.FC = () => {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Inactive</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Without Packages
+                </p>
                 <p className="text-2xl font-semibold text-gray-900">
-                  {userStats?.inactive_users ||
-                    users.filter((u) => !u.is_active).length}
+                  {userStats?.users_without_packages ||
+                    users.filter((u) => !u.package).length}
                 </p>
               </div>
             </div>
@@ -369,11 +372,9 @@ const AllUsers: React.FC = () => {
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
-                <option value="all">All Status</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-                <option value="Pending">Pending</option>
-                <option value="Suspended">Suspended</option>
+                <option value="all">All Roles</option>
+                <option value="customer">Customer</option>
+                <option value="admin">Admin</option>
               </select>
               <select
                 value={packageFilter}
@@ -429,59 +430,58 @@ const AllUsers: React.FC = () => {
           </div>
         )}
 
-        
         {isLoading
-                ? "Loading users..."
-                : `Showing ${filteredUsers.length} users`}
-              {pagination &&
-                ` (Page ${pagination.current_page} of ${pagination.last_page})`}
+          ? "Loading users..."
+          : `Showing ${filteredUsers.length} users`}
+        {pagination &&
+          ` (Page ${pagination.current_page} of ${pagination.last_page})`}
         {error ? (
-              <div className="text-center py-8">
-                <div className="text-red-600 mb-4">
-                  <svg
-                    className="w-16 h-16 mx-auto mb-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 9v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
-                    />
-                  </svg>
-                  <p className="text-lg font-semibold">Error loading users</p>
-                  <p className="text-sm text-gray-600">{error.message}</p>
-                </div>
-                <button
-                  onClick={() => window.location.reload()}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                  Retry
-                </button>
-              </div>
-            ) : (
-              <AgGridTable
-                rowData={filteredUsers}
-                columnDefs={columnDefs}
-                height={600}
-                enablePagination={true}
-                enableSorting={true}
-                enableFiltering={true}
-                enableSelection={true}
-                enableResizing={true}
-                enableColumnMoving={true}
-                paginationPageSize={perPage}
-                paginationPageSizeSelector={[10, 15, 25, 50, 100]}
-                selectionType="multiple"
-                selectedRows={selectedUsers}
-                onGridReady={handleGridReady}
-                onRowSelected={handleRowSelected}
-                loading={isLoading}
-                className="w-full"
-              />
-            )}
+          <div className="text-center py-8">
+            <div className="text-red-600 mb-4">
+              <svg
+                className="w-16 h-16 mx-auto mb-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 9v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
+                />
+              </svg>
+              <p className="text-lg font-semibold">Error loading users</p>
+              <p className="text-sm text-gray-600">{error.message}</p>
+            </div>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        ) : (
+          <AgGridTable
+            rowData={filteredUsers}
+            columnDefs={columnDefs}
+            height={600}
+            enablePagination={true}
+            enableSorting={true}
+            enableFiltering={true}
+            enableSelection={true}
+            enableResizing={true}
+            enableColumnMoving={true}
+            paginationPageSize={perPage}
+            paginationPageSizeSelector={[10, 15, 25, 50, 100]}
+            selectionType="multiple"
+            selectedRows={selectedUsers}
+            onGridReady={handleGridReady}
+            onRowSelected={handleRowSelected}
+            loading={isLoading}
+            className="w-full"
+          />
+        )}
       </div>
     </div>
   );

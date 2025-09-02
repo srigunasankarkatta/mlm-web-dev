@@ -4,16 +4,23 @@ interface StatusBadgeCellProps {
   value: string;
   type?: "status" | "role";
   getValue?: (params: any) => string;
+  data: any; // ag-grid passes the full row data here
 }
 
 const StatusBadgeCell: React.FC<StatusBadgeCellProps> = ({
   value,
   type = "status",
   getValue,
+  data,
 }) => {
   // If getValue function is provided, use it to get the actual value
-  const displayValue = getValue ? getValue({ value }) : value;
-  
+  const displayValue = getValue ? getValue(data) : value;
+
+  // Safety check for undefined displayValue
+  if (!displayValue) {
+    return <span className="text-gray-400 text-xs">N/A</span>;
+  }
+
   const getBadgeStyles = (value: string, type: string) => {
     if (type === "role") {
       switch (value) {

@@ -41,7 +41,7 @@ const AllPackages: React.FC = () => {
   const togglePackageStatusMutation = useTogglePackageStatus();
 
   // Extract packages and pagination from response
-  const packages = packagesResponse || [];
+  const packages = packagesResponse?.data || [];
   const pagination = packagesResponse?.pagination;
 
   // Filter packages based on search and filters (API handles most filtering)

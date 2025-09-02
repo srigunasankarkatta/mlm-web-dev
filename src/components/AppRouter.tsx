@@ -28,6 +28,8 @@ import CaseStudyDetail from "../features/work/CaseStudyDetail";
 import ServiceDetail from "../features/services/ServiceDetail";
 import AllUsers from "../mlm-dashboard-portal/features/user-management/AllUsers";
 import UserDetail from "../mlm-dashboard-portal/features/user-management/UserDetail";
+import EditUser from "../mlm-dashboard-portal/features/user-management/EditUser";
+import CreateUser from "../mlm-dashboard-portal/features/user-management/CreateUser";
 import AllPackages from "../mlm-dashboard-portal/features/package-management/AllPackages";
 import PackageDetail from "../mlm-dashboard-portal/features/package-management/PackageDetail";
 import CreatePackage from "../mlm-dashboard-portal/features/package-management/CreatePackage";
@@ -81,10 +83,26 @@ const AppRouter: React.FC<AppRouterProps> = ({ currentUserRole }) => {
         }
       />
       <Route
+        path="/admin/users/create"
+        element={
+          <AdminDashboardLayout>
+            <CreateUser />
+          </AdminDashboardLayout>
+        }
+      />
+      <Route
         path="/admin/users/:id"
         element={
           <AdminDashboardLayout>
             <UserDetail />
+          </AdminDashboardLayout>
+        }
+      />
+      <Route
+        path="/admin/users/:id/edit"
+        element={
+          <AdminDashboardLayout>
+            <EditUser />
           </AdminDashboardLayout>
         }
       />

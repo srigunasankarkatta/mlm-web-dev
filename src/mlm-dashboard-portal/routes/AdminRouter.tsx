@@ -2,7 +2,10 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import AdminDashboardLayout from "../components/layouts/admin-dashboard-layout";
 import AdminDashboard from "../features/dashboard/AdminDashboard";
-import AdminUsers from "../features/users/AdminUsers";
+import AllUsers from "../features/user-management/AllUsers";
+import CreateUser from "../features/user-management/CreateUser";
+import EditUser from "../features/user-management/EditUser";
+import UserDetail from "../features/user-management/UserDetail";
 import { useCurrentAdminUser } from "../queries/admin-auth";
 
 const AdminRouter: React.FC = () => {
@@ -42,15 +45,31 @@ const AdminRouter: React.FC = () => {
         path="/admin/users"
         element={
           <AdminDashboardLayout>
-            <AdminUsers />
+            <AllUsers />
           </AdminDashboardLayout>
         }
       />
       <Route
-        path="/admin/users/*"
+        path="/admin/users/create"
         element={
           <AdminDashboardLayout>
-            <AdminUsers />
+            <CreateUser />
+          </AdminDashboardLayout>
+        }
+      />
+      <Route
+        path="/admin/users/:id"
+        element={
+          <AdminDashboardLayout>
+            <UserDetail />
+          </AdminDashboardLayout>
+        }
+      />
+      <Route
+        path="/admin/users/:id/edit"
+        element={
+          <AdminDashboardLayout>
+            <EditUser />
           </AdminDashboardLayout>
         }
       />

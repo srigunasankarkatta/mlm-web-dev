@@ -9,13 +9,20 @@ export const userKeys = {
   details: () => [...userKeys.all, 'detail'] as const,
   detail: (id: number) => [...userKeys.details(), id] as const,
   stats: () => [...userKeys.all, 'stats'] as const,
+  trees: () => [...userKeys.all, 'tree'] as const,
+  tree: (id: number, maxLevel?: number) => [...userKeys.trees(), id, maxLevel] as const,
+  incomes: () => [...userKeys.all, 'incomes'] as const,
+  userIncomes: (id: number, perPage?: number) => [...userKeys.incomes(), id, perPage] as const,
 };
 
 // Get users list with pagination and filters
 export const useUsers = (params: UsersListParams = {}) => {
   return useQuery({
     queryKey: userKeys.list(params),
-    queryFn: () => userService.getUsers(params),
+    queryFn: async () => {
+      const response = await userService.getUsers(params);
+      return response.data; // Return the data part directly
+    },
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
   });
@@ -25,7 +32,10 @@ export const useUsers = (params: UsersListParams = {}) => {
 export const useUser = (id: number) => {
   return useQuery({
     queryKey: userKeys.detail(id),
-    queryFn: () => userService.getUserById(id),
+    queryFn: async () => {
+      const response = await userService.getUserById(id);
+      return response.data; // Return the data part directly
+    },
     enabled: !!id,
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
@@ -36,7 +46,10 @@ export const useUser = (id: number) => {
 export const useUserStats = () => {
   return useQuery({
     queryKey: userKeys.stats(),
-    queryFn: () => userService.getUserStats(),
+    queryFn: async () => {
+      const response = await userService.getUserStats();
+      return response.data; // Return the data part directly
+    },
     staleTime: 2 * 60 * 1000, // 2 minutes
     gcTime: 5 * 60 * 1000, // 5 minutes
   });
@@ -45,7 +58,7 @@ export const useUserStats = () => {
 // Create user mutation
 export const useCreateUser = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: (userData: CreateUserRequest) => userService.createUser(userData),
     onSuccess: () => {
@@ -59,7 +72,7 @@ export const useCreateUser = () => {
 // Update user mutation
 export const useUpdateUser = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: ({ id, userData }: { id: number; userData: UpdateUserRequest }) =>
       userService.updateUser(id, userData),
@@ -75,7 +88,7 @@ export const useUpdateUser = () => {
 // Delete user mutation
 export const useDeleteUser = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: (id: number) => userService.deleteUser(id),
     onSuccess: () => {
@@ -89,7 +102,7 @@ export const useDeleteUser = () => {
 // Toggle user status mutation
 export const useToggleUserStatus = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: ({ id, isActive }: { id: number; isActive: boolean }) =>
       userService.toggleUserStatus(id, isActive),
@@ -107,7 +120,7 @@ export const useToggleUserStatus = () => {
 // Bulk operations
 export const useBulkUpdateUsers = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async ({ userIds, updates }: { userIds: number[]; updates: UpdateUserRequest }) => {
       const promises = userIds.map(id => userService.updateUser(id, updates));
@@ -123,7 +136,7 @@ export const useBulkUpdateUsers = () => {
 
 export const useBulkDeleteUsers = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (userIds: number[]) => {
       const promises = userIds.map(id => userService.deleteUser(id));
@@ -139,7 +152,7 @@ export const useBulkDeleteUsers = () => {
 
 export const useBulkToggleUserStatus = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async ({ userIds, isActive }: { userIds: number[]; isActive: boolean }) => {
       const promises = userIds.map(id => userService.toggleUserStatus(id, isActive));
@@ -150,5 +163,33 @@ export const useBulkToggleUserStatus = () => {
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
       queryClient.invalidateQueries({ queryKey: userKeys.stats() });
     },
+  });
+};
+
+// Get user's MLM tree (Admin View)
+export const useUserTree = (id: number, maxLevel?: number) => {
+  return useQuery({
+    queryKey: userKeys.tree(id, maxLevel),
+    queryFn: async () => {
+      const response = await userService.getUserTree(id, maxLevel);
+      return response.data; // Return the data part directly
+    },
+    enabled: !!id,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+  });
+};
+
+// Get user's income history (Admin View)
+export const useUserIncomes = (id: number, perPage?: number) => {
+  return useQuery({
+    queryKey: userKeys.userIncomes(id, perPage),
+    queryFn: async () => {
+      const response = await userService.getUserIncomes(id, perPage);
+      return response.data; // Return the data part directly
+    },
+    enabled: !!id,
+    staleTime: 2 * 60 * 1000, // 2 minutes
+    gcTime: 5 * 60 * 1000, // 5 minutes
   });
 };
