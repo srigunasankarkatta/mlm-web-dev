@@ -2,6 +2,7 @@
 export { default as CustomerAuthService } from './auth-service';
 export { default as customerPackageService } from './package-service';
 export { PaymentService } from './payment-service';
+export { default as ProfileService } from './profile-service';
 export { defaultApiService, generalApiService, createCustomApiService } from './api-service-factory';
 export { API_CONFIG, getBaseURL, getCustomerBaseURL, buildApiUrl, buildCustomerApiUrl } from './api-config';
 
@@ -39,3 +40,12 @@ export type {
   ConfirmOrderRequest,
   ConfirmOrderResponse,
 } from './payment-service';
+
+export type {
+  UserProfile,
+  DirectUser,
+  IncomeLog,
+  UserProfileResponse,
+  TeamTreeNode,
+  TeamTreeResponse,
+} from './profile-service';

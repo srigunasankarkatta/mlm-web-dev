@@ -42,27 +42,6 @@
       color: $red-600;
       margin-bottom: 1rem;
     }
-
-    .retryButton {
-      background: $primary-500;
-      color: $white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 1rem;
-
-      &:hover {
-        background: $primary-600;
-        transform: translateY(-1px);
-      }
-
-      &:active {
-        transform: translateY(0);
-      }
-    }
   }
 
   @keyframes spin {
@@ -311,6 +290,322 @@
     }
   }
 
+  .directsSection {
+    background: $white;
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 40px rgba($primary-500, 0.1),
+      0 1px 0 rgba($primary-100, 0.1);
+    border: 1px solid rgba($primary-200, 0.2);
+
+    .sectionTitle {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: $text-primary;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      .sectionIcon {
+        width: 2rem;
+        height: 2rem;
+        background: $gradient-primary;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $white;
+        font-size: 1rem;
+        box-shadow: 0 4px 15px rgba($primary-500, 0.3),
+          inset 0 1px 0 rgba($white, 0.2);
+      }
+    }
+
+    .directsList {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+
+      .directItem {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem;
+        background: rgba($primary-50, 0.5);
+        border-radius: 1rem;
+        border: 1px solid rgba($primary-200, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover {
+          background: rgba($primary-100, 0.6);
+          border-color: rgba($primary-300, 0.4);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba($primary-500, 0.15),
+            inset 0 1px 0 rgba($primary-200, 0.2);
+        }
+
+        .directInfo {
+          .directName {
+            font-weight: 700;
+            color: $text-primary;
+            margin-bottom: 0.25rem;
+            font-size: 1.125rem;
+          }
+
+          .directEmail {
+            font-size: 0.875rem;
+            color: $text-secondary;
+            font-weight: 500;
+          }
+        }
+
+        .directDetails {
+          text-align: right;
+
+          .directPackage {
+            color: $primary-600;
+            font-weight: 600;
+            font-size: 0.875rem;
+            background: rgba($primary-100, 0.3);
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid rgba($primary-200, 0.3);
+            margin-bottom: 0.25rem;
+          }
+
+          .directPackageLevel {
+            color: $text-secondary;
+            font-weight: 500;
+            font-size: 0.75rem;
+            background: rgba($gray-100, 0.5);
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.375rem;
+            border: 1px solid rgba($gray-200, 0.3);
+          }
+        }
+      }
+    }
+  }
+
+  .incomeSection {
+    background: $white;
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 40px rgba($primary-500, 0.1),
+      0 1px 0 rgba($primary-100, 0.1);
+    border: 1px solid rgba($primary-200, 0.2);
+
+    .sectionTitle {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: $text-primary;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      .sectionIcon {
+        width: 2rem;
+        height: 2rem;
+        background: $gradient-primary;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $white;
+        font-size: 1rem;
+        box-shadow: 0 4px 15px rgba($primary-500, 0.3),
+          inset 0 1px 0 rgba($white, 0.2);
+      }
+    }
+
+    .incomesList {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .incomeItem {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem;
+        background: rgba($success-50, 0.3);
+        border-radius: 1rem;
+        border: 1px solid rgba($success-200, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover {
+          background: rgba($success-100, 0.4);
+          border-color: rgba($success-300, 0.4);
+          transform: translateX(4px);
+          box-shadow: 0 8px 25px rgba($success-500, 0.15),
+            inset 0 1px 0 rgba($success-200, 0.2);
+        }
+
+        .incomeInfo {
+          .incomeType {
+            font-weight: 700;
+            color: $text-primary;
+            margin-bottom: 0.25rem;
+            font-size: 1.125rem;
+          }
+
+          .incomeRemark {
+            font-size: 0.875rem;
+            color: $text-secondary;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+          }
+
+          .incomeDate {
+            font-size: 0.75rem;
+            color: $text-secondary;
+            font-weight: 500;
+          }
+        }
+
+        .incomeAmount {
+          text-align: right;
+
+          .amountValue {
+            color: $success-600;
+            font-weight: 800;
+            font-size: 1.25rem;
+          }
+        }
+      }
+    }
+  }
+
+  .teamTreeSection {
+    background: $white;
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 40px rgba($primary-500, 0.1),
+      0 1px 0 rgba($primary-100, 0.1);
+    border: 1px solid rgba($primary-200, 0.2);
+
+    .sectionTitle {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: $text-primary;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+
+      .sectionIcon {
+        width: 2rem;
+        height: 2rem;
+        background: $gradient-primary;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $white;
+        font-size: 1rem;
+        box-shadow: 0 4px 15px rgba($primary-500, 0.3),
+          inset 0 1px 0 rgba($white, 0.2);
+      }
+    }
+
+    .treeLegend {
+      background: rgba($primary-50, 0.3);
+      border: 1px solid rgba($primary-200, 0.2);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      margin-bottom: 1rem;
+
+      h4 {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: $text-primary;
+        margin: 0 0 0.75rem 0;
+      }
+
+      .legendItems {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+
+        .legendItem {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          .legendColor {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid $white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          }
+
+          span {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: $text-secondary;
+          }
+        }
+      }
+    }
+
+    .treeContainer {
+      height: 600px;
+      width: 100%;
+      border: 1px solid rgba($primary-200, 0.2);
+      border-radius: 1rem;
+      background: rgba($primary-50, 0.1);
+      position: relative;
+      overflow: hidden;
+
+      // Custom styles for react-d3-tree
+      :global(.tree-link) {
+        stroke: rgba($primary-400, 0.6);
+        stroke-width: 2;
+        fill: none;
+        transition: stroke 0.3s ease;
+      }
+
+      :global(.tree-node-circle) {
+        transition: all 0.3s ease;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+
+        &:hover {
+          r: 22;
+          filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+      }
+
+      :global(.tree-node-name) {
+        transition: all 0.3s ease;
+      }
+
+      :global(.rd3t-tree-container) {
+        width: 100%;
+        height: 100%;
+      }
+
+      :global(.rd3t-svg) {
+        width: 100%;
+        height: 100%;
+      }
+
+      :global(.rd3t-node) {
+        cursor: pointer;
+      }
+    }
+  }
+
   .accountDetails {
     background: $white;
     border-radius: 1.5rem;
@@ -486,6 +781,9 @@
     }
 
     .packageHistory,
+    .directsSection,
+    .incomeSection,
+    .teamTreeSection,
     .accountDetails {
       padding: 2rem 1.5rem;
 
@@ -516,6 +814,66 @@
             align-items: center;
           }
         }
+      }
+    }
+
+    .directsSection {
+      .directsList {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+
+        .directItem {
+          padding: 1rem;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.75rem;
+
+          .directDetails {
+            text-align: left;
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .incomeSection {
+      .incomesList {
+        .incomeItem {
+          padding: 1rem;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.75rem;
+
+          .incomeAmount {
+            text-align: left;
+            width: 100%;
+          }
+        }
+      }
+    }
+
+    .teamTreeSection {
+      .treeLegend {
+        padding: 0.75rem;
+
+        .legendItems {
+          gap: 0.75rem;
+
+          .legendItem {
+            .legendColor {
+              width: 14px;
+              height: 14px;
+            }
+
+            span {
+              font-size: 0.7rem;
+            }
+          }
+        }
+      }
+
+      .treeContainer {
+        height: 400px;
       }
     }
 

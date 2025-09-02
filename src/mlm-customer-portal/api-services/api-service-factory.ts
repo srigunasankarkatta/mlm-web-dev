@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 import { API_CONFIG } from './api-config';
 
 // Create axios instance with default configuration
@@ -57,7 +57,7 @@ const createApiService = (baseURL: string): AxiosInstance => {
                     localStorage.removeItem('token');
                     localStorage.removeItem('refreshToken');
                     localStorage.removeItem('user');
-                    
+
                     // Redirect to login page
                     if (window.location.pathname !== '/login') {
                         window.location.href = '/login';

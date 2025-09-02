@@ -112,8 +112,6 @@ export const useLogin = () => {
 
 // Hook for user registration
 export const useRegister = () => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: async (userData: RegisterRequest): Promise<RegisterResponse> => {
       return CustomerAuthService.register(userData);
@@ -121,35 +119,9 @@ export const useRegister = () => {
     onSuccess: (data: RegisterResponse) => {
       console.log('Registration successful:', data);
 
-      // Store tokens and user data
-      if (data.data?.token) {
-        localStorage.setItem('token', data.data.token);
-      }
-      if (data.data?.user) {
-        CustomerAuthService.setCurrentUser(data.data.user);
-      }
-
-      // Invalidate and refetch auth queries
-      queryClient.invalidateQueries({ queryKey: authQueryKeys.all });
-
-      // Set user profile data if available
-      if (data.data?.user) {
-        queryClient.setQueryData(authQueryKeys.profile(), {
-          status: true,
-          data: {
-            id: data.data.user.id,
-            name: data.data.user.name,
-            email: data.data.user.email,
-            sponsor_id: data.data.user.sponsor_id,
-            package_id: data.data.user.package_id,
-            created_at: data.data.user.created_at,
-            updated_at: data.data.user.updated_at,
-            walletBalance: 0,
-            totalEarnings: 0,
-            purchasedPlans: [],
-          },
-        });
-      }
+      // Note: The new API doesn't return a token or user object
+      // User will need to login after registration
+      // We just show success message and redirect to login
 
       // Dispatch custom event to notify other components
       window.dispatchEvent(new CustomEvent('authStateChanged'));

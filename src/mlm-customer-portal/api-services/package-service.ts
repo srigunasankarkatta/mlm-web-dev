@@ -59,31 +59,54 @@ export interface PackagesListResponse {
     };
 }
 
+export interface ApiPackage {
+    id: number;
+    name: string;
+    price: string;
+    level_unlock: number;
+}
+
+export interface ApiPackagesResponse {
+    status: boolean;
+    message: string;
+    data: ApiPackage[];
+}
+
+export interface ApiPackagesErrorResponse {
+    status: false;
+    message: string;
+    errors: null;
+}
+
 export interface PurchasePackageRequest {
-    packageId: string;
-    paymentMethod: 'razorpay' | 'cashfree' | 'bank_transfer';
-    referralCode?: string;
-    termsAccepted: boolean;
+    package_id: number;
 }
 
 export interface PurchasePackageResponse {
-    success: boolean;
+    status: boolean;
     message: string;
     data: {
-        orderId: string;
-        paymentUrl?: string;
-        paymentDetails: {
-            amount: number;
-            currency: string;
-            paymentId?: string;
-        };
-        package: MLMPackage;
         user: {
-            id: string;
+            id: number;
             name: string;
             email: string;
+            package_id: number;
+        };
+        package: {
+            id: number;
+            name: string;
+            price: string;
+            level_unlock: number;
         };
     };
+}
+
+export interface PurchasePackageErrorResponse {
+    status: false;
+    message: string;
+    errors?: {
+        package_id?: string[];
+    } | null;
 }
 
 export interface UserPackagesResponse {
@@ -149,6 +172,14 @@ class CustomerPackageService {
     private baseUrl = '/packages';
 
     /**
+     * Get available packages from the new API endpoint
+     */
+    async getApiPackages(): Promise<ApiPackagesResponse> {
+        const response = await defaultApiService.get<ApiPackagesResponse>('/packages');
+        return response.data;
+    }
+
+    /**
      * Get available packages list with pagination and filters
      */
     async getPackages(params: PackagesListParams = {}): Promise<PackagesListResponse> {
@@ -180,7 +211,7 @@ class CustomerPackageService {
      */
     async purchasePackage(packageData: PurchasePackageRequest): Promise<PurchasePackageResponse> {
         const response = await defaultApiService.post<PurchasePackageResponse>(
-            API_CONFIG.endpoints.packages.purchase, 
+            '/purchase-package',
             packageData
         );
         return response.data;

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import styles from "./RazorpayPopup.module.scss";
 
 interface RazorpayPopupProps {
@@ -47,7 +48,7 @@ const RazorpayPopup: React.FC<RazorpayPopupProps> = ({
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className={styles.overlay}>
       <div className={styles.popup}>
         <div className={styles.header}>
@@ -222,7 +223,8 @@ const RazorpayPopup: React.FC<RazorpayPopupProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

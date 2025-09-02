@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { PaymentService, CreateOrderRequest, ConfirmOrderRequest } from '../api-services';
 import { CustomerAuthService } from '../api-services/auth-service';
+import { usePackagePurchase } from './usePackagePurchase';
 
 interface PackageDetails {
     id: number; // Changed from string to number for API compatibility
@@ -14,7 +15,10 @@ export const usePayment = () => {
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const [selectedPackage, setSelectedPackage] = useState<PackageDetails | null>(null);
 
-    // Create order mutation
+    // Package purchase mutation
+    const packagePurchaseMutation = usePackagePurchase();
+
+    // Create order mutation (for dummy Razorpay)
     const createOrderMutation = useMutation({
         mutationFn: ({ orderData, userId }: { orderData: CreateOrderRequest; userId?: string }) =>
             PaymentService.createOrder(orderData, userId),
@@ -26,7 +30,7 @@ export const usePayment = () => {
         },
     });
 
-    // Confirm order mutation
+    // Confirm order mutation (for dummy Razorpay)
     const confirmOrderMutation = useMutation({
         mutationFn: ({ orderId, confirmationData }: { orderId: string; confirmationData: ConfirmOrderRequest }) =>
             PaymentService.confirmOrder(orderId, confirmationData),
@@ -49,36 +53,21 @@ export const usePayment = () => {
         if (!selectedPackage) return;
 
         try {
-            // Get current user ID for idempotency key
-            const currentUser = CustomerAuthService.getCurrentUser();
-            const userId = currentUser?.id?.toString() || currentUser?.email;
+            console.log('Payment successful, calling package purchase API...');
 
-            // Step 1: Create order
-            const orderData: CreateOrderRequest = {
+            // Call the package purchase API directly
+            await packagePurchaseMutation.mutateAsync({
                 package_id: selectedPackage.id,
-                payment_provider: 'razorpay',
-            };
-
-            const orderResponse = await createOrderMutation.mutateAsync({ orderData, userId });
-            console.log('Order created:', orderResponse);
-
-            // Step 2: Confirm order with payment token
-            const confirmationData: ConfirmOrderRequest = {
-                confirmation_token: paymentToken,
-                payment_status: 'success',
-            };
-
-            await confirmOrderMutation.mutateAsync({
-                orderId: orderResponse.order_id,
-                confirmationData,
             });
+
+            console.log('Package purchase completed successfully');
 
             // Close modal and reset state
             setIsPaymentModalOpen(false);
             setSelectedPackage(null);
 
         } catch (error) {
-            console.error('Payment process failed:', error);
+            console.error('Package purchase failed:', error);
             // Handle error - could show error message to user
         }
     };
@@ -96,8 +85,10 @@ export const usePayment = () => {
         closePaymentModal,
         isCreatingOrder: createOrderMutation.isPending,
         isConfirmingOrder: confirmOrderMutation.isPending,
-        isProcessing: createOrderMutation.isPending || confirmOrderMutation.isPending,
+        isProcessing: createOrderMutation.isPending || confirmOrderMutation.isPending || packagePurchaseMutation.isPending,
         createOrderError: createOrderMutation.error,
         confirmOrderError: confirmOrderMutation.error,
+        packagePurchaseError: packagePurchaseMutation.error,
+        isPurchasingPackage: packagePurchaseMutation.isPending,
     };
 };

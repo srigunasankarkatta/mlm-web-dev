@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import type { MLMPlan } from "../types";
 import { MLM_PLANS } from "../data/mockData";
 import styles from "./AuthModal.module.scss";
@@ -70,7 +71,7 @@ const AuthModal: React.FC<AuthModalProps> = ({
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  return (
+  return createPortal(
     <div className={styles.authModal}>
       <div className={styles.modalContainer}>
         <div className={styles.modalHeader}>
@@ -272,7 +273,8 @@ const AuthModal: React.FC<AuthModalProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

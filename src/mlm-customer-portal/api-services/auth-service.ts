@@ -30,7 +30,6 @@ export interface RegisterRequest {
     name: string;
     email: string;
     password: string;
-    password_confirmation: string;
     referral_code?: string;
 }
 
@@ -38,16 +37,11 @@ export interface RegisterResponse {
     status: boolean;
     message: string;
     data: {
-        token: string;
-        user: {
-            id: number;
-            name: string;
-            email: string;
-            sponsor_id: number | null;
-            package_id: number | null;
-            created_at: string;
-            updated_at: string;
-        };
+        id: number;
+        name: string;
+        email: string;
+        referral_code: string;
+        sponsor_referral_code: string;
     };
 }
 
@@ -138,7 +132,7 @@ export class CustomerAuthService {
             console.log('Registering user with data:', userData);
 
             const response = await defaultApiService.post<RegisterResponse>(
-                '/customer/register',
+                '/register',
                 userData
             );
 

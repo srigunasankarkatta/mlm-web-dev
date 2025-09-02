@@ -42,7 +42,7 @@ $bg-primary: #f0f7f5; // Very light teal background
 $bg-secondary: #d1e8e0; // Light teal background
 $bg-tertiary: #a3d1c1; // Medium light teal background
 $bg-dark: #0a3828; // Very dark teal background
-$background-light:#f0f7f5;
+$background-light: #f0f7f5;
 
 // Text Colors
 $text-primary: #051c14; // Darkest teal for primary text
@@ -61,11 +61,11 @@ $error-500: #c72522;
 $error-600: #c72522;
 $error-700: #c72522;
 
-$success-50:#75baa2;
-$success-500:#75baa2;
-$success-600:#75baa2;
-$success-600:#75baa2;
-$success-700:#75baa2;
+$success-50: #75baa2;
+$success-500: #75baa2;
+$success-600: #75baa2;
+$success-600: #75baa2;
+$success-700: #75baa2;
 // Shadow Colors
 $shadow-light: rgba(15, 54, 41, 0.1); // Light teal shadow
 $shadow-medium: rgba(10, 56, 40, 0.2); // Medium teal shadow
@@ -76,13 +76,29 @@ $success: #198c64; // Primary teal for success
 $warning: #a3d1c1; // Medium light teal for warning
 $error: #d1e8e0; // Light teal for error (soft)
 $info: #75baa2; // Medium teal for info
-$red-600:#c72522;
+$red-600: #c72522;
+$success-200: #198c64;
+$success-100: #198c64;
+$success-300: #198c64;
+$success-400: #198c64;
 
-$warning-100:#a3d1c1;
-$warning-300:#a3d1c1;
-$warning-600:#a3d1c1;
-$warning-500:#a3d1c1;
-$warning-700:#a3d1c1;
+$gray: #515f5a;
+$gray-100: #515f5a;
+$gray-200: #515f5a;
+$gray-300: #515f5a;
+$gray-400: #515f5a;
+$gray-500: #515f5a;
+
+$danger-500:#ce4545;
+$danger-400:#ce4545;
+$danger-600:#ce4545;
+$danger-700:#ce4545;
+
+$warning-100: #a3d1c1;
+$warning-300: #a3d1c1;
+$warning-600: #a3d1c1;
+$warning-500: #a3d1c1;
+$warning-700: #a3d1c1;
 
 // Gradients
 $gradient-primary: linear-gradient(135deg, $primary-500 0%, $primary-600 100%);

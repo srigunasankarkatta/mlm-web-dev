@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import type { MLMPlan } from "../types";
+import React, { useState, useEffect } from "react";
+import type { MLMPlan, IncomeType } from "../types";
 import { MLM_PLANS } from "../data/mockData";
 import AuthModal from "../components/AuthModal";
 import RazorpayPopup from "../components/RazorpayPopup";
@@ -12,20 +12,23 @@ import styles from "./PlansPage.module.scss";
 const PlansPage: React.FC = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<MLMPlan | null>(null);
+  const [notification, setNotification] = useState<{
+    type: "success" | "error" | "info";
+    message: string;
+  } | null>(null);
 
   // Fetch packages from API
   const {
     data: packagesData,
-    isLoading: isPackagesLoading,
     error: packagesError,
     refetch: refetchPackages,
   } = usePackages({ perPage: 100 }); // Get all packages
 
   // Utility function to convert package ID from string to integer
   const convertPackageId = (planId: string): number => {
-    const numericId = parseInt(planId.replace("package-", ""), 10);
+    const numericId = planId
     if (isNaN(numericId)) {
-      console.error("Invalid package ID format:", planId);
+      console.error("Invalid package ID format:", planId);  
       return 1; // Default to package 1 if conversion fails
     }
     return numericId;
@@ -47,8 +50,8 @@ const PlansPage: React.FC = () => {
   };
 
   // Generate unlocks array based on package data
-  const generateUnlocksFromPackage = (apiPackage: any): string[] => {
-    const unlocks: string[] = [];
+  const generateUnlocksFromPackage = (apiPackage: any): IncomeType[] => {
+    const unlocks: IncomeType[] = [];
 
     if (apiPackage.directCommission > 0) unlocks.push("Direct");
     if (apiPackage.levelCommissions && apiPackage.levelCommissions.length > 0)
@@ -69,10 +72,49 @@ const PlansPage: React.FC = () => {
     initiatePayment,
     handlePaymentSuccess,
     closePaymentModal,
-    isProcessing,
+    packagePurchaseError,
   } = usePayment();
 
   const registerMutation = useRegister();
+
+  // Listen for package purchase events
+  useEffect(() => {
+    const handlePackagePurchased = (event: any) => {
+      const data = event.detail;
+      setNotification({
+        type: "success",
+        message: `Package "${data.data.package.name}" purchased successfully!`,
+      });
+
+      // Auto-hide notification after 5 seconds
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
+    };
+
+    window.addEventListener("packagePurchased", handlePackagePurchased);
+
+    return () => {
+      window.removeEventListener("packagePurchased", handlePackagePurchased);
+    };
+  }, []);
+
+  // Show error notification if package purchase fails
+  useEffect(() => {
+    if (packagePurchaseError) {
+      setNotification({
+        type: "error",
+        message:
+          packagePurchaseError.response?.data?.message ||
+          "Package purchase failed. Please try again.",
+      });
+
+      // Auto-hide notification after 5 seconds
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
+    }
+  }, [packagePurchaseError]);
 
   const handlePlanSelect = (plan: MLMPlan) => {
     // Check if user is authenticated
@@ -84,7 +126,7 @@ const PlansPage: React.FC = () => {
       setIsAuthModalOpen(true);
     } else {
       // Show payment modal for authenticated users
-      const packageId = convertPackageId(plan.id);
+      const packageId = plan.id;
       console.log("Converting package ID:", {
         originalId: plan.id,
         convertedId: packageId,
@@ -158,30 +200,25 @@ const PlansPage: React.FC = () => {
     }
   };
 
-  // Show loading state
-  if (isPackagesLoading) {
-    return (
-      <div className={styles.plansPage}>
-        <div className="max-w-7xl mx-auto px-4">
-          <div className={styles.loadingContainer}>
-            <div className={styles.loadingSpinner}></div>
-            <p>Loading packages...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Show error state with fallback to mock data
-  if (packagesError) {
-    console.warn(
-      "Failed to load packages from API, using mock data:",
-      packagesError
-    );
-  }
-
   return (
     <div className={styles.plansPage}>
+      {/* Notification */}
+      {notification && (
+        <div className={`${styles.notification} ${styles[notification.type]}`}>
+          <div className={styles.notificationContent}>
+            <span className={styles.notificationMessage}>
+              {notification.message}
+            </span>
+            <button
+              className={styles.notificationClose}
+              onClick={() => setNotification(null)}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className={styles.pageHeader}>

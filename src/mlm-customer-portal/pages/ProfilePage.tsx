@@ -1,133 +1,110 @@
-import React, { useState, useEffect } from "react";
-import type { CustomerProfile, MLMPlan } from "../types";
-import { useUserProfile, useCurrentUser } from "../queries/auth";
-import { CustomerAuthService } from "../api-services/auth-service";
+import React from "react";
+import { useUserProfile } from "../hooks/useProfile";
 import styles from "./ProfilePage.module.scss";
 
 const ProfilePage: React.FC = () => {
-  const [user, setUser] = useState<CustomerProfile | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Try to get user data from React Query cache first
-  const { data: profileData, isLoading: isProfileLoading } = useUserProfile();
-
-  // Fallback to localStorage if React Query doesn't have data
-  const currentUser = useCurrentUser();
-
-  useEffect(() => {
-    const loadUserData = () => {
-      try {
-        console.log("ProfilePage: Loading user data...");
-        console.log("ProfilePage: profileData from React Query:", profileData);
-        console.log("ProfilePage: currentUser from localStorage:", currentUser);
-        console.log(
-          "ProfilePage: isAuthenticated:",
-          CustomerAuthService.isAuthenticated()
-        );
-
-        // First try to get from React Query cache
-        if (profileData?.data) {
-          console.log(
-            "ProfilePage: Using profile data from React Query:",
-            profileData.data
-          );
-          setUser({
-            id: profileData.data.id,
-            name: profileData.data.name,
-            email: profileData.data.email,
-            mobile: profileData.data.mobile || "",
-            purchasedPlans: profileData.data.purchasedPlans || [],
-            walletBalance: profileData.data.walletBalance || 0,
-            totalEarnings: profileData.data.totalEarnings || 0,
-            joinDate: new Date(profileData.data.joinDate),
-            referralCode: profileData.data.referralCode,
-            uplineId: profileData.data.uplineId,
-          });
-        }
-        // Fallback to localStorage
-        else if (currentUser) {
-          console.log(
-            "ProfilePage: Using user data from localStorage:",
-            currentUser
-          );
-          setUser({
-            id: currentUser.id,
-            name: currentUser.name,
-            email: currentUser.email,
-            mobile: currentUser.mobile || "",
-            purchasedPlans: [],
-            walletBalance: 0,
-            totalEarnings: 0,
-            joinDate: new Date(),
-            referralCode: currentUser.referralCode || "",
-            uplineId: currentUser.uplineId,
-          });
-        }
-        // If no data available, show default
-        else {
-          console.log("ProfilePage: No user data available, showing default");
-          setUser({
-            id: "1",
-            name: "Guest User",
-            email: "guest@example.com",
-            mobile: "",
-            purchasedPlans: [],
-            walletBalance: 0,
-            totalEarnings: 0,
-            joinDate: new Date(),
-            referralCode: "",
-            uplineId: "",
-          });
-        }
-      } catch (error) {
-        console.error("ProfilePage: Error loading user data:", error);
-        setUser({
-          id: "1",
-          name: "Error Loading",
-          email: "error@example.com",
-          mobile: "",
-          purchasedPlans: [],
-          walletBalance: 0,
-          totalEarnings: 0,
-          joinDate: new Date(),
-          referralCode: "",
-          uplineId: "",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadUserData();
-  }, [profileData, currentUser]);
+  // Fetch user profile data from API
+  const {
+    data: profileData,
+    isLoading: isProfileLoading,
+    error: profileError,
+  } = useUserProfile();
 
   // Show loading state
-  if (isLoading || isProfileLoading) {
+  if (isProfileLoading) {
     return (
       <div className={styles.profilePage}>
         <div className="max-w-4xl mx-auto px-4">
-          <div className={styles.loadingContainer}>
-            <div className={styles.loadingSpinner}></div>
-            <p>Loading profile...</p>
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <p className="ml-4 text-gray-600">Loading profile...</p>
           </div>
         </div>
       </div>
     );
   }
 
-  // Show error state if no user data
-  if (!user) {
+  // Show error state
+  if (profileError) {
     return (
       <div className={styles.profilePage}>
         <div className="max-w-4xl mx-auto px-4">
-          <div className={styles.errorContainer}>
-            <h2>Unable to load profile</h2>
-            <p>Please try logging in again.</p>
+          <div className="text-center py-12">
+            <h2 className="text-2xl font-bold text-red-600 mb-4">
+              Error Loading Profile
+            </h2>
+            <p className="text-gray-600">
+              Please try refreshing the page or contact support.
+            </p>
           </div>
         </div>
       </div>
     );
   }
+
+  // Use API data or fallback to mock data
+  const user = profileData?.data
+    ? {
+        id: profileData.data.user.id.toString(),
+        name: profileData.data.user.name,
+        email: profileData.data.user.email,
+        mobile: "", // Not provided in API response
+        purchasedPlans: profileData.data.user.package
+          ? [
+              {
+                id: profileData.data.user.package.id.toString(),
+                name: profileData.data.user.package.name,
+                price: parseFloat(profileData.data.user.package.price),
+                level: 1,
+                benefits: [],
+                unlocks: [],
+                isRequired: true,
+                description: "",
+                features: [],
+              },
+            ]
+          : [],
+        walletBalance: 0, // Not provided in API response
+        totalEarnings: parseFloat(profileData.data.total_income),
+        joinDate: new Date(), // Not provided in API response
+        referralCode: "", // Not provided in API response
+        uplineId: "", // Not provided in API response
+      }
+    : {
+        id: "1",
+        name: "John Doe",
+        email: "john@example.com",
+        mobile: "+1234567890",
+        purchasedPlans: [
+          {
+            id: "package-1",
+            name: "Package-1",
+            price: 20,
+            level: 1,
+            benefits: [],
+            unlocks: [],
+            isRequired: true,
+            description: "",
+            features: [],
+          },
+          {
+            id: "package-2",
+            name: "Package-2",
+            price: 40,
+            level: 2,
+            benefits: [],
+            unlocks: [],
+            isRequired: false,
+            description: "",
+            features: [],
+          },
+        ],
+        walletBalance: 125.5,
+        totalEarnings: 342.75,
+        joinDate: new Date("2024-01-15"),
+        referralCode: "JOHN001",
+        uplineId: "UPLINE001",
+      };
 
   return (
     <div className={styles.profilePage}>
@@ -189,6 +166,66 @@ const ProfilePage: React.FC = () => {
           <button className={styles.upgradeButton}>Upgrade Package</button>
         </div>
 
+        {/* Directs Section */}
+        {profileData?.data.directs && profileData.data.directs.length > 0 && (
+          <div className={styles.directsSection}>
+            <h2 className={styles.sectionTitle}>
+              <span className={styles.sectionIcon}>👥</span>
+              My Directs ({profileData.data.directs.length})
+            </h2>
+            <div className={styles.directsList}>
+              {profileData.data.directs.map((direct) => (
+                <div key={direct.id} className={styles.directItem}>
+                  <div className={styles.directInfo}>
+                    <h3 className={styles.directName}>{direct.name}</h3>
+                    <p className={styles.directEmail}>{direct.email}</p>
+                  </div>
+                  <div className={styles.directDetails}>
+                    <p className={styles.directPackage}>
+                      {direct.package ? direct.package.name : "No Package"}
+                    </p>
+                    {direct.package && (
+                      <p className={styles.directPackageLevel}>
+                        Level {direct.package.level_unlock}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Income History */}
+        {profileData?.data.incomes && profileData.data.incomes.length > 0 && (
+          <div className={styles.incomeSection}>
+            <h2 className={styles.sectionTitle}>
+              <span className={styles.sectionIcon}>💰</span>
+              Income History
+            </h2>
+            <div className={styles.incomesList}>
+              {profileData.data.incomes.map((income, index) => (
+                <div key={index} className={styles.incomeItem}>
+                  <div className={styles.incomeInfo}>
+                    <h3 className={styles.incomeType}>
+                      {income.type.charAt(0).toUpperCase() +
+                        income.type.slice(1)}{" "}
+                      Income
+                    </h3>
+                    <p className={styles.incomeRemark}>{income.remark}</p>
+                    <p className={styles.incomeDate}>
+                      {new Date(income.date).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <div className={styles.incomeAmount}>
+                    <p className={styles.amountValue}>${income.amount}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Account Details */}
         <div className={styles.accountDetails}>
           <h2 className={styles.sectionTitle}>
@@ -202,11 +239,15 @@ const ProfilePage: React.FC = () => {
             </div>
             <div className={styles.detailItem}>
               <span className={styles.detailLabel}>Mobile</span>
-              <span className={styles.detailValue}>{user.mobile}</span>
+              <span className={styles.detailValue}>
+                {user.mobile || "Not provided"}
+              </span>
             </div>
             <div className={styles.detailItem}>
               <span className={styles.detailLabel}>Upline ID</span>
-              <span className={styles.detailValue}>{user.uplineId}</span>
+              <span className={styles.detailValue}>
+                {user.uplineId || "Not provided"}
+              </span>
             </div>
             <div className={styles.detailItem}>
               <span className={styles.detailLabel}>Join Date</span>
@@ -216,42 +257,6 @@ const ProfilePage: React.FC = () => {
             </div>
           </div>
         </div>
-
-        {/* Debug Section - Remove in production */}
-        {process.env.NODE_ENV === "development" && (
-          <div className={styles.debugSection}>
-            <h2 className={styles.sectionTitle}>
-              <span className={styles.sectionIcon}>🐛</span>
-              Debug Info
-            </h2>
-            <div className={styles.debugInfo}>
-              <div className={styles.debugItem}>
-                <span className={styles.debugLabel}>
-                  Authentication Status:
-                </span>
-                <span className={styles.debugValue}>
-                  {CustomerAuthService.isAuthenticated()
-                    ? "Authenticated"
-                    : "Not Authenticated"}
-                </span>
-              </div>
-              <div className={styles.debugItem}>
-                <span className={styles.debugLabel}>Profile Data Source:</span>
-                <span className={styles.debugValue}>
-                  {profileData ? "React Query" : "localStorage"}
-                </span>
-              </div>
-              <div className={styles.debugItem}>
-                <span className={styles.debugLabel}>Current User ID:</span>
-                <span className={styles.debugValue}>{user.id}</span>
-              </div>
-              <div className={styles.debugItem}>
-                <span className={styles.debugLabel}>User Name:</span>
-                <span className={styles.debugValue}>{user.name}</span>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

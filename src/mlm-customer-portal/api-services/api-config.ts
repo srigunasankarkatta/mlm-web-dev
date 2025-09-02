@@ -23,6 +23,11 @@ export const API_CONFIG = {
             verifyOtp: '/customer/verify-otp',
             resendOtp: '/customer/resend-otp',
         },
+        user: {
+            profile: '/me',
+            team: '/my-tree',
+            updateProfile: '/profile/update',
+        },
         packages: {
             list: '/packages',
             details: (id: string | number) => `/packages/${id}`,
