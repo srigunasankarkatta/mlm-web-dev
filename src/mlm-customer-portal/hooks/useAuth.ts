@@ -22,7 +22,7 @@ export const useAuth = (): UseAuthReturn => {
   useEffect(() => {
     const token = localStorage.getItem('mlm-auth-token');
     const userData = localStorage.getItem('mlm-user-data');
-    
+
     if (token && userData) {
       try {
         const parsedUser = JSON.parse(userData);
@@ -38,14 +38,14 @@ export const useAuth = (): UseAuthReturn => {
   const login = useCallback(async (request: LoginRequest): Promise<boolean> => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const response: AuthResponse = await apiLogin(request);
-      
-      if (response.success && response.user && response.token) {
-        setUser(response.user);
-        localStorage.setItem('mlm-auth-token', response.token);
-        localStorage.setItem('mlm-user-data', JSON.stringify(response.user));
+
+      if ((response.status || response.success) && response.data?.user && response.data?.token) {
+        setUser(response.data.user);
+        localStorage.setItem('mlm-auth-token', response.data.token);
+        localStorage.setItem('mlm-user-data', JSON.stringify(response.data.user));
         return true;
       } else {
         setError(response.message || 'Login failed');
@@ -62,14 +62,14 @@ export const useAuth = (): UseAuthReturn => {
   const register = useCallback(async (request: RegisterRequest): Promise<boolean> => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const response: AuthResponse = await apiRegister(request);
-      
-      if (response.success && response.user && response.token) {
-        setUser(response.user);
-        localStorage.setItem('mlm-auth-token', response.token);
-        localStorage.setItem('mlm-user-data', JSON.stringify(response.user));
+
+      if ((response.status || response.success) && response.data?.user && response.data?.token) {
+        setUser(response.data.user);
+        localStorage.setItem('mlm-auth-token', response.data.token);
+        localStorage.setItem('mlm-user-data', JSON.stringify(response.data.user));
         return true;
       } else {
         setError(response.message || 'Registration failed');

@@ -1,6 +1,7 @@
 // Export all API services
 export { default as CustomerAuthService } from './auth-service';
 export { default as customerPackageService } from './package-service';
+export { PaymentService } from './payment-service';
 export { defaultApiService, generalApiService, createCustomApiService } from './api-service-factory';
 export { API_CONFIG, getBaseURL, getCustomerBaseURL, buildApiUrl, buildCustomerApiUrl } from './api-config';
 
@@ -31,3 +32,10 @@ export type {
   UpgradePackageResponse,
   PackageComparisonResponse,
 } from './package-service';
+
+export type {
+  CreateOrderRequest,
+  CreateOrderResponse,
+  ConfirmOrderRequest,
+  ConfirmOrderResponse,
+} from './payment-service';

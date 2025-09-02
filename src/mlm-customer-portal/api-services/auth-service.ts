@@ -10,49 +10,45 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-    success: boolean;
-    data: {
-        user: {
-            id: string;
-            email: string;
-            mobile: string;
-            name: string;
-            role: string;
-            referralCode: string;
-            uplineId?: string;
-        };
-        token: string;
-        refreshToken: string;
-    };
+    status: boolean;
     message: string;
+    data: {
+        token: string;
+        user: {
+            id: number;
+            name: string;
+            email: string;
+            sponsor_id: number | null;
+            package_id: number | null;
+            created_at: string;
+            updated_at: string;
+        };
+    };
 }
 
 export interface RegisterRequest {
     name: string;
     email: string;
-    mobile: string;
-    referralCode?: string;
-    planId: string;
     password: string;
-    passwordConfirmation: string;
+    password_confirmation: string;
+    referral_code?: string;
 }
 
 export interface RegisterResponse {
-    success: boolean;
-    data: {
-        user: {
-            id: string;
-            email: string;
-            mobile: string;
-            name: string;
-            role: string;
-            referralCode: string;
-        };
-        token: string;
-        refreshToken: string;
-        message: string;
-    };
+    status: boolean;
     message: string;
+    data: {
+        token: string;
+        user: {
+            id: number;
+            name: string;
+            email: string;
+            sponsor_id: number | null;
+            package_id: number | null;
+            created_at: string;
+            updated_at: string;
+        };
+    };
 }
 
 export interface OtpRequest {
@@ -61,7 +57,7 @@ export interface OtpRequest {
 }
 
 export interface OtpResponse {
-    success: boolean;
+    status: boolean;
     message: string;
     data?: {
         otpId: string;
@@ -77,18 +73,19 @@ export interface VerifyOtpRequest {
 }
 
 export interface VerifyOtpResponse {
-    success: boolean;
+    status: boolean;
     message: string;
     data?: {
         user?: {
-            id: string;
-            email: string;
-            mobile: string;
+            id: number;
             name: string;
-            role: string;
+            email: string;
+            sponsor_id: number | null;
+            package_id: number | null;
+            created_at: string;
+            updated_at: string;
         };
         token?: string;
-        refreshToken?: string;
     };
 }
 
@@ -103,21 +100,20 @@ export interface ResetPasswordRequest {
 }
 
 export interface ProfileResponse {
-    success: boolean;
+    status: boolean;
     data: {
-        id: string;
-        email: string;
-        mobile: string;
+        id: number;
         name: string;
-        role: string;
+        email: string;
+        sponsor_id: number | null;
+        package_id: number | null;
+        created_at: string;
+        updated_at: string;
         avatar?: string;
-        referralCode: string;
-        uplineId?: string;
-        joinDate: string;
-        walletBalance: number;
-        totalEarnings: number;
-        purchasedPlans: Array<{
-            id: string;
+        walletBalance?: number;
+        totalEarnings?: number;
+        purchasedPlans?: Array<{
+            id: number;
             name: string;
             price: number;
             purchaseDate: string;
@@ -129,34 +125,53 @@ export interface ProfileResponse {
 export class CustomerAuthService {
     // Login user
     static async login(credentials: LoginRequest): Promise<LoginResponse> {
-        return defaultApiService.post<LoginResponse>(
+        const response = await defaultApiService.post<LoginResponse>(
             API_CONFIG.endpoints.auth.login,
             credentials
         );
+        return response.data;
     }
 
     // Register user
     static async register(userData: RegisterRequest): Promise<RegisterResponse> {
-        return defaultApiService.post<RegisterResponse>(
-            API_CONFIG.endpoints.auth.register,
-            userData
-        );
+        try {
+            console.log('Registering user with data:', userData);
+
+            const response = await defaultApiService.post<RegisterResponse>(
+                '/customer/register',
+                userData
+            );
+
+            console.log('Registration successful:', response.data);
+            return response.data;
+        } catch (error: any) {
+            console.error('Registration failed:', error);
+            console.error('Error details:', {
+                message: error.message,
+                status: error.response?.status,
+                statusText: error.response?.statusText,
+                data: error.response?.data
+            });
+            throw error;
+        }
     }
 
     // Send OTP
     static async sendOtp(data: OtpRequest): Promise<OtpResponse> {
-        return defaultApiService.post<OtpResponse>(
+        const response = await defaultApiService.post<OtpResponse>(
             API_CONFIG.endpoints.auth.resendOtp,
             data
         );
+        return response.data;
     }
 
     // Verify OTP
     static async verifyOtp(data: VerifyOtpRequest): Promise<VerifyOtpResponse> {
-        return defaultApiService.post<VerifyOtpResponse>(
+        const response = await defaultApiService.post<VerifyOtpResponse>(
             API_CONFIG.endpoints.auth.verifyOtp,
             data
         );
+        return response.data;
     }
 
     // Logout user
@@ -170,18 +185,12 @@ export class CustomerAuthService {
 
         // Clear local storage regardless of API response
         localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
     }
 
     // Refresh access token
     static async refreshToken(): Promise<{ token: string }> {
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (!refreshToken) {
-            throw new Error('No refresh token available');
-        }
-
-        return defaultApiService.post('/auth/refresh', { refreshToken });
+        return defaultApiService.post('/customer/refresh');
     }
 
     // Forgot password
@@ -202,17 +211,19 @@ export class CustomerAuthService {
 
     // Get user profile
     static async getProfile(): Promise<ProfileResponse> {
-        return defaultApiService.get<ProfileResponse>(
+        const response = await defaultApiService.get<ProfileResponse>(
             API_CONFIG.endpoints.auth.profile
         );
+        return response.data;
     }
 
     // Update user profile
     static async updateProfile(data: Partial<ProfileResponse['data']>): Promise<ProfileResponse> {
-        return defaultApiService.put<ProfileResponse>(
+        const response = await defaultApiService.put<ProfileResponse>(
             API_CONFIG.endpoints.auth.profile,
             data
         );
+        return response.data;
     }
 
     // Check if user is authenticated
@@ -243,8 +254,15 @@ export class CustomerAuthService {
     // Clear all auth data
     static clearAuth(): void {
         localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
+    }
+
+    // Get network tree data
+    static async getNetworkTree(userId?: string): Promise<any> {
+        // TODO: Replace with actual API endpoint
+        return defaultApiService.get('/mlm/network-tree', {
+            params: userId ? { userId } : {}
+        });
     }
 }
 

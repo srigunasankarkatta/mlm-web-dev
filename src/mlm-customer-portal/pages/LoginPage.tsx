@@ -1,28 +1,38 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useLogin } from '../queries/auth';
-import styles from './LoginPage.module.scss';
+import React, { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useLogin } from "../queries/auth";
+import styles from "./LoginPage.module.scss";
 
 const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
   const loginMutation = useLogin();
+
+  // Get the intended destination from location state, default to /customer
+  const from = (location.state as any)?.from?.pathname || "/customer";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
-      await loginMutation.mutateAsync({
+      console.log("Starting login process...");
+      const result = await loginMutation.mutateAsync({
         email,
         password,
-        rememberMe: true
+        rememberMe: true,
       });
-      
-      // Navigate to dashboard on success
-      navigate('/customer/dashboard');
+
+      console.log("Login successful:", result);
+      console.log("Attempting to navigate to:", from);
+
+      // Navigate to intended destination or customer portal home on success
+      navigate(from, { replace: true });
+
+      console.log("Navigation called");
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error("Login failed:", error);
       // Handle error (show toast, etc.)
     }
   };
@@ -30,19 +40,18 @@ const LoginPage: React.FC = () => {
   return (
     <div className={styles.loginPage}>
       <div className={styles.loginContainer}>
-       
         {/* Login Form */}
         <div className={styles.loginForm}>
           <div className={styles.formHeader}>
             <h2 className={styles.formTitle}>Welcome Back</h2>
-            <p className={styles.formSubtitle}>Sign in to access your dashboard and start earning</p>
+            <p className={styles.formSubtitle}>
+              Sign in to access your dashboard and start earning
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.formGroup}>
-              <label className={styles.formLabel}>
-                Email Address
-              </label>
+              <label className={styles.formLabel}>Email Address</label>
               <input
                 type="email"
                 value={email}
@@ -54,9 +63,7 @@ const LoginPage: React.FC = () => {
             </div>
 
             <div className={styles.formGroup}>
-              <label className={styles.formLabel}>
-                Password
-              </label>
+              <label className={styles.formLabel}>Password</label>
               <input
                 type="password"
                 value={password}
@@ -67,32 +74,41 @@ const LoginPage: React.FC = () => {
               />
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className={styles.submitButton}
               disabled={loginMutation.isPending}
             >
-              {loginMutation.isPending ? 'Signing In...' : 'Sign In'}
+              {loginMutation.isPending ? "Signing In..." : "Sign In"}
             </button>
           </form>
 
-           {/* Header */}
-        <div className={styles.loginHeader}>
-          <Link to="/customer" className={styles.backLink}>
-            <svg className={styles.backIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to Home
-          </Link>
-          
-          <div className={styles.logoSection}>
-            <div className={styles.logoIcon}>
-              <span>M</span>
-            </div>
-            <h1 className={styles.logoText}>MLM Portal</h1>
-          </div>
-        </div>
+          {/* Header */}
+          <div className={styles.loginHeader}>
+            <Link to="/customer" className={styles.backLink}>
+              <svg
+                className={styles.backIcon}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Back to Home
+            </Link>
 
+            <div className={styles.logoSection}>
+              <div className={styles.logoIcon}>
+                <span>M</span>
+              </div>
+              <h1 className={styles.logoText}>MLM Portal</h1>
+            </div>
+          </div>
         </div>
 
         {/* Side Panel */}
@@ -100,9 +116,10 @@ const LoginPage: React.FC = () => {
           <div className={styles.panelContent}>
             <h3 className={styles.panelTitle}>Start Your MLM Journey</h3>
             <p className={styles.panelSubtitle}>
-              Join thousands of successful members who are already earning through our platform
+              Join thousands of successful members who are already earning
+              through our platform
             </p>
-            
+
             <div className={styles.features}>
               <div className={styles.feature}>
                 <div className={styles.featureIcon}>💰</div>
@@ -111,7 +128,7 @@ const LoginPage: React.FC = () => {
                   <p>Direct, Level, Club, and Auto Pool earnings</p>
                 </div>
               </div>
-              
+
               <div className={styles.feature}>
                 <div className={styles.featureIcon}>🚀</div>
                 <div className={styles.featureText}>
@@ -119,7 +136,7 @@ const LoginPage: React.FC = () => {
                   <p>Start with just $20 and unlock higher levels</p>
                 </div>
               </div>
-              
+
               <div className={styles.feature}>
                 <div className={styles.featureIcon}>📱</div>
                 <div className={styles.featureText}>

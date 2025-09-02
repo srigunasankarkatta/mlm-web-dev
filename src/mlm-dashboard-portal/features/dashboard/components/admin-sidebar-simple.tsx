@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "../styles/admin-sidebar.module.scss";
 import clsx from "clsx";
+import { useAdminLogout } from "../../../queries/admin-auth";
 
 /** ---- Types ---- */
 type Role = "SUPER_ADMIN" | "ADMIN" | "USER";
@@ -426,9 +427,23 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const adminLogoutMutation = useAdminLogout();
 
   const handleMenuClick = (item: MenuItem) => {
     navigate(item.to);
+  };
+
+  const handleLogout = () => {
+    console.log("Logout button clicked");
+    adminLogoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        console.log("Logout successful, navigating to login");
+        navigate("/admin/login");
+      },
+      onError: (error) => {
+        console.error("Logout failed:", error);
+      },
+    });
   };
 
   const filteredMenu = useMemo(() => {
@@ -475,6 +490,33 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
             </div>
           ))}
         </nav>
+      </div>
+
+      {/* Logout Button - Sticky at bottom */}
+      <div className={styles.logoutSection}>
+        <button
+          onClick={handleLogout}
+          disabled={adminLogoutMutation.isPending}
+          className={styles.logoutButton}
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className={styles.logoutIcon}
+          >
+            <path
+              d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9M16 17L21 12L16 7M21 12H9"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          {adminLogoutMutation.isPending ? "Logging out..." : "Logout"}
+        </button>
       </div>
     </aside>
   );

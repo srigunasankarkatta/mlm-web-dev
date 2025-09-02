@@ -10,7 +10,7 @@ export class AdminAuthService {
     // Admin login
     static async login(credentials: AdminLoginCredentials): Promise<AdminLoginResponse> {
         return adminApiService.post<AdminLoginResponse>(
-            '/login',
+            '/admin/login',
             credentials
         );
     }
@@ -18,7 +18,7 @@ export class AdminAuthService {
     // Admin logout
     static async logout(): Promise<void> {
         try {
-            await adminApiService.post('/logout');
+            await adminApiService.post('/admin/logout');
         } catch (error) {
             // Even if logout fails, we should clear local storage
             console.warn('Admin logout API call failed, but clearing local storage');
@@ -31,12 +31,12 @@ export class AdminAuthService {
 
     // Get admin profile
     static async getProfile(): Promise<AdminProfileResponse> {
-        return adminApiService.get<AdminProfileResponse>('/profile');
+        return adminApiService.get<AdminProfileResponse>('/admin/profile');
     }
 
     // Update admin profile
     static async updateProfile(data: Partial<AdminProfileResponse['data']>): Promise<AdminProfileResponse> {
-        return adminApiService.put<AdminProfileResponse>('/profile', data);
+        return adminApiService.put<AdminProfileResponse>('/admin/profile', data);
     }
 
     // Change admin password
@@ -44,27 +44,8 @@ export class AdminAuthService {
         currentPassword: string;
         newPassword: string;
         newPasswordConfirmation: string;
-    }): Promise<{ success: boolean; message: string }> {
-        return adminApiService.post('/change-password', data);
-    }
-
-    // Get admin permissions
-    static async getPermissions(): Promise<{
-        success: boolean;
-        data: {
-            permissions: string[];
-            roles: string[];
-        };
-    }> {
-        return adminApiService.get('/permissions');
-    }
-
-    // Check if admin has specific permission
-    static async checkPermission(permission: string): Promise<{
-        success: boolean;
-        data: { hasPermission: boolean };
-    }> {
-        return adminApiService.get(`/permissions/check/${permission}`);
+    }): Promise<{ status: boolean; message: string }> {
+        return adminApiService.post('/admin/change-password', data);
     }
 }
 

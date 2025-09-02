@@ -4,13 +4,19 @@ import { performLogout } from "../utils/auth/logout";
 
 // Default transformer for ApiResponse<T>
 const transformApiResponse = <T>(res: any): T => {
-    if (!res.data.success) throw new Error(res.data.message || "API call failed");
+    // Handle both old format (success) and new format (status)
+    const isSuccess = res.data.success !== undefined ? res.data.success : res.data.status;
+    if (!isSuccess) throw new Error(res.data.message || "API call failed");
     return res.data;
 };
 
 // Get token from localStorage/sessionStorage
 const getAuthToken = (): string | null => {
-    return localStorage.getItem('token') || sessionStorage.getItem('token') || null;
+    return localStorage.getItem('token') || 
+           localStorage.getItem('adminToken') || 
+           sessionStorage.getItem('token') || 
+           sessionStorage.getItem('adminToken') || 
+           null;
 };
 
 const createAxiosInstance = (baseURL: string): AxiosInstance => {

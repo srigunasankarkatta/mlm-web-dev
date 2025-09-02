@@ -68,8 +68,6 @@ const Login: React.FC = () => {
       {
         onSuccess: (data) => {
           console.log("Admin login successful:", data);
-          console.log("User roles:", data.data.user.roles);
-          console.log("User referral code:", data.data.user.referral_code);
 
           // Clear any previous errors
           setErrors({});
@@ -84,7 +82,9 @@ const Login: React.FC = () => {
           // Get default route based on user role and redirect
           const defaultRoute = getDefaultRouteByRole(data.data.user);
           console.log(
-            `Redirecting ${data.data.user.roles.join(", ")} to ${defaultRoute}`
+            `Redirecting ${data.data.user.roles
+              .map((r) => r.name)
+              .join(", ")} to ${defaultRoute}`
           );
 
           // Small delay to show success message before redirect

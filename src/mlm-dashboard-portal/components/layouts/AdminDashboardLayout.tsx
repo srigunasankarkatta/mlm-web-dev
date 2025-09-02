@@ -36,9 +36,14 @@ const AdminDashboardLayout: React.FC = () => {
   }, [location.pathname]);
 
   const handleLogout = () => {
+    console.log("Logout button clicked");
     adminLogoutMutation.mutate(undefined, {
       onSuccess: () => {
+        console.log("Logout successful, navigating to login");
         navigate("/admin/login");
+      },
+      onError: (error) => {
+        console.error("Logout failed:", error);
       },
     });
   };
@@ -141,11 +146,12 @@ const AdminDashboardLayout: React.FC = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 flex flex-col h-full ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
+        {/* Header */}
+        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center">
             <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
               <Shield className="w-5 h-5 text-white" />
@@ -163,7 +169,7 @@ const AdminDashboardLayout: React.FC = () => {
         </div>
 
         {/* User info */}
-        <div className="px-6 py-4 border-b border-gray-200">
+        <div className="px-6 py-4 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center">
             <div className="w-10 h-10 bg-teal-100 rounded-full flex items-center justify-center">
               <span className="text-sm font-medium text-teal-800">
@@ -179,7 +185,7 @@ const AdminDashboardLayout: React.FC = () => {
                     key={index}
                     className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-teal-100 text-teal-800"
                   >
-                    {role.replace("_", " ")}
+                    {role.name?.replace("_", " ")}
                   </span>
                 ))}
               </div>
@@ -187,8 +193,8 @@ const AdminDashboardLayout: React.FC = () => {
           </div>
         </div>
 
-        {/* Navigation */}
-        <nav className="mt-6 px-3">
+        {/* Navigation - Scrollable */}
+        <nav className="flex-1 overflow-y-auto px-3 py-6 min-h-0">
           <div className="space-y-1">
             {navigationItems.map((item) => {
               const isActive = location.pathname === item.href;
@@ -221,12 +227,12 @@ const AdminDashboardLayout: React.FC = () => {
           </div>
         </nav>
 
-        {/* Logout button */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+        {/* Logout button - Sticky at bottom */}
+        <div className="flex-shrink-0 p-4 border-t border-gray-200 bg-gray-50 mt-auto">
           <button
             onClick={handleLogout}
             disabled={adminLogoutMutation.isPending}
-            className="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-md hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50"
+            className="w-full flex items-center justify-center px-4 py-3 text-sm font-medium text-white bg-red-600 border border-red-600 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50 transition-colors shadow-sm"
           >
             <LogOut className="w-4 h-4 mr-2" />
             {adminLogoutMutation.isPending ? "Logging out..." : "Logout"}

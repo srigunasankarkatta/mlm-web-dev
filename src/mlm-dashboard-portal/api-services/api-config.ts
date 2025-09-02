@@ -8,17 +8,17 @@ export const API_CONFIG = {
     },
 
     // Admin API Base URL
-    adminBaseURL: import.meta.env.VITE_ADMIN_API_BASE_URL || 'http://127.0.0.1:8000/api/admin',
+    adminBaseURL: import.meta.env.VITE_ADMIN_API_BASE_URL || 'http://127.0.0.1:8000/api',
 
     // API endpoints
     endpoints: {
         auth: {
-            login: '/auth/login',
-            logout: '/auth/logout',
-            refresh: '/auth/refresh',
-            forgotPassword: '/auth/forgot-password',
-            resetPassword: '/auth/reset-password',
-            profile: '/auth/profile',
+            login: '/admin/login',
+            logout: '/admin/logout',
+            refresh: '/admin/refresh',
+            forgotPassword: '/admin/forgot-password',
+            resetPassword: '/admin/reset-password',
+            profile: '/admin/profile',
         },
         users: {
             list: '/users',

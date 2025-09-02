@@ -6,22 +6,26 @@
   .pageHeader {
     text-align: center;
     padding: 3rem 0 4rem;
-    background: linear-gradient(135deg, rgba($primary-50, 0.8) 0%, rgba($primary-100, 0.4) 100%);
+    background: linear-gradient(
+      135deg,
+      rgba($primary-50, 0.8) 0%,
+      rgba($primary-100, 0.4) 100%
+    );
     border-radius: 0 0 2rem 2rem;
     margin-bottom: 3rem;
-    
+
     .pageTitle {
       font-size: 3rem;
       font-weight: 800;
       color: $text-primary;
       margin-bottom: 1rem;
       line-height: 1.2;
-      
+
       @media (min-width: 768px) {
         font-size: 3.5rem;
       }
     }
-    
+
     .pageSubtitle {
       font-size: 1.25rem;
       color: $text-secondary;
@@ -29,18 +33,87 @@
       margin: 0 auto;
       line-height: 1.6;
     }
+
+    .errorBanner {
+      background: rgba($warning-100, 0.8);
+      border: 1px solid $warning-300;
+      border-radius: 0.75rem;
+      padding: 1rem 1.5rem;
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+
+      p {
+        color: $warning-700;
+        font-size: 0.9rem;
+        margin: 0;
+        flex: 1;
+      }
+
+      .retryButton {
+        background: $warning-500;
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: $warning-600;
+          transform: translateY(-1px);
+        }
+      }
+    }
   }
-  
+
+  .loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+
+    .loadingSpinner {
+      width: 3rem;
+      height: 3rem;
+      border: 3px solid rgba($primary-200, 0.3);
+      border-top: 3px solid $primary-500;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1.5rem;
+    }
+
+    p {
+      color: $text-secondary;
+      font-size: 1.1rem;
+      margin: 0;
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
   .eligibilitySection {
     background: $white;
     border-radius: 1.5rem;
     padding: 2.5rem;
     margin-bottom: 3rem;
-    box-shadow: 
-      0 10px 40px rgba($primary-500, 0.1),
+    box-shadow: 0 10px 40px rgba($primary-500, 0.1),
       0 1px 0 rgba($primary-100, 0.1);
     border: 1px solid rgba($primary-200, 0.2);
-    
+
     .sectionTitle {
       font-size: 1.75rem;
       font-weight: 700;
@@ -49,7 +122,7 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      
+
       .icon {
         width: 2rem;
         height: 2rem;
@@ -62,33 +135,32 @@
         font-size: 1rem;
       }
     }
-    
+
     .eligibilityRules {
       display: grid;
       grid-template-columns: 1fr;
       gap: 1.5rem;
-      
+
       @media (min-width: 768px) {
         grid-template-columns: repeat(2, 1fr);
         gap: 2rem;
       }
-      
+
       .ruleCard {
         background: rgba($primary-50, 0.5);
         border: 1px solid rgba($primary-200, 0.3);
         border-radius: 1rem;
         padding: 1.5rem;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        
+
         &:hover {
           background: rgba($primary-100, 0.6);
           border-color: rgba($primary-300, 0.5);
           transform: translateY(-2px);
-          box-shadow: 
-            0 8px 25px rgba($primary-500, 0.15),
+          box-shadow: 0 8px 25px rgba($primary-500, 0.15),
             inset 0 1px 0 rgba($primary-200, 0.2);
         }
-        
+
         .ruleTitle {
           font-size: 1.125rem;
           font-weight: 600;
@@ -97,7 +169,7 @@
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          
+
           .ruleNumber {
             background: $gradient-primary;
             color: $white;
@@ -111,7 +183,7 @@
             font-weight: 700;
           }
         }
-        
+
         .ruleDescription {
           color: $text-secondary;
           line-height: 1.6;
@@ -120,45 +192,44 @@
       }
     }
   }
-  
+
   .plansGrid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
     max-width: 1400px;
     margin: 0 auto;
-    
+
     @media (min-width: 640px) {
       grid-template-columns: repeat(2, 1fr);
       gap: 2.5rem;
     }
-    
+
     @media (min-width: 1024px) {
       grid-template-columns: repeat(3, 1fr);
       gap: 2rem;
     }
-    
+
     @media (min-width: 1280px) {
       grid-template-columns: repeat(5, 1fr);
       gap: 1.5rem;
     }
   }
-  
+
   .planCard {
     background: $white;
     border-radius: 1.5rem;
     padding: 2rem;
     height: 100%;
-    box-shadow: 
-      0 10px 40px rgba($primary-500, 0.1),
+    box-shadow: 0 10px 40px rgba($primary-500, 0.1),
       0 1px 0 rgba($primary-100, 0.1);
     border: 2px solid rgba($primary-200, 0.2);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
-    
+
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
@@ -168,42 +239,40 @@
       transform: scaleX(0);
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
+
     &:hover {
       transform: translateY(-8px);
-      box-shadow: 
-        0 20px 60px rgba($primary-500, 0.2),
+      box-shadow: 0 20px 60px rgba($primary-500, 0.2),
         0 1px 0 rgba($primary-100, 0.2);
       border-color: rgba($primary-300, 0.4);
-      
+
       &::before {
         transform: scaleX(1);
       }
     }
-    
+
     &.requiredPlan {
       border-color: $primary-400;
-      box-shadow: 
-        0 10px 40px rgba($primary-500, 0.15),
+      box-shadow: 0 10px 40px rgba($primary-500, 0.15),
         0 1px 0 rgba($primary-200, 0.2);
-      
+
       &::before {
         background: $gradient-primary;
         transform: scaleX(1);
       }
     }
   }
-  
+
   .planContent {
     height: 100%;
     display: flex;
     flex-direction: column;
   }
-  
+
   .planHeader {
     text-align: center;
     margin-bottom: 1.5rem;
-    
+
     .planName {
       font-size: 1.25rem;
       font-weight: 700;
@@ -211,7 +280,7 @@
       margin-bottom: 0.75rem;
       line-height: 1.3;
     }
-    
+
     .planPrice {
       font-size: 2.5rem;
       font-weight: 800;
@@ -222,7 +291,7 @@
       margin-bottom: 1rem;
       line-height: 1;
     }
-    
+
     .requiredBadge {
       display: inline-block;
       background: $gradient-primary;
@@ -233,26 +302,25 @@
       border-radius: 20px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      box-shadow: 
-        0 4px 15px rgba($primary-500, 0.3),
+      box-shadow: 0 4px 15px rgba($primary-500, 0.3),
         inset 0 1px 0 rgba($white, 0.2);
     }
   }
-  
+
   .planFeatures {
     margin-bottom: 1.5rem;
     flex: 1;
-    
+
     .featureItem {
       display: flex;
       align-items: flex-start;
       gap: 0.75rem;
       margin-bottom: 0.75rem;
-      
+
       &:last-child {
         margin-bottom: 0;
       }
-      
+
       .featureIcon {
         width: 1.25rem;
         height: 1.25rem;
@@ -265,11 +333,10 @@
         font-size: 0.75rem;
         flex-shrink: 0;
         margin-top: 0.125rem;
-        box-shadow: 
-          0 2px 8px rgba($primary-500, 0.3),
+        box-shadow: 0 2px 8px rgba($primary-500, 0.3),
           inset 0 1px 0 rgba($white, 0.2);
       }
-      
+
       .featureText {
         font-size: 0.875rem;
         color: $text-secondary;
@@ -278,10 +345,10 @@
       }
     }
   }
-  
+
   .planUnlocks {
     margin-bottom: 1.5rem;
-    
+
     .unlocksTitle {
       font-size: 0.875rem;
       font-weight: 600;
@@ -290,12 +357,12 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-    
+
     .unlocksList {
       display: flex;
       flex-wrap: wrap;
       gap: 0.5rem;
-      
+
       .unlockTag {
         display: inline-block;
         background: rgba($primary-100, 0.8);
@@ -306,7 +373,7 @@
         border-radius: 20px;
         border: 1px solid rgba($primary-200, 0.5);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        
+
         &:hover {
           background: rgba($primary-200, 0.9);
           border-color: $primary-300;
@@ -315,7 +382,7 @@
       }
     }
   }
-  
+
   .actionButton {
     width: 100%;
     font-weight: 700;
@@ -325,47 +392,51 @@
     border: 2px solid transparent;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
-    
+
     &.primaryButton {
       background: $gradient-primary;
       color: $white;
-      box-shadow: 
-        0 8px 25px rgba($primary-500, 0.25),
+      box-shadow: 0 8px 25px rgba($primary-500, 0.25),
         inset 0 1px 0 rgba($white, 0.2);
-      
+
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 
-          0 12px 35px rgba($primary-500, 0.35),
+        box-shadow: 0 12px 35px rgba($primary-500, 0.35),
           inset 0 1px 0 rgba($white, 0.3);
         background: linear-gradient(135deg, $primary-600 0%, $primary-700 100%);
       }
     }
-    
+
     &.secondaryButton {
-      background: linear-gradient(135deg, $secondary-500 0%, $secondary-600 100%);
+      background: linear-gradient(
+        135deg,
+        $secondary-500 0%,
+        $secondary-600 100%
+      );
       color: $white;
-      box-shadow: 
-        0 8px 25px rgba($secondary-500, 0.25),
+      box-shadow: 0 8px 25px rgba($secondary-500, 0.25),
         inset 0 1px 0 rgba($white, 0.2);
-      
+
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 
-          0 12px 35px rgba($secondary-500, 0.35),
+        box-shadow: 0 12px 35px rgba($secondary-500, 0.35),
           inset 0 1px 0 rgba($white, 0.3);
-        background: linear-gradient(135deg, $secondary-600 0%, $secondary-700 100%);
+        background: linear-gradient(
+          135deg,
+          $secondary-600 0%,
+          $secondary-700 100%
+        );
       }
     }
-    
+
     &:active {
       transform: translateY(0);
     }
   }
-  
+
   .comparisonSection {
     margin-top: 4rem;
-    
+
     .sectionTitle {
       font-size: 2rem;
       font-weight: 700;
@@ -373,44 +444,43 @@
       text-align: center;
       margin-bottom: 2rem;
     }
-    
+
     .comparisonTable {
       background: $white;
       border-radius: 1.5rem;
       overflow: hidden;
-      box-shadow: 
-        0 10px 40px rgba($primary-500, 0.1),
+      box-shadow: 0 10px 40px rgba($primary-500, 0.1),
         0 1px 0 rgba($primary-100, 0.1);
       border: 1px solid rgba($primary-200, 0.2);
-      
+
       .tableHeader {
         background: $gradient-primary;
         color: $white;
         padding: 1.5rem;
         text-align: center;
-        
+
         .headerTitle {
           font-size: 1.5rem;
           font-weight: 700;
           margin-bottom: 0.5rem;
         }
-        
+
         .headerSubtitle {
           opacity: 0.9;
           font-size: 0.875rem;
         }
       }
-      
+
       .tableBody {
         .tableRow {
           display: grid;
           grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
           border-bottom: 1px solid rgba($primary-200, 0.2);
-          
+
           &:last-child {
             border-bottom: none;
           }
-          
+
           .tableCell {
             padding: 1.25rem 1rem;
             display: flex;
@@ -418,27 +488,27 @@
             justify-content: center;
             text-align: center;
             font-size: 0.875rem;
-            
+
             &:first-child {
               justify-content: flex-start;
               font-weight: 600;
               color: $text-primary;
               background: rgba($primary-50, 0.3);
             }
-            
+
             &:not(:first-child) {
               color: $text-secondary;
             }
-            
+
             .featureIcon {
               width: 1.25rem;
               height: 1.25rem;
               margin-right: 0.5rem;
-              
+
               &.check {
                 color: $success-500;
               }
-              
+
               &.cross {
                 color: $error-500;
               }
@@ -448,23 +518,23 @@
       }
     }
   }
-  
+
   .ctaSection {
     text-align: center;
     margin-top: 4rem;
-    
+
     .ctaTitle {
       font-size: 2.5rem;
       font-weight: 800;
       color: $text-primary;
       margin-bottom: 1rem;
       line-height: 1.2;
-      
+
       @media (min-width: 768px) {
         font-size: 3rem;
       }
     }
-    
+
     .ctaSubtitle {
       font-size: 1.25rem;
       color: $text-secondary;
@@ -474,7 +544,7 @@
       margin-right: auto;
       line-height: 1.6;
     }
-    
+
     .ctaButton {
       background: $gradient-primary;
       color: $white;
@@ -484,19 +554,17 @@
       border-radius: 16px;
       border: 2px solid transparent;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 
-        0 8px 25px rgba($primary-500, 0.25),
+      box-shadow: 0 8px 25px rgba($primary-500, 0.25),
         inset 0 1px 0 rgba($white, 0.2);
       cursor: pointer;
-      
+
       &:hover {
         transform: translateY(-3px);
-        box-shadow: 
-          0 12px 35px rgba($primary-500, 0.35),
+        box-shadow: 0 12px 35px rgba($primary-500, 0.35),
           inset 0 1px 0 rgba($white, 0.3);
         background: linear-gradient(135deg, $primary-600 0%, $primary-700 100%);
       }
-      
+
       &:active {
         transform: translateY(-1px);
       }

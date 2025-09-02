@@ -42,7 +42,8 @@ const AppRouter: React.FC<AppRouterProps> = ({ currentUserRole }) => {
   return (
     <Routes>
       {/* Public Routes - Always accessible */}
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Navigate to="/customer" replace />} />
+      <Route path="/home" element={<Home />} />
       <Route path="/services" element={<Services />} />
       <Route path="/services/:serviceId" element={<ServiceDetail />} />
       <Route path="/work" element={<Work />} />

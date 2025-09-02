@@ -2,26 +2,26 @@
 export const API_CONFIG = {
     // Base URLs for different environments
     baseURL: {
-        development: import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api',
-        staging: import.meta.env.VITE_API_BASE_URL || 'https://staging-api.mlmportal.com/api',
-        production: import.meta.env.VITE_API_BASE_URL || 'https://api.mlmportal.com/api',
+        development: import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api/v1',
+        staging: import.meta.env.VITE_API_BASE_URL || 'https://staging-api.mlmportal.com/api/v1',
+        production: import.meta.env.VITE_API_BASE_URL || 'https://api.mlmportal.com/api/v1',
     },
 
     // Customer API Base URL
-    customerBaseURL: import.meta.env.VITE_CUSTOMER_API_BASE_URL || 'http://127.0.0.1:8000/api/customer',
+    customerBaseURL: import.meta.env.VITE_CUSTOMER_API_BASE_URL || 'http://127.0.0.1:8000/api',
 
     // API endpoints
     endpoints: {
         auth: {
-            login: '/auth/login',
-            register: '/auth/register',
-            logout: '/auth/logout',
-            refresh: '/auth/refresh',
-            forgotPassword: '/auth/forgot-password',
-            resetPassword: '/auth/reset-password',
-            profile: '/auth/profile',
-            verifyOtp: '/auth/verify-otp',
-            resendOtp: '/auth/resend-otp',
+            login: '/customer/login',
+            register: '/customer/register',
+            logout: '/customer/logout',
+            refresh: '/customer/refresh',
+            forgotPassword: '/customer/forgot-password',
+            resetPassword: '/customer/reset-password',
+            profile: '/customer/profile',
+            verifyOtp: '/customer/verify-otp',
+            resendOtp: '/customer/resend-otp',
         },
         packages: {
             list: '/packages',

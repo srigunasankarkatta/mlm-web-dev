@@ -1,63 +1,73 @@
-import React, { useState } from 'react';
-import type { MLMPlan } from '../types';
-import { MLM_PLANS } from '../data/mockData';
-import styles from './AuthModal.module.scss';
+import React, { useState } from "react";
+import type { MLMPlan } from "../types";
+import { MLM_PLANS } from "../data/mockData";
+import styles from "./AuthModal.module.scss";
 
 interface AuthModalProps {
   isOpen: boolean;
   onClose: () => void;
-  mode: 'login' | 'register';
-  onModeChange: (mode: 'login' | 'register') => void;
+  onLogin?: (identifier: string, otp: string) => void;
+  onRegister?: (data: any) => void;
+  isRegistering?: boolean;
 }
 
-const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChange }) => {
-  const [isLogin, setIsLogin] = useState(mode === 'login');
-  const [step, setStep] = useState<'form' | 'otp'>('form');
+const AuthModal: React.FC<AuthModalProps> = ({
+  isOpen,
+  onClose,
+  onLogin,
+  onRegister,
+  isRegistering = false,
+}) => {
+  const [isLogin, setIsLogin] = useState(true);
+  const [step, setStep] = useState<"form" | "otp">("form");
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    mobile: '',
-    referralCode: '',
-    planId: 'package-1'
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+    referral_code: "",
   });
-  const [identifier, setIdentifier] = useState('');
-  const [otp, setOtp] = useState('');
+  const [identifier, setIdentifier] = useState("");
+  const [otp, setOtp] = useState("");
 
   const resetForm = () => {
-    setStep('form');
-    setFormData({ name: '', email: '', mobile: '', referralCode: '', planId: 'package-1' });
-    setIdentifier('');
-    setOtp('');
+    setStep("form");
+    setFormData({
+      name: "",
+      email: "",
+      password: "",
+      password_confirmation: "",
+      referral_code: "",
+    });
+    setIdentifier("");
+    setOtp("");
   };
-
-  // Sync internal state with mode prop
-  React.useEffect(() => {
-    setIsLogin(mode === 'login');
-    setStep('form');
-    resetForm();
-  }, [mode]);
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isLogin) {
-      if (step === 'form') {
-        setStep('otp');
+      if (step === "form") {
+        setStep("otp");
       } else {
-        console.log('Login attempt:', { identifier, otp });
-        // In real app, this would call the login API
+        console.log("Login attempt:", { identifier, otp });
+        if (onLogin) {
+          onLogin(identifier, otp);
+        }
         onClose();
       }
     } else {
-      console.log('Register attempt:', formData);
-      // In real app, this would call the register API
+      console.log("Register attempt:", formData);
+      if (onRegister) {
+        onRegister(formData);
+      }
       onClose();
     }
   };
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -66,18 +76,22 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
         <div className={styles.modalHeader}>
           <div>
             <h2 className={styles.modalTitle}>
-              {isLogin ? 'Welcome Back' : 'Join Our Platform'}
+              {isLogin ? "Welcome Back" : "Join Our Platform"}
             </h2>
             <p className={styles.modalSubtitle}>
-              {isLogin ? 'Sign in to access your dashboard' : 'Create your account and start earning'}
+              {isLogin
+                ? "Sign in to access your dashboard"
+                : "Create your account and start earning"}
             </p>
           </div>
-          <button
-            onClick={onClose}
-            className={styles.closeButton}
-          >
+          <button onClick={onClose} className={styles.closeButton}>
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         </div>
@@ -87,17 +101,23 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
           <div className={styles.toggleButtons}>
             <button
               onClick={() => {
-                onModeChange('login');
+                setIsLogin(true);
+                resetForm();
               }}
-              className={`${styles.toggleButton} ${isLogin ? styles.active : ''}`}
+              className={`${styles.toggleButton} ${
+                isLogin ? styles.active : ""
+              }`}
             >
               Login
             </button>
             <button
               onClick={() => {
-                onModeChange('register');
+                setIsLogin(false);
+                resetForm();
               }}
-              className={`${styles.toggleButton} ${!isLogin ? styles.active : ''}`}
+              className={`${styles.toggleButton} ${
+                !isLogin ? styles.active : ""
+              }`}
             >
               Register
             </button>
@@ -107,11 +127,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
             {isLogin ? (
               // Login Form
               <>
-                {step === 'form' ? (
+                {step === "form" ? (
                   <div className={styles.formGroup}>
-                    <label className={styles.formLabel}>
-                      Email or Mobile
-                    </label>
+                    <label className={styles.formLabel}>Email or Mobile</label>
                     <input
                       type="text"
                       value={identifier}
@@ -123,9 +141,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                   </div>
                 ) : (
                   <div className={styles.formGroup}>
-                    <label className={styles.formLabel}>
-                      OTP Code
-                    </label>
+                    <label className={styles.formLabel}>OTP Code</label>
                     <input
                       type="text"
                       value={otp}
@@ -136,7 +152,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                       required
                     />
                     <p className={styles.helpText}>
-                      We've sent a 6-digit code to your {identifier.includes('@') ? 'email' : 'mobile'}
+                      We've sent a 6-digit code to your{" "}
+                      {identifier.includes("@") ? "email" : "mobile"}
                     </p>
                   </div>
                 )}
@@ -145,13 +162,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
               // Register Form
               <>
                 <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>
-                    Full Name
-                  </label>
+                  <label className={styles.formLabel}>Full Name</label>
                   <input
                     type="text"
                     value={formData.name}
-                    onChange={(e) => handleInputChange('name', e.target.value)}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
                     placeholder="Enter your full name"
                     className={styles.formInput}
                     required
@@ -159,13 +174,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>
-                    Email
-                  </label>
+                  <label className={styles.formLabel}>Email</label>
                   <input
                     type="email"
                     value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
                     placeholder="Enter your email"
                     className={styles.formInput}
                     required
@@ -173,14 +186,28 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                 </div>
 
                 <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>
-                    Mobile Number
-                  </label>
+                  <label className={styles.formLabel}>Password</label>
                   <input
-                    type="tel"
-                    value={formData.mobile}
-                    onChange={(e) => handleInputChange('mobile', e.target.value)}
-                    placeholder="Enter mobile number"
+                    type="password"
+                    value={formData.password}
+                    onChange={(e) =>
+                      handleInputChange("password", e.target.value)
+                    }
+                    placeholder="Enter your password"
+                    className={styles.formInput}
+                    required
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.formLabel}>Confirm Password</label>
+                  <input
+                    type="password"
+                    value={formData.password_confirmation}
+                    onChange={(e) =>
+                      handleInputChange("password_confirmation", e.target.value)
+                    }
+                    placeholder="Confirm your password"
                     className={styles.formInput}
                     required
                   />
@@ -192,32 +219,13 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
                   </label>
                   <input
                     type="text"
-                    value={formData.referralCode}
-                    onChange={(e) => handleInputChange('referralCode', e.target.value)}
+                    value={formData.referral_code}
+                    onChange={(e) =>
+                      handleInputChange("referral_code", e.target.value)
+                    }
                     placeholder="Enter referral code"
                     className={styles.formInput}
                   />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>
-                    Select Package
-                  </label>
-                  <select
-                    value={formData.planId}
-                    onChange={(e) => handleInputChange('planId', e.target.value)}
-                    className={styles.formSelect}
-                    required
-                  >
-                    {MLM_PLANS.map((plan) => (
-                      <option key={plan.id} value={plan.id}>
-                        {plan.name} - ${plan.price}
-                      </option>
-                    ))}
-                  </select>
-                  <p className={styles.helpText}>
-                    Package-1 ($20) is required to start
-                  </p>
                 </div>
               </>
             )}
@@ -225,14 +233,21 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
             <button
               type="submit"
               className={styles.submitButton}
+              disabled={!isLogin && isRegistering}
             >
-              {isLogin ? (step === 'form' ? 'Send OTP' : 'Login') : 'Register & Purchase'}
+              {!isLogin && isRegistering
+                ? "Registering..."
+                : isLogin
+                ? step === "form"
+                  ? "Send OTP"
+                  : "Login"
+                : "Register"}
             </button>
           </form>
 
-          {isLogin && step === 'otp' && (
+          {isLogin && step === "otp" && (
             <button
-              onClick={() => setStep('form')}
+              onClick={() => setStep("form")}
               className={styles.backButton}
             >
               ← Back to email/mobile
@@ -241,14 +256,17 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, mode, onModeChan
 
           <div className={styles.toggleLink}>
             <p className={styles.toggleText}>
-              {isLogin ? "Don't have an account? " : "Already have an account? "}
+              {isLogin
+                ? "Don't have an account? "
+                : "Already have an account? "}
               <button
                 onClick={() => {
-                  onModeChange(isLogin ? 'register' : 'login');
+                  setIsLogin(!isLogin);
+                  resetForm();
                 }}
                 className={styles.toggleButton}
               >
-                {isLogin ? 'Register here' : 'Login here'}
+                {isLogin ? "Register here" : "Login here"}
               </button>
             </p>
           </div>

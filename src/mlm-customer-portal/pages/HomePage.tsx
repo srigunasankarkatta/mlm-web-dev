@@ -70,13 +70,6 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Plans Slider Section */}
-      <section className={styles.plansSection}>
-        <div className="max-w-7xl mx-auto">
-          <PlanSlider onPlanSelect={handlePlanSelect} />
-        </div>
-      </section>
-
       {/* Income Types Section */}
       <section className={styles.incomeTypesSection}>
         <div className="max-w-7xl mx-auto">

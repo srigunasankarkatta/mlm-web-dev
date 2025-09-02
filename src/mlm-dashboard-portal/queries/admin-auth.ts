@@ -14,7 +14,6 @@ export const adminAuthQueryKeys = {
     profile: () => [...adminAuthQueryKeys.all, 'profile'] as const,
     user: (id: number) => [...adminAuthQueryKeys.all, 'user', id] as const,
     isAuthenticated: () => [...adminAuthQueryKeys.all, 'isAuthenticated'] as const,
-    permissions: () => [...adminAuthQueryKeys.all, 'permissions'] as const,
 };
 
 // Hook to get admin profile
@@ -82,7 +81,7 @@ export const useAdminLogin = () => {
 
             // Set admin profile data
             queryClient.setQueryData(adminAuthQueryKeys.profile(), {
-                success: true,
+                status: true,
                 data: data.data.user,
                 message: 'Admin login successful',
             });
@@ -173,7 +172,7 @@ export const useAdminChangePassword = () => {
             currentPassword: string;
             newPassword: string;
             newPasswordConfirmation: string;
-        }): Promise<{ success: boolean; message: string }> => {
+        }): Promise<{ status: boolean; message: string }> => {
             return AdminAuthService.changePassword(data);
         },
         onError: (error: AdminAuthError) => {
@@ -182,31 +181,7 @@ export const useAdminChangePassword = () => {
     });
 };
 
-// Hook for getting admin permissions
-export const useAdminPermissions = () => {
-    return useQuery({
-        queryKey: adminAuthQueryKeys.permissions(),
-        queryFn: async () => {
-            return AdminAuthService.getPermissions();
-        },
-        enabled: !!localStorage.getItem('adminToken'),
-        staleTime: 10 * 60 * 1000, // 10 minutes
-        gcTime: 15 * 60 * 1000, // 15 minutes
-    });
-};
 
-// Hook for checking specific admin permission
-export const useAdminCheckPermission = (permission: string) => {
-    return useQuery({
-        queryKey: [...adminAuthQueryKeys.permissions(), 'check', permission],
-        queryFn: async () => {
-            return AdminAuthService.checkPermission(permission);
-        },
-        enabled: !!localStorage.getItem('adminToken') && !!permission,
-        staleTime: 5 * 60 * 1000, // 5 minutes
-        gcTime: 10 * 60 * 1000, // 10 minutes
-    });
-};
 
 // Simple hook to get current admin user from localStorage
 export const useCurrentAdminUser = () => {
@@ -229,8 +204,8 @@ export const useCurrentAdminUser = () => {
 export const useAdminRoleAccess = (requiredRoles: AdminRole[]) => {
     const { user } = useCurrentAdminUser();
 
-    const hasAccess = user?.roles?.some((userRole: string) =>
-        requiredRoles.includes(userRole as AdminRole)
+    const hasAccess = user?.roles?.some((userRole: { name: string }) =>
+        requiredRoles.includes(userRole.name as AdminRole)
     ) || false;
 
     return {

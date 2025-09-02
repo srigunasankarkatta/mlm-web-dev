@@ -39,13 +39,7 @@ export const useUserProfile = () => {
       }
       return failureCount < 3;
     },
-    onError: (error: any) => {
-      // Handle authentication errors
-      if (error?.response?.status === 401 || error?.response?.status === 403) {
-        // Clear invalid tokens
-        CustomerAuthService.clearAuth();
-      }
-    },
+
   });
 };
 
@@ -55,7 +49,7 @@ export const useIsAuthenticated = () => {
     queryKey: authQueryKeys.isAuthenticated(),
     queryFn: async (): Promise<boolean> => {
       if (!CustomerAuthService.isAuthenticated()) return false;
-      
+
       try {
         await CustomerAuthService.getProfile();
         return true;
@@ -77,7 +71,7 @@ export const useIsAuthenticated = () => {
 // Hook for user login
 export const useLogin = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (credentials: LoginRequest): Promise<LoginResponse> => {
       return CustomerAuthService.login(credentials);
@@ -85,29 +79,30 @@ export const useLogin = () => {
     onSuccess: (data: LoginResponse) => {
       // Store tokens and user data
       localStorage.setItem('token', data.data.token);
-      localStorage.setItem('refreshToken', data.data.refreshToken);
       CustomerAuthService.setCurrentUser(data.data.user);
-      
+      console.log('Login successful:', data);
       // Invalidate and refetch auth queries
       queryClient.invalidateQueries({ queryKey: authQueryKeys.all });
-      
+
       // Set user profile data
       queryClient.setQueryData(authQueryKeys.profile(), {
-        success: true,
+        status: true,
         data: {
           id: data.data.user.id,
-          email: data.data.user.email,
-          mobile: data.data.user.mobile,
           name: data.data.user.name,
-          role: data.data.user.role,
-          referralCode: data.data.user.referralCode,
-          uplineId: data.data.user.uplineId,
-          joinDate: new Date().toISOString(),
+          email: data.data.user.email,
+          sponsor_id: data.data.user.sponsor_id,
+          package_id: data.data.user.package_id,
+          created_at: data.data.user.created_at,
+          updated_at: data.data.user.updated_at,
           walletBalance: 0,
           totalEarnings: 0,
           purchasedPlans: [],
         },
       });
+
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent('authStateChanged'));
     },
     onError: (error: any) => {
       console.error('Login failed:', error);
@@ -118,36 +113,46 @@ export const useLogin = () => {
 // Hook for user registration
 export const useRegister = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (userData: RegisterRequest): Promise<RegisterResponse> => {
       return CustomerAuthService.register(userData);
     },
     onSuccess: (data: RegisterResponse) => {
+      console.log('Registration successful:', data);
+
       // Store tokens and user data
-      localStorage.setItem('token', data.data.token);
-      localStorage.setItem('refreshToken', data.data.refreshToken);
-      CustomerAuthService.setCurrentUser(data.data.user);
-      
+      if (data.data?.token) {
+        localStorage.setItem('token', data.data.token);
+      }
+      if (data.data?.user) {
+        CustomerAuthService.setCurrentUser(data.data.user);
+      }
+
       // Invalidate and refetch auth queries
       queryClient.invalidateQueries({ queryKey: authQueryKeys.all });
-      
-      // Set user profile data
-      queryClient.setQueryData(authQueryKeys.profile(), {
-        success: true,
-        data: {
-          id: data.data.user.id,
-          email: data.data.user.email,
-          mobile: data.data.user.mobile,
-          name: data.data.user.name,
-          role: data.data.user.role,
-          referralCode: data.data.user.referralCode,
-          joinDate: new Date().toISOString(),
-          walletBalance: 0,
-          totalEarnings: 0,
-          purchasedPlans: [],
-        },
-      });
+
+      // Set user profile data if available
+      if (data.data?.user) {
+        queryClient.setQueryData(authQueryKeys.profile(), {
+          status: true,
+          data: {
+            id: data.data.user.id,
+            name: data.data.user.name,
+            email: data.data.user.email,
+            sponsor_id: data.data.user.sponsor_id,
+            package_id: data.data.user.package_id,
+            created_at: data.data.user.created_at,
+            updated_at: data.data.user.updated_at,
+            walletBalance: 0,
+            totalEarnings: 0,
+            purchasedPlans: [],
+          },
+        });
+      }
+
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent('authStateChanged'));
     },
     onError: (error: any) => {
       console.error('Registration failed:', error);
@@ -170,7 +175,7 @@ export const useSendOtp = () => {
 // Hook for verifying OTP
 export const useVerifyOtp = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (data: VerifyOtpRequest): Promise<VerifyOtpResponse> => {
       return CustomerAuthService.verifyOtp(data);
@@ -179,9 +184,8 @@ export const useVerifyOtp = () => {
       if (data.data?.token && data.data?.user) {
         // Store tokens and user data
         localStorage.setItem('token', data.data.token);
-        localStorage.setItem('refreshToken', data.data.refreshToken!);
         CustomerAuthService.setCurrentUser(data.data.user);
-        
+
         // Invalidate and refetch auth queries
         queryClient.invalidateQueries({ queryKey: authQueryKeys.all });
       }
@@ -195,7 +199,7 @@ export const useVerifyOtp = () => {
 // Hook for user logout
 export const useLogout = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (): Promise<void> => {
       return CustomerAuthService.logout();
@@ -203,15 +207,21 @@ export const useLogout = () => {
     onSuccess: () => {
       // Clear all auth data from cache
       queryClient.clear();
-      
+
       // Clear localStorage
       CustomerAuthService.clearAuth();
+
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent('authStateChanged'));
     },
     onError: (error: any) => {
       console.error('Logout failed:', error);
       // Even if logout fails, clear local data
       queryClient.clear();
       CustomerAuthService.clearAuth();
+
+      // Dispatch custom event to notify other components
+      window.dispatchEvent(new CustomEvent('authStateChanged'));
     },
   });
 };
@@ -243,7 +253,7 @@ export const useResetPassword = () => {
 // Hook for updating profile
 export const useUpdateProfile = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async (data: Partial<ProfileResponse['data']>): Promise<ProfileResponse> => {
       return CustomerAuthService.updateProfile(data);
@@ -251,7 +261,7 @@ export const useUpdateProfile = () => {
     onSuccess: (data: ProfileResponse) => {
       // Update profile data in cache
       queryClient.setQueryData(authQueryKeys.profile(), data);
-      
+
       // Update user in localStorage
       CustomerAuthService.setCurrentUser(data.data);
     },

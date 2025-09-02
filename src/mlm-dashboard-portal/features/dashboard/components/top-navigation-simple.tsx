@@ -121,7 +121,7 @@ const TopNavigation: React.FC<TopNavigationProps> = ({
               {user?.name || "Admin User"}
             </span>
             <span className={styles.userRole}>
-              {user?.roles?.[0]?.replace("_", " ") || "Admin"}
+              {user?.roles?.[0]?.name?.replace("_", " ") || "Admin"}
             </span>
           </div>
 

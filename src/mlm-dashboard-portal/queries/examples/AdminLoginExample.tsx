@@ -4,7 +4,6 @@ import {
   useAdminLogout,
   useCurrentAdminUser,
   useAdminProfile,
-  useAdminPermissions,
 } from "../admin-auth";
 
 // Example component demonstrating admin authentication queries usage
@@ -21,7 +20,6 @@ export const AdminLoginExample: React.FC = () => {
     isAuthenticated,
   } = useCurrentAdminUser();
   const { data: profile, isLoading: profileLoading } = useAdminProfile();
-  const { data: permissions } = useAdminPermissions();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -143,7 +141,7 @@ export const AdminLoginExample: React.FC = () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Admin User Info */}
         <div className="bg-gray-50 p-4 rounded-lg">
           <h3 className="text-lg font-semibold mb-3 text-teal-700">
@@ -157,6 +155,9 @@ export const AdminLoginExample: React.FC = () => {
               <strong>Email:</strong> {user?.email}
             </p>
             <p>
+              <strong>ID:</strong> {user?.id}
+            </p>
+            <p>
               <strong>Roles:</strong>
             </p>
             <ul className="ml-4 space-y-1">
@@ -164,11 +165,17 @@ export const AdminLoginExample: React.FC = () => {
                 <li key={index} className="text-sm">
                   •{" "}
                   <span className="inline-block px-2 py-1 bg-teal-100 text-teal-800 rounded-full text-xs">
-                    {role}
+                    {role.name}
                   </span>
                 </li>
               ))}
             </ul>
+            <p>
+              <strong>Created:</strong>{" "}
+              {user?.created_at
+                ? new Date(user.created_at).toLocaleDateString()
+                : "N/A"}
+            </p>
           </div>
         </div>
 
@@ -188,6 +195,9 @@ export const AdminLoginExample: React.FC = () => {
                 <strong>Email:</strong> {profile.data.email}
               </p>
               <p>
+                <strong>ID:</strong> {profile.data.id}
+              </p>
+              <p>
                 <strong>Roles:</strong>
               </p>
               <ul className="ml-4 space-y-1">
@@ -195,65 +205,28 @@ export const AdminLoginExample: React.FC = () => {
                   <li key={index} className="text-sm">
                     •{" "}
                     <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
-                      {role}
+                      {role.name}
                     </span>
                   </li>
                 ))}
               </ul>
-              {profile.data.createdAt && (
-                <p>
-                  <strong>Created:</strong>{" "}
-                  {new Date(profile.data.createdAt).toLocaleDateString()}
-                </p>
-              )}
-              {profile.data.updatedAt && (
-                <p>
-                  <strong>Updated:</strong>{" "}
-                  {new Date(profile.data.updatedAt).toLocaleDateString()}
-                </p>
-              )}
+              <p>
+                <strong>Sponsor ID:</strong> {profile.data.sponsor_id || "None"}
+              </p>
+              <p>
+                <strong>Package ID:</strong> {profile.data.package_id || "None"}
+              </p>
+              <p>
+                <strong>Created:</strong>{" "}
+                {new Date(profile.data.created_at).toLocaleDateString()}
+              </p>
+              <p>
+                <strong>Updated:</strong>{" "}
+                {new Date(profile.data.updated_at).toLocaleDateString()}
+              </p>
             </div>
           ) : (
             <p>No profile data available</p>
-          )}
-        </div>
-
-        {/* Admin Permissions */}
-        <div className="bg-gray-50 p-4 rounded-lg">
-          <h3 className="text-lg font-semibold mb-3 text-teal-700">
-            Permissions (useAdminPermissions)
-          </h3>
-          {permissions?.data ? (
-            <div className="space-y-3">
-              <div>
-                <p className="font-medium text-sm">Roles:</p>
-                <ul className="ml-4 space-y-1">
-                  {permissions.data.roles?.map((role, index) => (
-                    <li key={index} className="text-sm">
-                      •{" "}
-                      <span className="inline-block px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
-                        {role}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div>
-                <p className="font-medium text-sm">Permissions:</p>
-                <ul className="ml-4 space-y-1">
-                  {permissions.data.permissions?.map((permission, index) => (
-                    <li key={index} className="text-sm">
-                      •{" "}
-                      <span className="inline-block px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">
-                        {permission}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          ) : (
-            <p>Loading permissions...</p>
           )}
         </div>
       </div>
