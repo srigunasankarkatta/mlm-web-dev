@@ -2,25 +2,18 @@ import React, { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ColDef } from "ag-grid-community";
 import AgGridTable from "../../components/ui/AgGridTable";
-import StatusBadgeCell from "../../components/ui/StatusBadgeCell";
 import ActionsCell from "../../components/ui/ActionsCell";
 import {
   usePackages,
   useDeletePackage,
-  useTogglePackageStatus,
   usePackageStats,
 } from "../../queries/packages";
 import type { Package } from "../../api-services/package-service";
 
 const AllPackages: React.FC = () => {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [rankFilter, setRankFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("created_at");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(15);
+  const [currentPage] = useState(1);
+  const [perPage] = useState(15);
   const [selectedPackages, setSelectedPackages] = useState<Package[]>([]);
 
   // API queries
@@ -29,32 +22,19 @@ const AllPackages: React.FC = () => {
     isLoading,
     error,
   } = usePackages({
-    search: searchTerm || undefined,
-    is_active: statusFilter !== "all" ? statusFilter === "Active" : undefined,
-    rank: rankFilter !== "all" ? parseInt(rankFilter) : undefined,
     per_page: perPage,
     page: currentPage,
   });
 
   const { data: packageStats } = usePackageStats();
   const deletePackageMutation = useDeletePackage();
-  const togglePackageStatusMutation = useTogglePackageStatus();
 
   // Extract packages and pagination from response
-  const packages = packagesResponse?.data || [];
+  const packages = packagesResponse?.packages || [];
   const pagination = packagesResponse?.pagination;
 
-  // Filter packages based on search and filters (API handles most filtering)
-  const filteredPackages = useMemo(() => {
-    return packages.filter((packageItem) => {
-      const matchesStatus =
-        statusFilter === "all" ||
-        (statusFilter === "Active" && packageItem.is_active) ||
-        (statusFilter === "Inactive" && !packageItem.is_active);
-
-      return matchesStatus;
-    });
-  }, [packages, statusFilter]);
+  // No client-side filtering needed as API handles it
+  const filteredPackages = packages;
 
   // Event handlers
   const handleViewPackage = useCallback(
@@ -88,20 +68,6 @@ const AllPackages: React.FC = () => {
     [deletePackageMutation]
   );
 
-  const handleToggleStatus = useCallback(
-    async (packageItem: any) => {
-      try {
-        await togglePackageStatusMutation.mutateAsync({
-          id: packageItem.id,
-          isActive: !packageItem.is_active,
-        });
-      } catch (error) {
-        console.error("Failed to toggle package status:", error);
-      }
-    },
-    [togglePackageStatusMutation]
-  );
-
   const handleGridReady = useCallback((params: any) => {
     console.log("Grid ready:", params);
   }, []);
@@ -124,15 +90,15 @@ const AllPackages: React.FC = () => {
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
               <span className="text-sm font-bold text-white">
-                {params.data.code.charAt(0)}
+                {params.data.name.charAt(0)}
               </span>
             </div>
             <div className="min-w-0 flex-1">
               <div className="text-sm font-semibold text-gray-900 truncate">
                 {params.data.name}
               </div>
-              <div className="text-xs text-gray-500 font-mono">
-                {params.data.code}
+              <div className="text-xs text-gray-500">
+                Level {params.data.level_unlock}
               </div>
             </div>
           </div>
@@ -146,42 +112,43 @@ const AllPackages: React.FC = () => {
       {
         headerName: "Price",
         field: "price",
+        cellRenderer: (params: any) => (
+          <span className="font-semibold text-green-600">₹{params.value}</span>
+        ),
         width: 120,
         minWidth: 100,
         sortable: true,
         filter: true,
         resizable: true,
         cellStyle: { color: "#059669", fontWeight: "600" },
-        valueFormatter: (params: any) =>
-          `$${parseFloat(params.value).toFixed(2)}`,
       },
       {
-        headerName: "Rank",
-        field: "rank",
-        width: 80,
-        minWidth: 70,
-        sortable: true,
-        filter: true,
-        resizable: true,
-        cellRenderer: (params: any) => (
-          <span className="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-            {params.value}
-          </span>
-        ),
-      },
-      {
-        headerName: "Status",
-        field: "is_active",
-        cellRenderer: StatusBadgeCell,
-        cellRendererParams: {
-          type: "status",
-          getValue: (params: any) => (params.is_active ? "Active" : "Inactive"),
-        },
+        headerName: "Level Unlock",
+        field: "level_unlock",
         width: 120,
         minWidth: 100,
         sortable: true,
         filter: true,
         resizable: true,
+        cellRenderer: (params: any) => (
+          <span className="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+            Level {params.value}
+          </span>
+        ),
+      },
+      {
+        headerName: "Description",
+        field: "description",
+        width: 200,
+        minWidth: 150,
+        sortable: false,
+        filter: true,
+        resizable: true,
+        cellRenderer: (params: any) => (
+          <div className="text-sm text-gray-600 truncate" title={params.value}>
+            {params.value || "No description"}
+          </div>
+        ),
       },
       {
         headerName: "Created",
@@ -295,119 +262,25 @@ const AllPackages: React.FC = () => {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">
-                  Active Packages
+                  Users with Packages
                 </p>
                 <p className="text-2xl font-bold bg-gradient-to-r from-green-600 to-green-800 bg-clip-text text-transparent">
-                  {packageStats?.active_packages ||
-                    packages.filter((p) => p.is_active).length}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <div className="flex items-center">
-              <div className="p-3 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-xl shadow-lg">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Users</p>
-                <p className="text-2xl font-bold bg-gradient-to-r from-yellow-600 to-yellow-800 bg-clip-text text-transparent">
-                  {packageStats?.total_users || 0}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <div className="flex items-center">
-              <div className="p-3 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl shadow-lg">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                  />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
-                  Total Revenue
-                </p>
-                <p className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
-                  ${packageStats?.total_revenue || "0.00"}
+                  {packageStats?.total_users_with_packages || 0}
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Filters */}
+        {/* Add Package Button */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 mb-6">
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex-1 min-w-64">
-              <input
-                type="text"
-                placeholder="Search packages..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="all">All Status</option>
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-            </select>
-            <select
-              value={rankFilter}
-              onChange={(e) => setRankFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="all">All Ranks</option>
-              <option value="1">Rank 1</option>
-              <option value="2">Rank 2</option>
-              <option value="3">Rank 3</option>
-              <option value="4">Rank 4</option>
-            </select>
-            <button
-              onClick={() => {
-                setSearchTerm("");
-                setStatusFilter("all");
-                setRankFilter("all");
-              }}
-              className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              Clear Filters
-            </button>
+          <div className="flex justify-end">
             <button
               onClick={() => navigate("/admin/packages/create")}
-              className="px-4 py-2 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-200 font-medium flex items-center space-x-2"
+              className="px-6 py-3 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-200 font-medium flex items-center space-x-2"
             >
               <svg
-                className="w-4 h-4"
+                className="w-5 h-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -416,10 +289,10 @@ const AllPackages: React.FC = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  d="M12 4v16m8-8H4"
                 />
               </svg>
-              <span>Create Package</span>
+              <span>Add Package</span>
             </button>
           </div>
         </div>

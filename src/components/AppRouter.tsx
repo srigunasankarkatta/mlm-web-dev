@@ -10,7 +10,7 @@ import {
 
 // Import Admin components
 import AdminDashboard from "../mlm-dashboard-portal/features/dashboard/AdminDashboard";
-import AdminUsers from "../mlm-dashboard-portal/features/users/AdminUsers";
+
 import AdminDashboardLayout from "../mlm-dashboard-portal/components/layouts/admin-dashboard-layout";
 
 // Import Customer Portal components
@@ -31,9 +31,9 @@ import UserDetail from "../mlm-dashboard-portal/features/user-management/UserDet
 import EditUser from "../mlm-dashboard-portal/features/user-management/EditUser";
 import CreateUser from "../mlm-dashboard-portal/features/user-management/CreateUser";
 import AllPackages from "../mlm-dashboard-portal/features/package-management/AllPackages";
-import PackageDetail from "../mlm-dashboard-portal/features/package-management/PackageDetail";
 import CreatePackage from "../mlm-dashboard-portal/features/package-management/CreatePackage";
 import EditPackage from "../mlm-dashboard-portal/features/package-management/EditPackage";
+import PackageDetail from "../mlm-dashboard-portal/features/package-management/PackageDetail";
 import DashboardLayout from "../components/DashboardLayout";
 
 interface AppRouterProps {

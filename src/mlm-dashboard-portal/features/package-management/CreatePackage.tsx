@@ -1,63 +1,61 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreatePackage } from "../../queries/packages";
-import type { CreatePackageRequest } from "../../api-services/package-service";
+
+interface CreatePackageFormData {
+  name: string;
+  price: number;
+  level_unlock: number;
+  description: string;
+}
 
 const CreatePackage: React.FC = () => {
   const navigate = useNavigate();
   const createPackageMutation = useCreatePackage();
 
-  const [formData, setFormData] = useState<CreatePackageRequest>({
-    code: "",
+  const [formData, setFormData] = useState<CreatePackageFormData>({
     name: "",
-    price: "",
-    rank: 1,
-    is_active: true,
+    price: 0,
+    level_unlock: 1,
+    description: "",
   });
 
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Partial<CreatePackageFormData>>({});
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
-    const { name, value, type } = e.target;
-
-    if (type === "checkbox") {
-      const checked = (e.target as HTMLInputElement).checked;
-      setFormData((prev) => ({ ...prev, [name]: checked }));
-    } else if (type === "number") {
-      setFormData((prev) => ({ ...prev, [name]: parseInt(value) || 0 }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]:
+        name === "price" || name === "level_unlock" ? Number(value) : value,
+    }));
 
     // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
+    if (errors[name as keyof CreatePackageFormData]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: undefined,
+      }));
     }
   };
 
   const validateForm = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    if (!formData.code.trim()) {
-      newErrors.code = "Package code is required";
-    } else if (formData.code.length < 2) {
-      newErrors.code = "Package code must be at least 2 characters";
-    }
+    const newErrors: Partial<CreatePackageFormData> = {};
 
     if (!formData.name.trim()) {
       newErrors.name = "Package name is required";
-    } else if (formData.name.length < 3) {
-      newErrors.name = "Package name must be at least 3 characters";
     }
 
-    if (!formData.price || parseFloat(formData.price) <= 0) {
-      newErrors.price = "Valid price is required";
+    if (formData.price <= 0) {
+      newErrors.price = "Price must be greater than 0";
     }
 
-    if (formData.rank < 1 || formData.rank > 10) {
-      newErrors.rank = "Rank must be between 1 and 10";
+    if (formData.level_unlock < 1 || formData.level_unlock > 10) {
+      newErrors.level_unlock = "Level unlock must be between 1 and 10";
     }
 
     setErrors(newErrors);
@@ -79,34 +77,12 @@ const CreatePackage: React.FC = () => {
     }
   };
 
-  const handleCancel = () => {
-    navigate("/admin/packages");
-  };
-
   return (
-    <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
-      <div className="max-w-4xl mx-auto">
+    <div className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+      <div className="max-w-4xl mx-auto py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center space-x-3 mb-4">
-            <button
-              onClick={handleCancel}
-              className="p-2 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
-            >
-              <svg
-                className="w-6 h-6 text-gray-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </button>
             <div className="p-3 bg-gradient-to-r from-green-500 to-blue-600 rounded-xl shadow-lg">
               <svg
                 className="w-8 h-8 text-white"
@@ -118,16 +94,16 @@ const CreatePackage: React.FC = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
                 />
               </svg>
             </div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
                 Create New Package
               </h1>
               <p className="text-gray-600 mt-1">
-                Add a new package to your MLM network
+                Add a new package to the MLM system
               </p>
             </div>
           </div>
@@ -136,190 +112,130 @@ const CreatePackage: React.FC = () => {
         {/* Form */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Package Code */}
-            <div>
-              <label
-                htmlFor="code"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Package Code <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                id="code"
-                name="code"
-                value={formData.code}
-                onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                  errors.code ? "border-red-300" : "border-gray-300"
-                }`}
-                placeholder="e.g., PREMIUM, GOLD, SILVER"
-                maxLength={20}
-              />
-              {errors.code && (
-                <p className="mt-1 text-sm text-red-600">{errors.code}</p>
-              )}
-              <p className="mt-1 text-xs text-gray-500">
-                Unique identifier for the package (2-20 characters)
-              </p>
-            </div>
-
-            {/* Package Name */}
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Package Name <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                  errors.name ? "border-red-300" : "border-gray-300"
-                }`}
-                placeholder="e.g., Premium Package, Gold Package"
-                maxLength={100}
-              />
-              {errors.name && (
-                <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-              )}
-              <p className="mt-1 text-xs text-gray-500">
-                Descriptive name for the package (3-100 characters)
-              </p>
-            </div>
-
-            {/* Price and Rank Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Package Name */}
+              <div className="md:col-span-2">
+                <label
+                  htmlFor="name"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Package Name *
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                    errors.name ? "border-red-300" : "border-gray-300"
+                  }`}
+                  placeholder="Enter package name"
+                />
+                {errors.name && (
+                  <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                )}
+              </div>
+
               {/* Price */}
               <div>
                 <label
                   htmlFor="price"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Price <span className="text-red-500">*</span>
+                  Price (₹) *
                 </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">
-                    $
-                  </span>
-                  <input
-                    type="number"
-                    id="price"
-                    name="price"
-                    value={formData.price}
-                    onChange={handleInputChange}
-                    step="0.01"
-                    min="0"
-                    className={`w-full pl-8 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                      errors.price ? "border-red-300" : "border-gray-300"
-                    }`}
-                    placeholder="0.00"
-                  />
-                </div>
+                <input
+                  type="number"
+                  id="price"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleInputChange}
+                  min="0.01"
+                  step="0.01"
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                    errors.price ? "border-red-300" : "border-gray-300"
+                  }`}
+                  placeholder="0.00"
+                />
                 {errors.price && (
                   <p className="mt-1 text-sm text-red-600">{errors.price}</p>
                 )}
-                <p className="mt-1 text-xs text-gray-500">
-                  Package price in USD
-                </p>
               </div>
 
-              {/* Rank */}
+              {/* Level Unlock */}
               <div>
                 <label
-                  htmlFor="rank"
+                  htmlFor="level_unlock"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Rank <span className="text-red-500">*</span>
+                  Level Unlock *
                 </label>
                 <select
-                  id="rank"
-                  name="rank"
-                  value={formData.rank}
+                  id="level_unlock"
+                  name="level_unlock"
+                  value={formData.level_unlock}
                   onChange={handleInputChange}
                   className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-                    errors.rank ? "border-red-300" : "border-gray-300"
+                    errors.level_unlock ? "border-red-300" : "border-gray-300"
                   }`}
                 >
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((rank) => (
-                    <option key={rank} value={rank}>
-                      Rank {rank}
+                  {Array.from({ length: 10 }, (_, i) => i + 1).map((level) => (
+                    <option key={level} value={level}>
+                      Level {level}
                     </option>
                   ))}
                 </select>
-                {errors.rank && (
-                  <p className="mt-1 text-sm text-red-600">{errors.rank}</p>
+                {errors.level_unlock && (
+                  <p className="mt-1 text-sm text-red-600">
+                    {errors.level_unlock}
+                  </p>
                 )}
-                <p className="mt-1 text-xs text-gray-500">
-                  Package hierarchy level (1-10)
-                </p>
+              </div>
+
+              {/* Description */}
+              <div className="md:col-span-2">
+                <label
+                  htmlFor="description"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Description
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  rows={4}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  placeholder="Enter package description (optional)"
+                />
               </div>
             </div>
 
-            {/* Active Status */}
-            <div className="flex items-center">
-              <input
-                type="checkbox"
-                id="is_active"
-                name="is_active"
-                checked={formData.is_active}
-                onChange={handleInputChange}
-                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label
-                htmlFor="is_active"
-                className="ml-2 block text-sm text-gray-700"
-              >
-                Package is active and available for users
-              </label>
-            </div>
-
-            {/* Action Buttons */}
+            {/* Form Actions */}
             <div className="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
               <button
                 type="button"
-                onClick={handleCancel}
-                className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+                onClick={() => navigate("/admin/packages")}
+                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={createPackageMutation.isPending}
-                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                className="px-6 py-3 bg-gradient-to-r from-green-600 to-blue-600 text-white rounded-lg hover:from-green-700 hover:to-blue-700 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
               >
                 {createPackageMutation.isPending ? (
                   <>
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                     <span>Creating...</span>
                   </>
                 ) : (
                   <>
                     <svg
-                      className="w-5 h-5"
+                      className="w-4 h-4"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -328,7 +244,7 @@ const CreatePackage: React.FC = () => {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                        d="M12 4v16m8-8H4"
                       />
                     </svg>
                     <span>Create Package</span>
@@ -337,58 +253,6 @@ const CreatePackage: React.FC = () => {
               </button>
             </div>
           </form>
-        </div>
-
-        {/* Preview Card */}
-        <div className="mt-8 bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Package Preview
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Code:</span>
-                <span className="font-medium font-mono">
-                  {formData.code || "N/A"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Name:</span>
-                <span className="font-medium">{formData.name || "N/A"}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Price:</span>
-                <span className="font-medium text-green-600">
-                  {formData.price
-                    ? `$${parseFloat(formData.price).toFixed(2)}`
-                    : "N/A"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Rank:</span>
-                <span className="font-medium">Rank {formData.rank}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Status:</span>
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                    formData.is_active
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
-                  }`}
-                >
-                  {formData.is_active ? "Active" : "Inactive"}
-                </span>
-              </div>
-            </div>
-            <div className="flex items-center justify-center">
-              <div className="w-24 h-24 bg-gradient-to-br from-green-400 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <span className="text-2xl font-bold text-white">
-                  {formData.code ? formData.code.charAt(0) : "?"}
-                </span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

@@ -6,10 +6,14 @@ import AllUsers from "../features/user-management/AllUsers";
 import CreateUser from "../features/user-management/CreateUser";
 import EditUser from "../features/user-management/EditUser";
 import UserDetail from "../features/user-management/UserDetail";
+import AllPackages from "../features/package-management/AllPackages";
+import CreatePackage from "../features/package-management/CreatePackage";
+import EditPackage from "../features/package-management/EditPackage";
+import PackageDetail from "../features/package-management/PackageDetail";
 import { useCurrentAdminUser } from "../queries/admin-auth";
 
 const AdminRouter: React.FC = () => {
-  const { user, isLoading, isAuthenticated } = useCurrentAdminUser();
+  const { isLoading, isAuthenticated } = useCurrentAdminUser();
 
   // Show loading while checking authentication
   if (isLoading) {
@@ -70,6 +74,40 @@ const AdminRouter: React.FC = () => {
         element={
           <AdminDashboardLayout>
             <EditUser />
+          </AdminDashboardLayout>
+        }
+      />
+
+      {/* Package Management */}
+      <Route
+        path="/admin/packages"
+        element={
+          <AdminDashboardLayout>
+            <AllPackages />
+          </AdminDashboardLayout>
+        }
+      />
+      <Route
+        path="/admin/packages/create"
+        element={
+          <AdminDashboardLayout>
+            <CreatePackage />
+          </AdminDashboardLayout>
+        }
+      />
+      <Route
+        path="/admin/packages/:id"
+        element={
+          <AdminDashboardLayout>
+            <PackageDetail />
+          </AdminDashboardLayout>
+        }
+      />
+      <Route
+        path="/admin/packages/:id/edit"
+        element={
+          <AdminDashboardLayout>
+            <EditPackage />
           </AdminDashboardLayout>
         }
       />

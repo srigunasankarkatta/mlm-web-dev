@@ -11,11 +11,14 @@ export const packageKeys = {
     stats: () => [...packageKeys.all, 'stats'] as const,
 };
 
-// Get packages list with pagination and filters
+// Get packages list with pagination
 export const usePackages = (params: PackagesListParams = {}) => {
     return useQuery({
         queryKey: packageKeys.list(params),
-        queryFn: () => packageService.getPackages(params),
+        queryFn: async () => {
+            const response = await packageService.getPackages(params);
+            return response.data;
+        },
         staleTime: 5 * 60 * 1000, // 5 minutes
         gcTime: 10 * 60 * 1000, // 10 minutes
     });
@@ -25,7 +28,10 @@ export const usePackages = (params: PackagesListParams = {}) => {
 export const usePackage = (id: number) => {
     return useQuery({
         queryKey: packageKeys.detail(id),
-        queryFn: () => packageService.getPackageById(id),
+        queryFn: async () => {
+            const response = await packageService.getPackageById(id);
+            return response.data;
+        },
         enabled: !!id,
         staleTime: 5 * 60 * 1000, // 5 minutes
         gcTime: 10 * 60 * 1000, // 10 minutes
@@ -36,7 +42,10 @@ export const usePackage = (id: number) => {
 export const usePackageStats = () => {
     return useQuery({
         queryKey: packageKeys.stats(),
-        queryFn: () => packageService.getPackageStats(),
+        queryFn: async () => {
+            const response = await packageService.getPackageStats();
+            return response.data;
+        },
         staleTime: 2 * 60 * 1000, // 2 minutes
         gcTime: 5 * 60 * 1000, // 5 minutes
     });
@@ -86,69 +95,4 @@ export const useDeletePackage = () => {
     });
 };
 
-// Toggle package status mutation
-export const useTogglePackageStatus = () => {
-    const queryClient = useQueryClient();
 
-    return useMutation({
-        mutationFn: ({ id, isActive }: { id: number; isActive: boolean }) =>
-            packageService.togglePackageStatus(id, isActive),
-        onSuccess: (data, { id }) => {
-            // Update package in cache
-            queryClient.setQueryData(packageKeys.detail(id), data.data);
-            // Invalidate packages list
-            queryClient.invalidateQueries({ queryKey: packageKeys.lists() });
-            // Invalidate stats
-            queryClient.invalidateQueries({ queryKey: packageKeys.stats() });
-        },
-    });
-};
-
-// Bulk operations
-export const useBulkUpdatePackages = () => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-        mutationFn: async ({ packageIds, updates }: { packageIds: number[]; updates: UpdatePackageRequest }) => {
-            const promises = packageIds.map(id => packageService.updatePackage(id, updates));
-            return Promise.all(promises);
-        },
-        onSuccess: () => {
-            // Invalidate and refetch packages list
-            queryClient.invalidateQueries({ queryKey: packageKeys.lists() });
-            queryClient.invalidateQueries({ queryKey: packageKeys.stats() });
-        },
-    });
-};
-
-export const useBulkDeletePackages = () => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-        mutationFn: async (packageIds: number[]) => {
-            const promises = packageIds.map(id => packageService.deletePackage(id));
-            return Promise.all(promises);
-        },
-        onSuccess: () => {
-            // Invalidate and refetch packages list and stats
-            queryClient.invalidateQueries({ queryKey: packageKeys.lists() });
-            queryClient.invalidateQueries({ queryKey: packageKeys.stats() });
-        },
-    });
-};
-
-export const useBulkTogglePackageStatus = () => {
-    const queryClient = useQueryClient();
-
-    return useMutation({
-        mutationFn: async ({ packageIds, isActive }: { packageIds: number[]; isActive: boolean }) => {
-            const promises = packageIds.map(id => packageService.togglePackageStatus(id, isActive));
-            return Promise.all(promises);
-        },
-        onSuccess: () => {
-            // Invalidate and refetch packages list and stats
-            queryClient.invalidateQueries({ queryKey: packageKeys.lists() });
-            queryClient.invalidateQueries({ queryKey: packageKeys.stats() });
-        },
-    });
-};

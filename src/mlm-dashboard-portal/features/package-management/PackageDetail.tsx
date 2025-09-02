@@ -1,15 +1,31 @@
-import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { usePackage, useTogglePackageStatus } from "../../queries/packages";
-import type { PackageDetail as PackageDetailType } from "../../api-services/package-service";
+import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { usePackage, useDeletePackage } from "../../queries/packages";
 
 const PackageDetail: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-
+  const { id } = useParams<{ id: string }>();
   const packageId = parseInt(id || "0");
+
   const { data: packageItem, isLoading, error } = usePackage(packageId);
-  const toggleStatusMutation = useTogglePackageStatus();
+  const deletePackageMutation = useDeletePackage();
+
+  const handleDelete = async () => {
+    if (!packageItem) return;
+
+    if (
+      window.confirm(
+        `Are you sure you want to delete "${packageItem.name}"? This action cannot be undone.`
+      )
+    ) {
+      try {
+        await deletePackageMutation.mutateAsync(packageId);
+        navigate("/admin/packages");
+      } catch (error) {
+        console.error("Failed to delete package:", error);
+      }
+    }
+  };
 
   if (isLoading) {
     return (
@@ -28,28 +44,16 @@ const PackageDetail: React.FC = () => {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="text-red-600 mb-4">
-            <svg
-              className="w-16 h-16 mx-auto mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 9v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
-              />
-            </svg>
-            <p className="text-lg font-semibold">Error loading package</p>
-            <p className="text-sm text-gray-600">
-              {error?.message || "Package not found"}
-            </p>
-          </div>
+          <div className="text-red-500 text-6xl mb-4">⚠️</div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Package Not Found
+          </h2>
+          <p className="text-gray-600 mb-6">
+            The package you're looking for doesn't exist or has been deleted.
+          </p>
           <button
             onClick={() => navigate("/admin/packages")}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             Back to Packages
           </button>
@@ -58,47 +62,16 @@ const PackageDetail: React.FC = () => {
     );
   }
 
-  const handleToggleStatus = async () => {
-    try {
-      await toggleStatusMutation.mutateAsync({
-        id: packageItem.id,
-        isActive: !packageItem.is_active,
-      });
-    } catch (error) {
-      console.error("Failed to toggle package status:", error);
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  const formatCurrency = (amount: string) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(parseFloat(amount));
-  };
-
   return (
-    <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
-      <div className="max-w-7xl mx-auto">
+    <div className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+      <div className="max-w-4xl mx-auto py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <button
-                onClick={() => navigate("/admin/packages")}
-                className="p-2 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow"
-              >
+              <div className="p-3 bg-gradient-to-r from-green-500 to-blue-600 rounded-xl shadow-lg">
                 <svg
-                  className="w-6 h-6 text-gray-600"
+                  className="w-8 h-8 text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -107,371 +80,223 @@ const PackageDetail: React.FC = () => {
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
+                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
                   />
                 </svg>
-              </button>
+              </div>
               <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                  Package Details
-                </h1>
-                <p className="text-gray-600 mt-1">
-                  Viewing information for {packageItem.name}
-                </p>
-              </div>
-            </div>
-            <div className="flex space-x-3">
-              <button
-                onClick={() =>
-                  navigate(`/admin/packages/${packageItem.id}/edit`)
-                }
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Edit Package
-              </button>
-              <button
-                onClick={handleToggleStatus}
-                disabled={toggleStatusMutation.isPending}
-                className={`px-4 py-2 rounded-lg transition-colors ${
-                  packageItem.is_active
-                    ? "bg-red-600 hover:bg-red-700 text-white"
-                    : "bg-green-600 hover:bg-green-700 text-white"
-                }`}
-              >
-                {toggleStatusMutation.isPending
-                  ? "Updating..."
-                  : packageItem.is_active
-                  ? "Deactivate"
-                  : "Activate"}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Package Overview Card */}
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 mb-6">
-          <div className="flex items-start space-x-6">
-            {/* Package Icon */}
-            <div className="relative">
-              <div className="w-24 h-24 bg-gradient-to-br from-green-400 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <span className="text-2xl font-bold text-white">
-                  {packageItem.code.charAt(0)}
-                </span>
-              </div>
-              <div
-                className={`absolute -bottom-1 -right-1 w-6 h-6 border-2 border-white rounded-full ${
-                  packageItem.is_active ? "bg-green-400" : "bg-red-400"
-                }`}
-              ></div>
-            </div>
-
-            {/* Basic Info */}
-            <div className="flex-1">
-              <div className="flex items-center space-x-4 mb-4">
-                <h2 className="text-2xl font-bold text-gray-900">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
                   {packageItem.name}
+                </h1>
+                <p className="text-gray-600 mt-1">Package Details</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={() => navigate(`/admin/packages/${packageId}/edit`)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center space-x-2"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                  />
+                </svg>
+                <span>Edit</span>
+              </button>
+              <button
+                onClick={handleDelete}
+                disabled={deletePackageMutation.isPending}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+              >
+                {deletePackageMutation.isPending ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                ) : (
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                    />
+                  </svg>
+                )}
+                <span>Delete</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Package Details */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Main Details */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Basic Information */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Basic Information
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                    Package Name
+                  </label>
+                  <p className="text-lg font-semibold text-gray-900">
+                    {packageItem.name}
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                    Price
+                  </label>
+                  <p className="text-lg font-semibold text-green-600">
+                    ₹{packageItem.price}
+                  </p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                    Level Unlock
+                  </label>
+                  <span className="inline-flex items-center px-3 py-1 text-sm font-semibold rounded-full bg-blue-100 text-blue-800">
+                    Level {packageItem.level_unlock}
+                  </span>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                    Package ID
+                  </label>
+                  <p className="text-lg font-mono text-gray-600">
+                    #{packageItem.id}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Description */}
+            {packageItem.description && (
+              <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                  Description
                 </h2>
-                <span
-                  className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                    packageItem.is_active
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
-                  }`}
-                >
-                  {packageItem.is_active ? "Active" : "Inactive"}
-                </span>
+                <p className="text-gray-700 leading-relaxed">
+                  {packageItem.description}
+                </p>
               </div>
+            )}
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {/* Timestamps */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Timestamps
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-sm text-gray-600">Package Code</p>
-                  <p className="font-medium font-mono">{packageItem.code}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Price</p>
-                  <p className="font-medium text-green-600">
-                    {formatCurrency(packageItem.price)}
+                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                    Created At
+                  </label>
+                  <p className="text-gray-900">
+                    {new Date(packageItem.created_at).toLocaleString()}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Rank</p>
-                  <p className="font-medium">{packageItem.rank}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600">Created</p>
-                  <p className="font-medium">
-                    {formatDate(packageItem.created_at)}
+                  <label className="block text-sm font-medium text-gray-500 mb-1">
+                    Last Updated
+                  </label>
+                  <p className="text-gray-900">
+                    {new Date(packageItem.updated_at).toLocaleString()}
                   </p>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-            <div className="flex items-center">
-              <div className="p-3 bg-blue-100 rounded-xl">
-                <svg
-                  className="w-6 h-6 text-blue-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Users</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {packageItem.users?.length || 0}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-            <div className="flex items-center">
-              <div className="p-3 bg-green-100 rounded-xl">
-                <svg
-                  className="w-6 h-6 text-green-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                  />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
-                  Total Commissions
-                </p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {packageItem.commissions?.length || 0}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-            <div className="flex items-center">
-              <div className="p-3 bg-purple-100 rounded-xl">
-                <svg
-                  className="w-6 h-6 text-purple-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                  />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
-                  Total Revenue
-                </p>
-                <p className="text-2xl font-bold text-green-600">
-                  $
-                  {packageItem.commissions
-                    ?.reduce((sum, comm) => sum + parseFloat(comm.amount), 0)
-                    .toFixed(2) || "0.00"}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Detailed Information Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Package Information */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Package Information
-            </h3>
-            <div className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Package Name:</span>
-                <span className="font-medium">{packageItem.name}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Package Code:</span>
-                <span className="font-medium font-mono">
-                  {packageItem.code}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Price:</span>
-                <span className="font-medium text-green-600">
-                  {formatCurrency(packageItem.price)}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Rank:</span>
-                <span className="font-medium">{packageItem.rank}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Status:</span>
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                    packageItem.is_active
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
-                  }`}
-                >
-                  {packageItem.is_active ? "Active" : "Inactive"}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Creator Information */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Creator Information
-            </h3>
-            {packageItem.creator ? (
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Quick Actions */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Quick Actions
+              </h2>
               <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Creator Name:</span>
-                  <span className="font-medium">
-                    {packageItem.creator.name}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Creator Email:</span>
-                  <span className="font-medium">
-                    {packageItem.creator.email}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Creator ID:</span>
-                  <span className="font-medium">{packageItem.creator.id}</span>
-                </div>
-              </div>
-            ) : (
-              <p className="text-gray-500 italic">
-                No creator information available
-              </p>
-            )}
-          </div>
-
-          {/* Users List */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Package Users ({packageItem.users?.length || 0})
-            </h3>
-            {packageItem.users && packageItem.users.length > 0 ? (
-              <div className="space-y-3 max-h-64 overflow-y-auto">
-                {packageItem.users.map((user) => (
-                  <div
-                    key={user.id}
-                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                <button
+                  onClick={() => navigate(`/admin/packages/${packageId}/edit`)}
+                  className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center space-x-2"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    <div>
-                      <p className="font-medium text-gray-900">{user.name}</p>
-                      <p className="text-sm text-gray-600">{user.email}</p>
-                    </div>
-                    <span className="text-xs text-gray-500 font-mono">
-                      {user.referral_code}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-500 italic">
-                No users assigned to this package
-              </p>
-            )}
-          </div>
-
-          {/* Commissions List */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Recent Commissions ({packageItem.commissions?.length || 0})
-            </h3>
-            {packageItem.commissions && packageItem.commissions.length > 0 ? (
-              <div className="space-y-3 max-h-64 overflow-y-auto">
-                {packageItem.commissions.map((commission) => (
-                  <div
-                    key={commission.id}
-                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                    />
+                  </svg>
+                  <span>Edit Package</span>
+                </button>
+                <button
+                  onClick={() => navigate("/admin/packages")}
+                  className="w-full px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center justify-center space-x-2"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    <div>
-                      <p className="font-medium text-gray-900">
-                        {commission.type.replace("_", " ").toUpperCase()}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        {formatDate(commission.created_at)}
-                      </p>
-                    </div>
-                    <span className="text-sm font-semibold text-green-600">
-                      {formatCurrency(commission.amount)}
-                    </span>
-                  </div>
-                ))}
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                    />
+                  </svg>
+                  <span>Back to Packages</span>
+                </button>
               </div>
-            ) : (
-              <p className="text-gray-500 italic">
-                No commissions recorded for this package
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Recent Activity */}
-        <div className="mt-6 bg-white rounded-xl shadow-lg border border-gray-100 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Recent Activity
-          </h3>
-          <div className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <div className="flex items-center space-x-3">
-                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                <span className="text-sm text-gray-600">Package created</span>
-              </div>
-              <span className="text-sm text-gray-500">
-                {formatDate(packageItem.created_at)}
-              </span>
             </div>
 
-            {packageItem.updated_at !== packageItem.created_at && (
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
-                  <span className="text-sm text-gray-600">Package updated</span>
-                </div>
-                <span className="text-sm text-gray-500">
-                  {formatDate(packageItem.updated_at)}
-                </span>
-              </div>
-            )}
-
-            {packageItem.is_active && (
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                  <span className="text-sm text-gray-600">
-                    Package activated
+            {/* Package Stats */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                Package Stats
+              </h2>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Level Unlock</span>
+                  <span className="font-semibold text-blue-600">
+                    Level {packageItem.level_unlock}
                   </span>
                 </div>
-                <span className="text-sm text-gray-500">Recently</span>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Price</span>
+                  <span className="font-semibold text-green-600">
+                    ₹{packageItem.price}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-600">Status</span>
+                  <span className="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                    Active
+                  </span>
+                </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>

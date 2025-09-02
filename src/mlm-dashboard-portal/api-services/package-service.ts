@@ -3,117 +3,108 @@ import { defaultApiService } from './api-service-factory';
 // Types for Package API
 export interface Package {
     id: number;
-    code: string;
     name: string;
     price: string;
-    rank: number;
-    is_active: boolean;
-    created_by: number;
+    level_unlock: number;
+    description?: string;
     created_at: string;
     updated_at: string;
-    deleted_at: string | null;
 }
 
 export interface PackageDetail extends Package {
-    creator: {
-        id: number;
-        name: string;
-        email: string;
-    };
-    users: Array<{
-        id: number;
-        name: string;
-        email: string;
-        referral_code: string;
-    }>;
-    commissions: Array<{
-        id: number;
-        amount: string;
-        type: string;
-        created_at: string;
-    }>;
+    // Additional details can be added here if needed
 }
 
 export interface PackagesListParams {
-    search?: string;
-    rank?: number;
-    is_active?: boolean;
     per_page?: number;
     page?: number;
 }
 
 export interface PackagesListResponse {
-    success: boolean;
+    status: boolean;
     message: string;
-    data: Package[];
-    pagination: {
-        current_page: number;
-        last_page: number;
-        per_page: number;
-        total: number;
+    data: {
+        packages: Package[];
+        pagination: {
+            current_page: number;
+            last_page: number;
+            per_page: number;
+            total: number;
+            has_more_pages: boolean;
+        };
     };
 }
 
 export interface CreatePackageRequest {
-    code: string;
     name: string;
-    price: string;
-    rank: number;
-    is_active?: boolean;
+    price: number;
+    level_unlock: number;
+    description?: string;
 }
 
 export interface UpdatePackageRequest {
-    code?: string;
     name?: string;
-    price?: string;
-    rank?: number;
-    is_active?: boolean;
+    price?: number;
+    level_unlock?: number;
+    description?: string;
 }
 
 export interface CreatePackageResponse {
-    success: boolean;
+    status: boolean;
     message: string;
     data: Package;
 }
 
 export interface UpdatePackageResponse {
-    success: boolean;
+    status: boolean;
     message: string;
     data: Package;
 }
 
 export interface DeletePackageResponse {
-    success: boolean;
+    status: boolean;
     message: string;
+    data: null;
+}
+
+export interface PackageStatsResponse {
+    status: boolean;
+    message: string;
+    data: {
+        total_packages: number;
+        total_users_with_packages: number;
+        package_usage: Array<{
+            id: number;
+            name: string;
+            users_count: number;
+        }>;
+    };
 }
 
 class PackageService {
     private baseUrl = '/admin/packages';
 
     /**
-     * Get packages list with pagination and filters
+     * Get packages list with pagination
      */
     async getPackages(params: PackagesListParams = {}): Promise<PackagesListResponse> {
         const queryParams = new URLSearchParams();
 
-        if (params.search) queryParams.append('search', params.search);
-        if (params.rank) queryParams.append('rank', params.rank.toString());
-        if (params.is_active !== undefined) queryParams.append('is_active', params.is_active.toString());
         if (params.per_page) queryParams.append('per_page', params.per_page.toString());
         if (params.page) queryParams.append('page', params.page.toString());
 
         const url = `${this.baseUrl}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`;
 
         const response = await defaultApiService.get<PackagesListResponse>(url);
-        return response.data;
+        return response;
     }
 
     /**
      * Get package by ID
      */
-    async getPackageById(id: number): Promise<PackageDetail> {
-        const response = await defaultApiService.get<PackageDetail>(`${this.baseUrl}/${id}`);
-        return response.data;
+    async getPackageById(id: number): Promise<{ status: boolean; message: string; data: Package }> {
+        const response = await defaultApiService.get<{ status: boolean; message: string; data: Package }>(`${this.baseUrl}/${id}`);
+        return response;
     }
 
     /**
@@ -121,7 +112,7 @@ class PackageService {
      */
     async createPackage(packageData: CreatePackageRequest): Promise<CreatePackageResponse> {
         const response = await defaultApiService.post<CreatePackageResponse>(this.baseUrl, packageData);
-        return response.data;
+        return response;
     }
 
     /**
@@ -129,7 +120,7 @@ class PackageService {
      */
     async updatePackage(id: number, packageData: UpdatePackageRequest): Promise<UpdatePackageResponse> {
         const response = await defaultApiService.put<UpdatePackageResponse>(`${this.baseUrl}/${id}`, packageData);
-        return response.data;
+        return response;
     }
 
     /**
@@ -137,31 +128,15 @@ class PackageService {
      */
     async deletePackage(id: number): Promise<DeletePackageResponse> {
         const response = await defaultApiService.delete<DeletePackageResponse>(`${this.baseUrl}/${id}`);
-        return response.data;
-    }
-
-    /**
-     * Toggle package status
-     */
-    async togglePackageStatus(id: number, isActive: boolean): Promise<UpdatePackageResponse> {
-        const response = await defaultApiService.patch<UpdatePackageResponse>(`${this.baseUrl}/${id}/status`, {
-            is_active: isActive
-        });
-        return response.data;
+        return response;
     }
 
     /**
      * Get package statistics
      */
-    async getPackageStats(): Promise<{
-        total_packages: number;
-        active_packages: number;
-        inactive_packages: number;
-        total_users: number;
-        total_revenue: string;
-    }> {
-        const response = await defaultApiService.get(`${this.baseUrl}/stats`);
-        return response.data;
+    async getPackageStats(): Promise<PackageStatsResponse> {
+        const response = await defaultApiService.get<PackageStatsResponse>('/admin/packages-stats');
+        return response;
     }
 }
 
