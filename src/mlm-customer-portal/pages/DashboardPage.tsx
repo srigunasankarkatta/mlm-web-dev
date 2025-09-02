@@ -181,13 +181,13 @@ const DashboardPage: React.FC = () => {
               <div className={styles.statCard}>
                 <p className={styles.statLabel}>Wallet Balance</p>
                 <p className={styles.statValue + " " + styles.walletBalance}>
-                  ${user.walletBalance.toFixed(2)}
+                  ₹{user.walletBalance.toFixed(2)}
                 </p>
               </div>
               <div className={styles.statCard}>
                 <p className={styles.statLabel}>Total Earnings</p>
                 <p className={styles.statValue + " " + styles.totalEarnings}>
-                  ${user.totalEarnings.toFixed(2)}
+                  ₹{user.totalEarnings.toFixed(2)}
                 </p>
               </div>
             </div>
@@ -323,7 +323,7 @@ const DashboardPage: React.FC = () => {
                       <p className={styles.planName}>{plan.name}</p>
                       <p className={styles.planLevel}>Level {plan.level}</p>
                     </div>
-                    <span className={styles.planPrice}>${plan.price}</span>
+                    <span className={styles.planPrice}>₹{plan.price}</span>
                   </div>
                 ))}
               </div>

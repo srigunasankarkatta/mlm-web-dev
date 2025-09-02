@@ -1,13 +1,13 @@
-import { 
-  MLMPlan, 
-  CustomerProfile, 
-  IncomeSummary, 
-  PurchaseRequest, 
-  PurchaseResponse, 
-  LoginRequest, 
-  RegisterRequest, 
+import {
+  MLMPlan,
+  CustomerProfile,
+  IncomeSummary,
+  PurchaseRequest,
+  PurchaseResponse,
+  LoginRequest,
+  RegisterRequest,
   AuthResponse,
-  Notification 
+  Notification
 } from '../types';
 import { MLM_PLANS } from '../data/mockData';
 
@@ -66,7 +66,7 @@ const mockNotifications: Notification[] = [
     id: '1',
     type: 'income',
     title: 'New Direct Referral',
-    message: 'You earned $12.50 from a new direct referral',
+    message: 'You earned ₹12.50 from a new direct referral',
     timestamp: new Date(),
     isRead: false
   },
@@ -82,7 +82,7 @@ const mockNotifications: Notification[] = [
     id: '3',
     type: 'upgrade',
     title: 'Package Upgrade Available',
-    message: 'You can now upgrade to Package-3 for $60',
+    message: 'You can now upgrade to Package-3 for ₹60',
     timestamp: new Date(Date.now() - 172800000),
     isRead: true
   }
@@ -93,7 +93,7 @@ export class CustomerPortalAPI {
   // Authentication
   static async login(request: LoginRequest): Promise<AuthResponse> {
     await delay(1000); // Simulate network delay
-    
+
     // Mock validation - in real app, this would validate against backend
     if (request.identifier.includes('@') && request.otp === '123456') {
       const user = mockUsers[0];
@@ -104,7 +104,7 @@ export class CustomerPortalAPI {
         message: 'Login successful'
       };
     }
-    
+
     return {
       success: false,
       message: 'Invalid credentials or OTP'
@@ -113,7 +113,7 @@ export class CustomerPortalAPI {
 
   static async register(request: RegisterRequest): Promise<AuthResponse> {
     await delay(1500);
-    
+
     // Mock validation
     if (request.planId !== 'package-1') {
       return {
@@ -121,7 +121,7 @@ export class CustomerPortalAPI {
         message: 'Package-1 is required for registration'
       };
     }
-    
+
     // Create new user
     const newUser: CustomerProfile = {
       id: Date.now().toString(),
@@ -135,9 +135,9 @@ export class CustomerPortalAPI {
       referralCode: request.name.toUpperCase().substring(0, 4) + Date.now().toString().slice(-3),
       uplineId: request.referralCode || undefined
     };
-    
+
     mockUsers.push(newUser);
-    
+
     return {
       success: true,
       user: newUser,
@@ -167,7 +167,7 @@ export class CustomerPortalAPI {
     await delay(800);
     const userIndex = mockUsers.findIndex(user => user.id === userId);
     if (userIndex === -1) return null;
-    
+
     mockUsers[userIndex] = { ...mockUsers[userIndex], ...updates };
     return mockUsers[userIndex];
   }
@@ -196,7 +196,7 @@ export class CustomerPortalAPI {
   // Purchase Flow
   static async purchasePlan(request: PurchaseRequest): Promise<PurchaseResponse> {
     await delay(2000); // Simulate payment processing
-    
+
     const plan = MLM_PLANS.find(p => p.id === request.planId);
     if (!plan) {
       return {
@@ -206,17 +206,17 @@ export class CustomerPortalAPI {
         message: 'Plan not found'
       };
     }
-    
+
     // Mock payment success
     const transactionId = 'TXN_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-    
+
     // Update user's purchased plans
     const user = mockUsers.find(u => u.id === request.userId);
     if (user) {
       user.purchasedPlans.push(plan);
       user.walletBalance += plan.price * 0.1; // Add 10% of plan price as bonus
     }
-    
+
     return {
       success: true,
       transactionId,
@@ -248,7 +248,7 @@ export class CustomerPortalAPI {
     message: string;
   }> {
     await delay(1500);
-    
+
     const user = mockUsers.find(u => u.id === userId);
     if (!user) {
       return {
@@ -256,21 +256,21 @@ export class CustomerPortalAPI {
         message: 'User not found'
       };
     }
-    
+
     if (amount > user.walletBalance) {
       return {
         success: false,
         message: 'Insufficient wallet balance'
       };
     }
-    
+
     const transactionId = 'WD_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
     user.walletBalance -= amount;
-    
+
     return {
       success: true,
       transactionId,
-      message: `Withdrawal request of $${amount} submitted successfully`
+      message: `Withdrawal request of ₹${amount} submitted successfully`
     };
   }
 }

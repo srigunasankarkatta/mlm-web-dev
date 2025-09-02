@@ -134,7 +134,7 @@ const NetworkPage: React.FC = () => {
                     <div className={styles.statItem}>
                       <span className={styles.statLabel}>Total Earnings:</span>
                       <span className={styles.statValue}>
-                        ${stats.totalEarnings}
+                        ₹{stats.totalEarnings}
                       </span>
                     </div>
                   </div>

@@ -133,7 +133,7 @@ const LoginPage: React.FC = () => {
                 <div className={styles.featureIcon}>🚀</div>
                 <div className={styles.featureText}>
                   <h4>Fast Track Packages</h4>
-                  <p>Start with just $20 and unlock higher levels</p>
+                  <p>Start with just ₹20 and unlock higher levels</p>
                 </div>
               </div>
 

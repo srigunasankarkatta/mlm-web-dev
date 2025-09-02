@@ -113,13 +113,13 @@ const ProfilePage: React.FC = () => {
             <div className={styles.statItem}>
               <p className={styles.statLabel}>Wallet Balance</p>
               <p className={styles.statValue + " " + styles.walletBalance}>
-                ${user.walletBalance.toFixed(2)}
+                ₹{user.walletBalance.toFixed(2)}
               </p>
             </div>
             <div className={styles.statItem}>
               <p className={styles.statLabel}>Total Earnings</p>
               <p className={styles.statValue + " " + styles.totalEarnings}>
-                ${user.totalEarnings.toFixed(2)}
+                ₹{user.totalEarnings.toFixed(2)}
               </p>
             </div>
             <div className={styles.statItem}>
@@ -194,7 +194,7 @@ const ProfilePage: React.FC = () => {
                               Income
                             </p>
                             <p className={styles.activityAmount}>
-                              +${income.amount}
+                              +₹{income.amount}
                             </p>
                             <p className={styles.activityDate}>
                               {income.formatted_date} at {income.time}
@@ -225,7 +225,7 @@ const ProfilePage: React.FC = () => {
                       <p className={styles.packageLevel}>Level {plan.level}</p>
                     </div>
                     <div className={styles.packageDetails}>
-                      <p className={styles.packagePrice}>${plan.price}</p>
+                      <p className={styles.packagePrice}>₹{plan.price}</p>
                       <p className={styles.packageStatus}>Purchased</p>
                     </div>
                   </div>
@@ -292,7 +292,7 @@ const ProfilePage: React.FC = () => {
                     <div className={styles.summaryCard}>
                       <h4>Total Income</h4>
                       <p className={styles.summaryAmount}>
-                        ${incomeSummary.total_income}
+                        ₹{incomeSummary.total_income}
                       </p>
                     </div>
                     <div className={styles.summaryCard}>
@@ -354,7 +354,7 @@ const ProfilePage: React.FC = () => {
                             </td>
                             <td>
                               <span className={styles.amountValue}>
-                                ${income.amount}
+                                ₹{income.amount}
                               </span>
                             </td>
                             <td>

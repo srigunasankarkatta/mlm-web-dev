@@ -131,7 +131,7 @@ export const INCOME_BREAKDOWN: IncomeBreakdown[] = [
   {
     type: 'Club',
     amount: 0.5,
-    description: '$0.5 per new member join'
+    description: '₹0.5 per new member join'
   },
   {
     type: 'AutoPool',
@@ -143,7 +143,7 @@ export const INCOME_BREAKDOWN: IncomeBreakdown[] = [
 export const HERO_CONTENT = {
   title: 'Fast Track to Financial Freedom',
   subtitle: 'Join our MLM platform and unlock multiple income streams',
-  description: 'Start with just $20 and build your network. Earn from direct referrals, level income, club benefits, and auto pool rewards.',
+  description: 'Start with just ₹20 and build your network. Earn from direct referrals, level income, club benefits, and auto pool rewards.',
   benefits: [
     'Multiple Income Streams',
     'Fast Track Packages',
@@ -156,8 +156,8 @@ export const HERO_CONTENT = {
 export const FAQ_DATA = [
   {
     question: 'What is the minimum investment required?',
-    answer: 'Package-1 ($20) is mandatory to start. This unlocks Direct Income, Level-1 Income, Club Income, and Auto Pool access.',
-    telugu: 'మీరు ప్రారంభించడానికి Package-1 ($20) తప్పనిసరి. ఇది Direct Income, Level-1 Income, Club Income మరియు Auto Pool access ని అన్లాక్ చేస్తుంది.'
+    answer: 'Package-1 (₹20) is mandatory to start. This unlocks Direct Income, Level-1 Income, Club Income, and Auto Pool access.',
+    telugu: 'మీరు ప్రారంభించడానికి Package-1 (₹20) తప్పనిసరి. ఇది Direct Income, Level-1 Income, Club Income మరియు Auto Pool access ని అన్లాక్ చేస్తుంది.'
   },
   {
     question: 'How does Direct Income work?',

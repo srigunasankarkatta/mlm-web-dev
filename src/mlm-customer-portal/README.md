@@ -6,7 +6,7 @@ A modern, responsive customer portal for purchasing MLM plans and managing incom
 
 ### 🏠 **Home Page**
 - Hero section with compelling call-to-action
-- Interactive plan slider showcasing 10 Fast Track Packages ($20-$200)
+- Interactive plan slider showcasing 10 Fast Track Packages (₹20-₹200)
 - Income types breakdown with infographic-style cards
 - Multiple CTA sections for user engagement
 
@@ -98,15 +98,15 @@ src/mlm-dashboard-portal/features/customer-portal/
 ## Data Models
 
 ### MLM Plans
-- 10 packages from $20 to $200
-- Package-1 ($20) is mandatory
+- 10 packages from ₹20 to ₹200
+- Package-1 (₹20) is mandatory
 - Higher packages unlock additional income levels
 - Each package has specific benefits and unlocks
 
 ### Income Types
 - **Direct Income**: 6%, 9%, 12%, 15% (max 4 directs)
 - **Level Income**: 2% to 10% based on package level
-- **Club Income**: $0.50 per new member join
+- **Club Income**: ₹0.50 per new member join
 - **Auto Pool**: Progressive rewards (4 → 16 → 64 members)
 
 ## Getting Started

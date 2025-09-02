@@ -224,7 +224,7 @@ const PlansPage: React.FC = () => {
         <div className={styles.pageHeader}>
           <h1 className={styles.pageTitle}>Choose Your MLM Package</h1>
           <p className={styles.pageSubtitle}>
-            Start with Package-1 ($20) and unlock higher levels as you grow.
+            Start with Package-1 (₹20) and unlock higher levels as you grow.
             Each package opens new income opportunities.
           </p>
           {packagesError && (
@@ -253,7 +253,7 @@ const PlansPage: React.FC = () => {
                 Package-1 is Mandatory
               </div>
               <p className={styles.ruleDescription}>
-                All users must start with Package-1 ($20) to access the platform
+                All users must start with Package-1 (₹20) to access the platform
               </p>
             </div>
             <div className={styles.ruleCard}>
@@ -299,7 +299,7 @@ const PlansPage: React.FC = () => {
                 {/* Header */}
                 <div className={styles.planHeader}>
                   <h3 className={styles.planName}>{plan.name}</h3>
-                  <div className={styles.planPrice}>${plan.price}</div>
+                  <div className={styles.planPrice}>₹{plan.price}</div>
                   {plan.isRequired && (
                     <span className={styles.requiredBadge}>Required</span>
                   )}
@@ -358,7 +358,7 @@ const PlansPage: React.FC = () => {
                 <div className={styles.tableCell}>Price</div>
                 {packages.map((plan) => (
                   <div key={plan.id} className={styles.tableCell}>
-                    ${plan.price}
+                    ₹{plan.price}
                   </div>
                 ))}
               </div>
