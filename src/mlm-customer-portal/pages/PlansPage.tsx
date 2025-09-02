@@ -26,9 +26,9 @@ const PlansPage: React.FC = () => {
 
   // Utility function to convert package ID from string to integer
   const convertPackageId = (planId: string): number => {
-    const numericId = planId
+    const numericId = planId;
     if (isNaN(numericId)) {
-      console.error("Invalid package ID format:", planId);  
+      console.error("Invalid package ID format:", planId);
       return 1; // Default to package 1 if conversion fails
     }
     return numericId;

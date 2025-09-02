@@ -27,6 +27,7 @@ export const API_CONFIG = {
             profile: '/me',
             team: '/my-tree',
             updateProfile: '/profile/update',
+            incomeHistory: '/income-history',
         },
         packages: {
             list: '/packages',

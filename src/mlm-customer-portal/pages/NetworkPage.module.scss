@@ -1,16 +1,26 @@
+@use "../../styles/color-palette" as *;
+
+// Professional NetworkPage Design with Teal/Green Color Palette
+
 .networkPage {
   min-height: 100vh;
-  background: #f8fafc;
+  background: linear-gradient(
+    135deg,
+    rgba($primary-50, 0.3) 0%,
+    rgba($primary-100, 0.1) 100%
+  );
 }
 
 .pageHeader {
-  background: white;
-  padding: 24px;
-  border-bottom: 1px solid #e5e7eb;
+  background: $white;
+  padding: 2rem;
+  border-bottom: 2px solid $border-light;
+  box-shadow: 0 4px 20px $shadow-light, 0 1px 0 rgba($primary-100, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 24px;
+  gap: 2rem;
+  border-radius: 0 0 1.5rem 1.5rem;
 }
 
 .headerContent {
@@ -18,75 +28,93 @@
 }
 
 .pageTitle {
-  font-size: 28px;
+  font-size: 2rem;
   font-weight: 700;
-  color: #1f2937;
-  margin: 0 0 8px 0;
+  color: $text-primary;
+  margin: 0 0 0.5rem 0;
+  background: $gradient-primary;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .pageSubtitle {
-  font-size: 16px;
-  color: #6b7280;
+  font-size: 1rem;
+  color: $text-secondary;
   margin: 0;
+  font-weight: 500;
 }
 
 .controls {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1rem;
   align-items: flex-end;
 }
 
 .viewControls {
   display: flex;
-  background: #f3f4f6;
-  border-radius: 8px;
-  padding: 4px;
+  background: rgba($primary-100, 0.3);
+  border-radius: 0.75rem;
+  padding: 0.25rem;
+  border: 1px solid rgba($primary-200, 0.3);
 }
 
 .viewButton {
-  padding: 8px 16px;
+  padding: 0.75rem 1.5rem;
   border: none;
   background: transparent;
-  color: #6b7280;
-  border-radius: 6px;
+  color: $text-secondary;
+  border-radius: 0.5rem;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
 
   &:hover {
-    color: #374151;
+    color: $text-primary;
+    background: rgba($primary-100, 0.5);
   }
 
   &.active {
-    background: white;
-    color: #1f2937;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    background: $white;
+    color: $primary-600;
+    box-shadow: 0 4px 12px rgba($primary-500, 0.15);
+    border: 1px solid rgba($primary-200, 0.3);
   }
 }
 
 .depthControl {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: #374151;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: $text-secondary;
+  font-weight: 600;
 }
 
 .depthSelect {
-  padding: 6px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background: white;
-  color: #374151;
-  font-size: 14px;
+  padding: 0.75rem 1rem;
+  border: 1px solid $border-light;
+  border-radius: 0.5rem;
+  background: $white;
+  color: $text-primary;
+  font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba($primary-500, 0.05);
 
   &:focus {
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: $primary-500;
+    box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
+  }
+
+  &:hover {
+    border-color: $primary-300;
+    box-shadow: 0 4px 8px rgba($primary-500, 0.1);
   }
 }
 
@@ -96,115 +124,192 @@
 
 // List View Styles
 .listView {
-  padding: 24px;
+  padding: 2rem;
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 4px solid rgba($primary-200, 0.3);
+  border-top: 4px solid $primary-500;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  gap: 1rem;
+}
+
+.errorMessage {
+  color: $error-600;
+  font-size: 1rem;
+  margin: 0;
+  font-weight: 500;
+}
+
+.retryButton {
+  background: $gradient-primary;
+  color: $white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba($primary-500, 0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba($primary-500, 0.4);
+  }
 }
 
 .listHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid $border-light;
 }
 
 .listHeader h2 {
-  font-size: 20px;
-  font-weight: 600;
-  color: #1f2937;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: $text-primary;
   margin: 0;
+  background: $gradient-primary;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .listStats {
   display: flex;
-  gap: 24px;
+  gap: 2rem;
 }
 
 .statItem {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba($primary-50, 0.5);
+  border-radius: 0.75rem;
+  border: 1px solid rgba($primary-200, 0.3);
+  min-width: 120px;
 }
 
 .statLabel {
-  font-size: 12px;
-  color: #6b7280;
+  font-size: 0.75rem;
+  color: $text-secondary;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: 600;
 }
 
 .statValue {
-  font-size: 16px;
-  font-weight: 600;
-  color: #1f2937;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: $primary-600;
 }
 
 .membersList {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1rem;
 }
 
 .listItem {
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: $white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px $shadow-light, 0 1px 0 rgba($primary-100, 0.1);
+  border: 1px solid rgba($primary-200, 0.2);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: box-shadow 0.2s;
+  transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 30px rgba($primary-500, 0.15);
+    border-color: rgba($primary-300, 0.3);
+    transform: translateY(-2px);
   }
 }
 
 .memberInfo {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 1rem;
 }
 
 .memberAvatar {
-  width: 48px;
-  height: 48px;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
-  background: #3b82f6;
-  color: white;
+  background: $gradient-primary;
+  color: $white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: 18px;
+  font-weight: 700;
+  font-size: 1.125rem;
+  box-shadow: 0 4px 12px rgba($primary-500, 0.2);
 }
 
 .memberDetails h3 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #1f2937;
-  margin: 0 0 4px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: $text-primary;
+  margin: 0 0 0.25rem 0;
 }
 
 .memberDetails p {
-  font-size: 14px;
-  color: #6b7280;
-  margin: 0 0 4px 0;
+  font-size: 0.875rem;
+  color: $text-secondary;
+  margin: 0 0 0.25rem 0;
+  font-weight: 500;
 }
 
 .memberLevel {
-  font-size: 12px;
-  color: #3b82f6;
-  background: #eff6ff;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-weight: 500;
+  font-size: 0.75rem;
+  color: $primary-600;
+  background: rgba($primary-100, 0.5);
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  border: 1px solid rgba($primary-200, 0.3);
 }
 
 .memberStats {
   display: flex;
-  gap: 24px;
+  gap: 2rem;
   align-items: center;
 }
 
@@ -212,24 +317,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 0.25rem;
 }
 
 .status {
-  padding: 4px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   text-transform: capitalize;
+  border: 1px solid;
 
   &.active {
-    background: #dcfce7;
-    color: #166534;
+    background: rgba($success-500, 0.1);
+    color: $success-600;
+    border-color: rgba($success-500, 0.2);
   }
 
   &.inactive {
-    background: #fee2e2;
-    color: #991b1b;
+    background: rgba($error-500, 0.1);
+    color: $error-600;
+    border-color: rgba($error-500, 0.2);
   }
 }
 

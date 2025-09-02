@@ -48,7 +48,8 @@ export interface TeamTreeNode {
     id: number;
     name: string;
     email: string;
-    package: string;
+    referral_code?: string;
+    package: string | null;
     level: number;
     children: TeamTreeNode[];
 }

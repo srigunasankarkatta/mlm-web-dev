@@ -1,10 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import NetworkTree from "../components/NetworkTree";
+import { useUserTeamTree } from "../hooks/useProfile";
+import { TeamTreeNode } from "../api-services/profile-service";
 import styles from "./NetworkPage.module.scss";
 
 const NetworkPage: React.FC = () => {
   const [viewMode, setViewMode] = useState<"tree" | "list">("tree");
   const [maxDepth, setMaxDepth] = useState(3);
+
+  // Fetch team tree data
+  const { data: teamTreeResponse, isLoading, error } = useUserTeamTree();
+
+  // Flatten tree data into a list for list view
+  const flattenedMembers = useMemo(() => {
+    if (!teamTreeResponse?.data) return [];
+
+    const flattenNode = (node: TeamTreeNode): TeamTreeNode[] => {
+      const result = [node];
+      if (node.children && node.children.length > 0) {
+        node.children.forEach((child) => {
+          result.push(...flattenNode(child));
+        });
+      }
+      return result;
+    };
+
+    return flattenNode(teamTreeResponse.data);
+  }, [teamTreeResponse]);
+
+  // Calculate statistics
+  const stats = useMemo(() => {
+    const totalMembers = flattenedMembers.length;
+    const activeMembers = flattenedMembers.filter(
+      (member) => member.level > 1
+    ).length; // Assuming level 1 is root, others are active
+    const totalEarnings = 0; // API doesn't provide earnings data in tree response
+
+    return {
+      totalMembers,
+      activeMembers,
+      totalEarnings: totalEarnings.toFixed(2),
+    };
+  }, [flattenedMembers]);
 
   return (
     <div className={styles.networkPage}>
@@ -58,94 +95,93 @@ const NetworkPage: React.FC = () => {
           <NetworkTree maxDepth={maxDepth} />
         ) : (
           <div className={styles.listView}>
-            <div className={styles.listHeader}>
-              <h2>Network Members</h2>
-              <div className={styles.listStats}>
-                <div className={styles.statItem}>
-                  <span className={styles.statLabel}>Total Members:</span>
-                  <span className={styles.statValue}>12</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statLabel}>Active Members:</span>
-                  <span className={styles.statValue}>10</span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statLabel}>Total Earnings:</span>
-                  <span className={styles.statValue}>$2,450.75</span>
-                </div>
+            {isLoading ? (
+              <div className={styles.loadingContainer}>
+                <div className={styles.spinner}></div>
+                <p>Loading network members...</p>
               </div>
-            </div>
+            ) : error ? (
+              <div className={styles.errorContainer}>
+                <p className={styles.errorMessage}>
+                  {error instanceof Error
+                    ? error.message
+                    : "Failed to load network data"}
+                </p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className={styles.retryButton}
+                >
+                  Retry
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className={styles.listHeader}>
+                  <h2>Network Members</h2>
+                  <div className={styles.listStats}>
+                    <div className={styles.statItem}>
+                      <span className={styles.statLabel}>Total Members:</span>
+                      <span className={styles.statValue}>
+                        {stats.totalMembers}
+                      </span>
+                    </div>
+                    <div className={styles.statItem}>
+                      <span className={styles.statLabel}>Active Members:</span>
+                      <span className={styles.statValue}>
+                        {stats.activeMembers}
+                      </span>
+                    </div>
+                    <div className={styles.statItem}>
+                      <span className={styles.statLabel}>Total Earnings:</span>
+                      <span className={styles.statValue}>
+                        ${stats.totalEarnings}
+                      </span>
+                    </div>
+                  </div>
+                </div>
 
-            <div className={styles.membersList}>
-              <div className={styles.listItem}>
-                <div className={styles.memberInfo}>
-                  <div className={styles.memberAvatar}>J</div>
-                  <div className={styles.memberDetails}>
-                    <h3>John Smith</h3>
-                    <p>john@example.com</p>
-                    <span className={styles.memberLevel}>Level 2</span>
-                  </div>
+                <div className={styles.membersList}>
+                  {flattenedMembers.map((member) => (
+                    <div key={member.id} className={styles.listItem}>
+                      <div className={styles.memberInfo}>
+                        <div className={styles.memberAvatar}>
+                          {member.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div className={styles.memberDetails}>
+                          <h3>{member.name}</h3>
+                          <p>{member.email}</p>
+                          <span className={styles.memberLevel}>
+                            Level {member.level}
+                          </span>
+                        </div>
+                      </div>
+                      <div className={styles.memberStats}>
+                        <div className={styles.stat}>
+                          <span className={styles.statLabel}>
+                            Referral Code
+                          </span>
+                          <span className={styles.statValue}>
+                            {member.referral_code}
+                          </span>
+                        </div>
+                        <div className={styles.stat}>
+                          <span className={styles.statLabel}>Package</span>
+                          <span className={styles.statValue}>
+                            {member.package}
+                          </span>
+                        </div>
+                        <div className={styles.stat}>
+                          <span className={styles.statLabel}>Status</span>
+                          <span className={`${styles.status} ${styles.active}`}>
+                            Active
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className={styles.memberStats}>
-                  <div className={styles.stat}>
-                    <span className={styles.statLabel}>Earnings</span>
-                    <span className={styles.statValue}>$850.25</span>
-                  </div>
-                  <div className={styles.stat}>
-                    <span className={styles.statLabel}>Status</span>
-                    <span className={`${styles.status} ${styles.active}`}>
-                      Active
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className={styles.listItem}>
-                <div className={styles.memberInfo}>
-                  <div className={styles.memberAvatar}>S</div>
-                  <div className={styles.memberDetails}>
-                    <h3>Sarah Wilson</h3>
-                    <p>sarah@example.com</p>
-                    <span className={styles.memberLevel}>Level 2</span>
-                  </div>
-                </div>
-                <div className={styles.memberStats}>
-                  <div className={styles.stat}>
-                    <span className={styles.statLabel}>Earnings</span>
-                    <span className={styles.statValue}>$680.75</span>
-                  </div>
-                  <div className={styles.stat}>
-                    <span className={styles.statLabel}>Status</span>
-                    <span className={`${styles.status} ${styles.active}`}>
-                      Active
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className={styles.listItem}>
-                <div className={styles.memberInfo}>
-                  <div className={styles.memberAvatar}>T</div>
-                  <div className={styles.memberDetails}>
-                    <h3>Tom Davis</h3>
-                    <p>tom@example.com</p>
-                    <span className={styles.memberLevel}>Level 2</span>
-                  </div>
-                </div>
-                <div className={styles.memberStats}>
-                  <div className={styles.stat}>
-                    <span className={styles.statLabel}>Earnings</span>
-                    <span className={styles.statValue}>$450.00</span>
-                  </div>
-                  <div className={styles.stat}>
-                    <span className={styles.statLabel}>Status</span>
-                    <span className={`${styles.status} ${styles.inactive}`}>
-                      Inactive
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+              </>
+            )}
           </div>
         )}
       </div>

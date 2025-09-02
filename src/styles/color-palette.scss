@@ -57,9 +57,11 @@ $border-light: #d1e8e0; // Light teal borders
 $border-medium: #a3d1c1; // Medium teal borders
 $border-dark: #75baa2; // Dark teal borders
 $border-primary: #198c64; // Primary teal borders
+$error-200: #c72522;
 $error-500: #c72522;
 $error-600: #c72522;
 $error-700: #c72522;
+$error-50: #c72522;
 
 $success-50: #75baa2;
 $success-500: #75baa2;
@@ -73,6 +75,7 @@ $shadow-dark: rgba(10, 56, 40, 0.4); // Dark teal shadow
 
 // Status Colors
 $success: #198c64; // Primary teal for success
+$warning-200: #a3d1c1; // Medium light teal for warning
 $warning: #a3d1c1; // Medium light teal for warning
 $error: #d1e8e0; // Light teal for error (soft)
 $info: #75baa2; // Medium teal for info

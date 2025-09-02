@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Tree from "react-d3-tree";
-import { CustomerAuthService } from "../api-services/auth-service";
+import { useUserTeamTree } from "../hooks/useProfile";
+import { TeamTreeNode } from "../api-services/profile-service";
 import styles from "./NetworkTree.module.scss";
 
 interface NetworkNode {
   name: string;
   attributes?: {
+    id?: number;
     email?: string;
-    joinDate?: string;
+    referral_code?: string;
+    package?: string;
     level?: number;
-    earnings?: number;
     status?: "active" | "inactive";
   };
   children?: NetworkNode[];
@@ -21,162 +23,62 @@ interface NetworkTreeProps {
 }
 
 const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
-  const [treeData, setTreeData] = useState<NetworkNode[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [selectedNode, setSelectedNode] = useState<NetworkNode | null>(null);
+  const [treeTranslate, setTreeTranslate] = useState({ x: 400, y: 100 });
 
-  // Mock data for demonstration - replace with actual API call
-  const generateMockNetworkData = (): NetworkNode[] => {
-    const currentUser = CustomerAuthService.getCurrentUser();
+  // Use the React Query hook to fetch team tree data
+  const {
+    data: teamTreeResponse,
+    isLoading: loading,
+    error,
+  } = useUserTeamTree();
 
-    return [
-      {
-        name: currentUser?.name || "You",
-        attributes: {
-          email: currentUser?.email || "your@email.com",
-          joinDate: "2024-01-15",
-          level: 1,
-          earnings: 1250.5,
-          status: "active",
-        },
-        children: [
-          {
-            name: "John Smith",
-            attributes: {
-              email: "john@example.com",
-              joinDate: "2024-02-01",
-              level: 2,
-              earnings: 850.25,
-              status: "active",
-            },
-            children: [
-              {
-                name: "Alice Johnson",
-                attributes: {
-                  email: "alice@example.com",
-                  joinDate: "2024-02-15",
-                  level: 3,
-                  earnings: 420.75,
-                  status: "active",
-                },
-                children: [
-                  {
-                    name: "Bob Wilson",
-                    attributes: {
-                      email: "bob@example.com",
-                      joinDate: "2024-03-01",
-                      level: 4,
-                      earnings: 180.0,
-                      status: "active",
-                    },
-                  },
-                  {
-                    name: "Carol Davis",
-                    attributes: {
-                      email: "carol@example.com",
-                      joinDate: "2024-03-05",
-                      level: 4,
-                      earnings: 95.5,
-                      status: "inactive",
-                    },
-                  },
-                ],
-              },
-              {
-                name: "David Brown",
-                attributes: {
-                  email: "david@example.com",
-                  joinDate: "2024-02-20",
-                  level: 3,
-                  earnings: 320.0,
-                  status: "active",
-                },
-                children: [
-                  {
-                    name: "Eva Martinez",
-                    attributes: {
-                      email: "eva@example.com",
-                      joinDate: "2024-03-10",
-                      level: 4,
-                      earnings: 150.25,
-                      status: "active",
-                    },
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            name: "Sarah Wilson",
-            attributes: {
-              email: "sarah@example.com",
-              joinDate: "2024-02-05",
-              level: 2,
-              earnings: 680.75,
-              status: "active",
-            },
-            children: [
-              {
-                name: "Mike Johnson",
-                attributes: {
-                  email: "mike@example.com",
-                  joinDate: "2024-02-25",
-                  level: 3,
-                  earnings: 280.5,
-                  status: "active",
-                },
-              },
-              {
-                name: "Lisa Anderson",
-                attributes: {
-                  email: "lisa@example.com",
-                  joinDate: "2024-03-01",
-                  level: 3,
-                  earnings: 195.25,
-                  status: "active",
-                },
-              },
-            ],
-          },
-          {
-            name: "Tom Davis",
-            attributes: {
-              email: "tom@example.com",
-              joinDate: "2024-02-10",
-              level: 2,
-              earnings: 450.0,
-              status: "inactive",
-            },
-          },
-        ],
-      },
-    ];
-  };
-
+  // Calculate center position for tree
   useEffect(() => {
-    const loadNetworkData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        // TODO: Replace with actual API call
-        // const response = await CustomerAuthService.getNetworkTree(userId);
-        // setTreeData(response.data);
-
-        // For now, use mock data
-        const mockData = generateMockNetworkData();
-        setTreeData(mockData);
-      } catch (err) {
-        setError("Failed to load network data");
-        console.error("Network tree error:", err);
-      } finally {
-        setLoading(false);
-      }
+    const updateTreePosition = () => {
+      const containerWidth = window.innerWidth;
+      const centerX = Math.max(containerWidth / 2, 400);
+      setTreeTranslate({ x: centerX, y: 100 });
     };
 
-    loadNetworkData();
-  }, [userId]);
+    updateTreePosition();
+    window.addEventListener("resize", updateTreePosition);
+
+    return () => window.removeEventListener("resize", updateTreePosition);
+  }, []);
+
+  // Transform API data to react-d3-tree format
+  const treeData = useMemo(() => {
+    if (!teamTreeResponse?.data) return [];
+
+    const transformNode = (node: TeamTreeNode): NetworkNode => {
+      const transformedNode = {
+        name: node.name,
+        attributes: {
+          id: node.id,
+          email: node.email,
+          referral_code: node.referral_code || "N/A",
+          package: node.package || "No Package",
+          level: node.level,
+          status: "active", // Default to active since API doesn't provide status
+        },
+        children: node.children?.map(transformNode) || [],
+      };
+
+      // Debug logging
+      console.log(`Transforming node: ${node.name} (ID: ${node.id})`, {
+        originalChildren: node.children,
+        transformedChildren: transformedNode.children,
+        hasChildren: node.children && node.children.length > 0,
+      });
+
+      return transformedNode;
+    };
+
+    const result = [transformNode(teamTreeResponse.data)];
+    console.log("Final tree data:", result);
+    return result;
+  }, [teamTreeResponse]);
 
   const handleNodeClick = (nodeData: any) => {
     setSelectedNode(nodeData);
@@ -184,10 +86,9 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
 
   const renderCustomNode = ({ nodeDatum, toggleNode }: any) => {
     const isActive = nodeDatum.attributes?.status === "active";
-    const isCurrentUser =
-      nodeDatum.name === (CustomerAuthService.getCurrentUser()?.name || "You");
+    const isCurrentUser = nodeDatum.attributes?.level === 1; // Root user is level 1
 
-    const nodeRadius = isCurrentUser ? 25 : 18;
+    const nodeRadius = isCurrentUser ? 35 : 28;
     const nodeColor = isCurrentUser
       ? "url(#currentUserGradient)"
       : isActive
@@ -268,9 +169,9 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
         {/* Node icon/avatar */}
         <text
           textAnchor="middle"
-          y={isCurrentUser ? 8 : 6}
+          y={isCurrentUser ? 12 : 10}
           style={{
-            fontSize: isCurrentUser ? "14px" : "12px",
+            fontSize: isCurrentUser ? "18px" : "16px",
             fontWeight: "bold",
             fill: "white",
             textShadow: "0 1px 2px rgba(0, 0, 0, 0.3)",
@@ -282,9 +183,9 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
         {/* Node name */}
         <text
           textAnchor="middle"
-          y={isCurrentUser ? 45 : 40}
+          y={isCurrentUser ? 55 : 50}
           style={{
-            fontSize: isCurrentUser ? "13px" : "11px",
+            fontSize: isCurrentUser ? "16px" : "14px",
             fontWeight: isCurrentUser ? "bold" : "600",
             fill: "#1f2937",
             textShadow: "0 1px 2px rgba(255, 255, 255, 0.8)",
@@ -297,20 +198,20 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
         {nodeDatum.attributes?.level && (
           <g>
             <rect
-              x={-20}
-              y={isCurrentUser ? 50 : 45}
-              width={40}
-              height={16}
-              rx={8}
+              x={-25}
+              y={isCurrentUser ? 60 : 55}
+              width={50}
+              height={20}
+              rx={10}
               fill="rgba(255, 255, 255, 0.9)"
               stroke="rgba(0, 0, 0, 0.1)"
               strokeWidth={1}
             />
             <text
               textAnchor="middle"
-              y={isCurrentUser ? 61 : 56}
+              y={isCurrentUser ? 73 : 68}
               style={{
-                fontSize: "9px",
+                fontSize: "11px",
                 fontWeight: "600",
                 fill: "#374151",
               }}
@@ -320,12 +221,12 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
           </g>
         )}
 
-        {/* Earnings indicator */}
-        {nodeDatum.attributes?.earnings && (
+        {/* Children indicator */}
+        {nodeDatum.children && nodeDatum.children.length > 0 && (
           <g>
             <circle
-              cx={nodeRadius - 5}
-              cy={-nodeRadius + 5}
+              cx={nodeRadius - 8}
+              cy={-nodeRadius + 8}
               r={8}
               fill="rgba(255, 255, 255, 0.95)"
               stroke="rgba(0, 0, 0, 0.1)"
@@ -333,10 +234,36 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
             />
             <text
               textAnchor="middle"
-              x={nodeRadius - 5}
-              y={-nodeRadius + 8}
+              x={nodeRadius - 8}
+              y={-nodeRadius + 11}
               style={{
-                fontSize: "8px",
+                fontSize: "9px",
+                fontWeight: "bold",
+                fill: "#3b82f6",
+              }}
+            >
+              {nodeDatum.children.length}
+            </text>
+          </g>
+        )}
+
+        {/* Earnings indicator */}
+        {nodeDatum.attributes?.earnings && (
+          <g>
+            <circle
+              cx={nodeRadius - 8}
+              cy={-nodeRadius + 8}
+              r={10}
+              fill="rgba(255, 255, 255, 0.95)"
+              stroke="rgba(0, 0, 0, 0.1)"
+              strokeWidth={1}
+            />
+            <text
+              textAnchor="middle"
+              x={nodeRadius - 8}
+              y={-nodeRadius + 12}
+              style={{
+                fontSize: "10px",
                 fontWeight: "bold",
                 fill: "#059669",
               }}
@@ -361,7 +288,11 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
   if (error) {
     return (
       <div className={styles.errorContainer}>
-        <p className={styles.errorMessage}>{error}</p>
+        <p className={styles.errorMessage}>
+          {error instanceof Error
+            ? error.message
+            : "Failed to load network data"}
+        </p>
         <button
           onClick={() => window.location.reload()}
           className={styles.retryButton}
@@ -379,9 +310,9 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
           <h2 className={styles.treeTitle}>Your Network Tree</h2>
           <p
             style={{
-              margin: "8px 0 0 0",
-              color: "#6b7280",
-              fontSize: "14px",
+              margin: "0.5rem 0 0 0",
+              color: "var(--text-secondary)",
+              fontSize: "0.875rem",
               fontWeight: "500",
             }}
           >
@@ -401,6 +332,22 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
             <div className={`${styles.legendDot} ${styles.inactive}`}></div>
             <span>Inactive</span>
           </div>
+          <div className={styles.legendItem}>
+            <div
+              className={styles.legendDot}
+              style={{
+                background: "#3b82f6",
+                color: "white",
+                fontSize: "10px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              1
+            </div>
+            <span>Has Children</span>
+          </div>
         </div>
       </div>
 
@@ -409,14 +356,17 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
           data={treeData}
           orientation="vertical"
           pathFunc="step"
-          nodeSize={{ x: 200, y: 120 }}
+          nodeSize={{ x: 250, y: 150 }}
           separation={{ siblings: 1.2, nonSiblings: 1.5 }}
-          translate={{ x: 400, y: 50 }}
-          scaleExtent={{ min: 0.3, max: 2.5 }}
+          translate={treeTranslate}
+          scaleExtent={{ min: 0.5, max: 3.0 }}
+          initialDepth={maxDepth}
           renderCustomNodeElement={renderCustomNode}
           onNodeClick={handleNodeClick}
           zoomable={true}
           draggable={true}
+          shouldCollapseNeighborNodes={false}
+          enableLegacyTransitions={true}
         />
 
         {/* Floating controls */}
@@ -425,10 +375,44 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
             <button
               className={styles.controlButton}
               onClick={() => {
+                // Expand all nodes by clicking on them
+                const nodes = document.querySelectorAll(".rd3t-node");
+                nodes.forEach((node: any) => {
+                  if (
+                    node.__data__ &&
+                    node.__data__.children &&
+                    node.__data__.children.length > 0
+                  ) {
+                    // Simulate click to expand
+                    const clickEvent = new MouseEvent("click", {
+                      bubbles: true,
+                    });
+                    node.dispatchEvent(clickEvent);
+                  }
+                });
+              }}
+              title="Expand All Nodes"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                <path d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+            </button>
+
+            <button
+              className={styles.controlButton}
+              onClick={() => {
                 // Reset zoom and position
                 const svg = document.querySelector(".rd3t-svg");
                 if (svg) {
-                  svg.style.transform = "translate(400px, 50px) scale(1)";
+                  svg.style.transform = `translate(${treeTranslate.x}px, ${treeTranslate.y}px) scale(1.2)`;
                 }
               }}
               title="Reset View"
@@ -454,7 +438,7 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
                 // Fit to screen
                 const svg = document.querySelector(".rd3t-svg");
                 if (svg) {
-                  svg.style.transform = "translate(50%, 50%) scale(0.8)";
+                  svg.style.transform = `translate(${treeTranslate.x}px, ${treeTranslate.y}px) scale(1.0)`;
                 }
               }}
               title="Fit to Screen"
@@ -555,20 +539,20 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
                 <strong>Email:</strong> {selectedNode.attributes.email}
               </div>
             )}
-            {selectedNode.attributes?.joinDate && (
+            {selectedNode.attributes?.referral_code && (
               <div className={styles.detailItem}>
-                <strong>Join Date:</strong> {selectedNode.attributes.joinDate}
+                <strong>Referral Code:</strong>{" "}
+                {selectedNode.attributes.referral_code}
+              </div>
+            )}
+            {selectedNode.attributes?.package && (
+              <div className={styles.detailItem}>
+                <strong>Package:</strong> {selectedNode.attributes.package}
               </div>
             )}
             {selectedNode.attributes?.level && (
               <div className={styles.detailItem}>
                 <strong>Level:</strong> {selectedNode.attributes.level}
-              </div>
-            )}
-            {selectedNode.attributes?.earnings && (
-              <div className={styles.detailItem}>
-                <strong>Earnings:</strong> $
-                {selectedNode.attributes.earnings.toFixed(2)}
               </div>
             )}
             {selectedNode.attributes?.status && (

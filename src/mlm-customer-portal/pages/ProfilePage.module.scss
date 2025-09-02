@@ -9,7 +9,7 @@
     rgba($primary-50, 0.3) 0%,
     rgba($primary-100, 0.1) 100%
   );
-  padding: 2rem 0;
+  padding: 1rem 0;
 
   .loadingContainer,
   .errorContainer {
@@ -55,20 +55,20 @@
 
   .profileHeader {
     background: $white;
-    border-radius: 1.5rem;
-    padding: 2.5rem;
-    margin-bottom: 2rem;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
     box-shadow: 0 10px 40px rgba($primary-500, 0.1),
       0 1px 0 rgba($primary-100, 0.1);
     border: 1px solid rgba($primary-200, 0.2);
     text-align: center;
 
     .profileInfo {
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
 
       .profileAvatar {
-        width: 6rem;
-        height: 6rem;
+        width: 4rem;
+        height: 4rem;
         background: $gradient-primary;
         border-radius: 50%;
         margin: 0 auto 1rem;
@@ -88,46 +88,46 @@
 
         .avatarText {
           color: $white;
-          font-size: 2rem;
+          font-size: 1.5rem;
           font-weight: 800;
           text-shadow: 0 2px 4px rgba($primary-700, 0.3);
         }
       }
 
       .profileName {
-        font-size: 2.5rem;
+        font-size: 1.75rem;
         font-weight: 800;
         color: $text-primary;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.25rem;
         line-height: 1.2;
 
         @media (min-width: 768px) {
-          font-size: 3rem;
+          font-size: 2rem;
         }
       }
 
       .memberSince {
-        font-size: 1.125rem;
+        font-size: 0.875rem;
         color: $text-secondary;
-        line-height: 1.6;
+        line-height: 1.4;
       }
     }
 
     .profileStats {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 1.5rem;
+      gap: 0.75rem;
 
       @media (min-width: 768px) {
         grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
+        gap: 1rem;
       }
 
       .statItem {
         text-align: center;
-        padding: 1.5rem;
+        padding: 1rem;
         background: rgba($primary-50, 0.3);
-        border-radius: 1rem;
+        border-radius: 0.75rem;
         border: 1px solid rgba($primary-200, 0.2);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -149,7 +149,7 @@
         }
 
         .statValue {
-          font-size: 1.75rem;
+          font-size: 1.25rem;
           font-weight: 800;
           line-height: 1;
 
@@ -163,7 +163,7 @@
 
           &.referralCode {
             color: $secondary-600;
-            font-size: 1.5rem;
+            font-size: 1rem;
           }
         }
       }
@@ -172,25 +172,25 @@
 
   .packageHistory {
     background: $white;
-    border-radius: 1.5rem;
-    padding: 2.5rem;
-    margin-bottom: 2rem;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
     box-shadow: 0 10px 40px rgba($primary-500, 0.1),
       0 1px 0 rgba($primary-100, 0.1);
     border: 1px solid rgba($primary-200, 0.2);
 
     .sectionTitle {
-      font-size: 1.75rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: $text-primary;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       display: flex;
       align-items: center;
       gap: 0.75rem;
 
       .sectionIcon {
-        width: 2rem;
-        height: 2rem;
+        width: 1.5rem;
+        height: 1.5rem;
         background: $gradient-primary;
         border-radius: 50%;
         display: flex;
@@ -206,16 +206,16 @@
     .packagesList {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
 
       .packageItem {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 1.25rem;
+        padding: 1rem;
         background: rgba($primary-50, 0.5);
-        border-radius: 1rem;
+        border-radius: 0.75rem;
         border: 1px solid rgba($primary-200, 0.2);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -292,9 +292,9 @@
 
   .directsSection {
     background: $white;
-    border-radius: 1.5rem;
-    padding: 2.5rem;
-    margin-bottom: 2rem;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
     box-shadow: 0 10px 40px rgba($primary-500, 0.1),
       0 1px 0 rgba($primary-100, 0.1);
     border: 1px solid rgba($primary-200, 0.2);
@@ -309,8 +309,8 @@
       gap: 0.75rem;
 
       .sectionIcon {
-        width: 2rem;
-        height: 2rem;
+        width: 1.5rem;
+        height: 1.5rem;
         background: $gradient-primary;
         border-radius: 50%;
         display: flex;
@@ -326,20 +326,20 @@
     .directsList {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 1rem;
+      gap: 0.75rem;
 
       @media (min-width: 768px) {
         grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
+        gap: 1rem;
       }
 
       .directItem {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 1.25rem;
+        padding: 1rem;
         background: rgba($primary-50, 0.5);
-        border-radius: 1rem;
+        border-radius: 0.75rem;
         border: 1px solid rgba($primary-200, 0.2);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -396,9 +396,9 @@
 
   .incomeSection {
     background: $white;
-    border-radius: 1.5rem;
-    padding: 2.5rem;
-    margin-bottom: 2rem;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
     box-shadow: 0 10px 40px rgba($primary-500, 0.1),
       0 1px 0 rgba($primary-100, 0.1);
     border: 1px solid rgba($primary-200, 0.2);
@@ -413,8 +413,8 @@
       gap: 0.75rem;
 
       .sectionIcon {
-        width: 2rem;
-        height: 2rem;
+        width: 1.5rem;
+        height: 1.5rem;
         background: $gradient-primary;
         border-radius: 50%;
         display: flex;
@@ -430,15 +430,15 @@
     .incomesList {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.75rem;
 
       .incomeItem {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 1.25rem;
+        padding: 1rem;
         background: rgba($success-50, 0.3);
-        border-radius: 1rem;
+        border-radius: 0.75rem;
         border: 1px solid rgba($success-200, 0.2);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -504,8 +504,8 @@
       gap: 0.75rem;
 
       .sectionIcon {
-        width: 2rem;
-        height: 2rem;
+        width: 1.5rem;
+        height: 1.5rem;
         background: $gradient-primary;
         border-radius: 50%;
         display: flex;
@@ -608,8 +608,8 @@
 
   .accountDetails {
     background: $white;
-    border-radius: 1.5rem;
-    padding: 2.5rem;
+    border-radius: 1rem;
+    padding: 1.5rem;
     box-shadow: 0 10px 40px rgba($primary-500, 0.1),
       0 1px 0 rgba($primary-100, 0.1);
     border: 1px solid rgba($primary-200, 0.2);
@@ -624,8 +624,8 @@
       gap: 0.75rem;
 
       .sectionIcon {
-        width: 2rem;
-        height: 2rem;
+        width: 1.5rem;
+        height: 1.5rem;
         background: $gradient-primary;
         border-radius: 50%;
         display: flex;
@@ -647,7 +647,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1.25rem 0;
+        padding: 0.75rem 0;
         border-bottom: 1px solid rgba($primary-200, 0.2);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -733,6 +733,593 @@
         }
       }
     }
+  }
+}
+
+// Tab Navigation Styles
+.tabNavigation {
+  display: flex;
+  background: $white;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 10px 40px rgba($primary-500, 0.1),
+    0 1px 0 rgba($primary-100, 0.1);
+  border: 1px solid rgba($primary-200, 0.2);
+  overflow-x: auto;
+  gap: 0.25rem;
+
+  @media (max-width: 768px) {
+    padding: 0.25rem;
+    gap: 0.125rem;
+  }
+}
+
+.tabButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 0.75rem;
+  background: transparent;
+  color: $text-secondary;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  min-width: fit-content;
+
+  &:hover {
+    background: rgba($primary-50, 0.5);
+    color: $text-primary;
+    transform: translateY(-1px);
+  }
+
+  &.active {
+    background: $gradient-primary;
+    color: $white;
+    box-shadow: 0 4px 12px rgba($primary-500, 0.3),
+      inset 0 1px 0 rgba($white, 0.2);
+    transform: translateY(-1px);
+
+    .tabIcon {
+      transform: scale(1.1);
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    gap: 0.25rem;
+  }
+}
+
+.tabIcon {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+
+  @media (max-width: 768px) {
+    font-size: 0.875rem;
+  }
+}
+
+.tabLabel {
+  @media (max-width: 640px) {
+    display: none;
+  }
+}
+
+.tabContent {
+  min-height: 400px;
+}
+
+// Overview Tab Styles
+.overviewTab {
+  .overviewGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+  }
+
+  .overviewCard {
+    background: $white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 10px 40px rgba($primary-500, 0.1),
+      0 1px 0 rgba($primary-100, 0.1);
+    border: 1px solid rgba($primary-200, 0.2);
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $text-primary;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      &::before {
+        content: "📊";
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .quickStats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+
+    .quickStat {
+      text-align: center;
+      padding: 1rem;
+      background: rgba($primary-50, 0.3);
+      border-radius: 0.75rem;
+      border: 1px solid rgba($primary-200, 0.2);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba($primary-100, 0.4);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba($primary-500, 0.15);
+      }
+
+      .quickStatValue {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: $primary-600;
+        line-height: 1;
+        margin-bottom: 0.25rem;
+      }
+
+      .quickStatLabel {
+        font-size: 0.75rem;
+        color: $text-secondary;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+    }
+  }
+
+  .recentActivity {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+
+    .activityItem {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: rgba($success-50, 0.3);
+      border-radius: 0.75rem;
+      border: 1px solid rgba($success-200, 0.2);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba($success-100, 0.4);
+        transform: translateX(4px);
+      }
+
+      .activityIcon {
+        font-size: 1.25rem;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba($success-100, 0.5);
+        border-radius: 50%;
+      }
+
+      .activityDetails {
+        flex: 1;
+
+        .activityTitle {
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: $text-primary;
+          margin: 0 0 0.25rem 0;
+        }
+
+        .activityAmount {
+          font-size: 0.875rem;
+          font-weight: 700;
+          color: $success-600;
+          margin: 0 0 0.25rem 0;
+        }
+
+        .activityDate {
+          font-size: 0.75rem;
+          color: $text-secondary;
+          margin: 0;
+        }
+      }
+    }
+
+    .noActivity {
+      text-align: center;
+      color: $text-secondary;
+      font-style: italic;
+      padding: 2rem;
+    }
+  }
+}
+
+// Income History Enhanced Styles
+.incomeHeader {
+  margin-bottom: 1.5rem;
+}
+
+.incomeSummary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .summaryCard {
+    background: rgba($success-50, 0.3);
+    border: 1px solid rgba($success-200, 0.2);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    text-align: center;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba($success-100, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba($success-500, 0.15);
+    }
+
+    h4 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: $text-secondary;
+      margin: 0 0 0.5rem 0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .summaryAmount {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: $success-600;
+      margin: 0;
+      line-height: 1;
+    }
+
+    .summaryCount {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: $primary-600;
+      margin: 0;
+      line-height: 1;
+    }
+  }
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  background: $white;
+  border-radius: 1rem;
+  box-shadow: 0 10px 40px rgba($primary-500, 0.1),
+    0 1px 0 rgba($primary-100, 0.1);
+  border: 1px solid rgba($primary-200, 0.2);
+
+  .spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 3px solid rgba($primary-200, 0.3);
+    border-top: 3px solid $primary-500;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: $text-secondary;
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+.errorState {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba($error-50, 0.3);
+  border: 1px solid rgba($error-200, 0.2);
+  border-radius: 1rem;
+
+  .errorIcon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $error-600;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: $text-secondary;
+    margin: 0;
+    line-height: 1.6;
+  }
+}
+
+.paginationInfo {
+  text-align: center;
+  padding: 1rem;
+  background: rgba($primary-50, 0.3);
+  border: 1px solid rgba($primary-200, 0.2);
+  border-radius: 0.75rem;
+  margin-top: 1rem;
+
+  p {
+    color: $text-secondary;
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+}
+
+// Income Table Styles
+.incomeTableContainer {
+  background: $white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba($primary-500, 0.1),
+    0 1px 0 rgba($primary-100, 0.1);
+  border: 1px solid rgba($primary-200, 0.2);
+  margin-bottom: 1rem;
+}
+
+.incomeTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+
+  thead {
+    background: rgba($primary-50, 0.5);
+    border-bottom: 2px solid rgba($primary-200, 0.3);
+
+    th {
+      padding: 1rem 0.75rem;
+      text-align: left;
+      font-weight: 700;
+      color: $text-primary;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-right: 1px solid rgba($primary-200, 0.2);
+
+      &:last-child {
+        border-right: none;
+      }
+
+      &:first-child {
+        padding-left: 1.5rem;
+      }
+
+      &:last-child {
+        padding-right: 1.5rem;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid rgba($primary-200, 0.1);
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba($primary-50, 0.3);
+        transform: translateX(2px);
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    td {
+      padding: 1rem 0.75rem;
+      vertical-align: middle;
+      border-right: 1px solid rgba($primary-200, 0.1);
+
+      &:last-child {
+        border-right: none;
+      }
+
+      &:first-child {
+        padding-left: 1.5rem;
+      }
+
+      &:last-child {
+        padding-right: 1.5rem;
+      }
+    }
+  }
+}
+
+.incomeRow {
+  .incomeType {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    &.direct {
+      background: rgba($success-100, 0.3);
+      color: $success-700;
+      border: 1px solid rgba($success-200, 0.3);
+    }
+
+    &.level {
+      background: rgba($primary-100, 0.3);
+      color: $primary-700;
+      border: 1px solid rgba($primary-200, 0.3);
+    }
+
+    &.club {
+      background: rgba($secondary-100, 0.3);
+      color: $secondary-700;
+      border: 1px solid rgba($secondary-200, 0.3);
+    }
+
+    &.autopool {
+      background: rgba($warning-100, 0.3);
+      color: $warning-700;
+      border: 1px solid rgba($warning-200, 0.3);
+    }
+  }
+
+  .amountValue {
+    font-weight: 800;
+    color: $success-600;
+    font-size: 1rem;
+  }
+
+  .incomeRemark {
+    color: $text-primary;
+    font-weight: 500;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .incomeDate {
+    color: $text-secondary;
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+
+  .incomeTime {
+    color: $text-secondary;
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+}
+
+// Responsive table styles
+@media (max-width: 768px) {
+  .incomeTableContainer {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .incomeTable {
+    min-width: 600px;
+
+    thead th,
+    tbody td {
+      padding: 0.75rem 0.5rem;
+      font-size: 0.75rem;
+
+      &:first-child {
+        padding-left: 1rem;
+      }
+
+      &:last-child {
+        padding-right: 1rem;
+      }
+    }
+
+    .incomeRow {
+      .incomeRemark {
+        max-width: 150px;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .incomeTable {
+    min-width: 500px;
+
+    thead th,
+    tbody td {
+      padding: 0.5rem 0.25rem;
+      font-size: 0.7rem;
+
+      &:first-child {
+        padding-left: 0.75rem;
+      }
+
+      &:last-child {
+        padding-right: 0.75rem;
+      }
+    }
+
+    .incomeRow {
+      .incomeType {
+        padding: 0.125rem 0.5rem;
+        font-size: 0.7rem;
+      }
+
+      .amountValue {
+        font-size: 0.875rem;
+      }
+
+      .incomeRemark {
+        max-width: 120px;
+      }
+    }
+  }
+}
+
+// Empty State Styles
+.emptyState {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: $white;
+  border-radius: 1rem;
+  box-shadow: 0 10px 40px rgba($primary-500, 0.1),
+    0 1px 0 rgba($primary-100, 0.1);
+  border: 1px solid rgba($primary-200, 0.2);
+
+  .emptyIcon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: $text-secondary;
+    margin: 0;
+    line-height: 1.6;
   }
 }
 

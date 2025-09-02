@@ -5,7 +5,7 @@ import styles from "./RazorpayPopup.module.scss";
 interface RazorpayPopupProps {
   isOpen: boolean;
   onClose: () => void;
-  onPaymentSuccess: (paymentToken: string) => void;
+  onPaymentSuccess: (paymentToken: string) => Promise<void>;
   packageDetails: {
     id: number; // Changed from string to number for API compatibility
     name: string;
@@ -22,28 +22,39 @@ const RazorpayPopup: React.FC<RazorpayPopupProps> = ({
 }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentStep, setPaymentStep] = useState<
-    "form" | "processing" | "success"
+    "form" | "processing" | "success" | "error"
   >("form");
 
   const handlePayment = async () => {
     setIsProcessing(true);
     setPaymentStep("processing");
 
-    // Simulate payment processing
-    setTimeout(() => {
-      setPaymentStep("success");
+    try {
+      // Simulate payment processing
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
       // Generate a dummy payment token
       const paymentToken = `rzp_${Date.now()}_${Math.random()
         .toString(36)
         .substr(2, 9)}`;
 
+      // Call the payment success handler and wait for the API response
+      await onPaymentSuccess(paymentToken);
+
+      // Only show success if the API call succeeded
+      setPaymentStep("success");
+
+      // Close modal after showing success
       setTimeout(() => {
-        onPaymentSuccess(paymentToken);
         onClose();
         setPaymentStep("form");
         setIsProcessing(false);
       }, 2000);
-    }, 3000);
+    } catch (error) {
+      console.error("Payment processing failed:", error);
+      setPaymentStep("error");
+      setIsProcessing(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -203,6 +214,38 @@ const RazorpayPopup: React.FC<RazorpayPopupProps> = ({
               </div>
               <h3>Payment Successful!</h3>
               <p>Your payment has been processed successfully</p>
+            </div>
+          )}
+
+          {paymentStep === "error" && (
+            <div className={styles.error}>
+              <div className={styles.errorIcon}>
+                <svg
+                  width="48"
+                  height="48"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="15" y1="9" x2="9" y2="15"></line>
+                  <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+              </div>
+              <h3>Payment Failed!</h3>
+              <p>
+                There was an error processing your payment. Please try again.
+              </p>
+              <button
+                className={styles.retryButton}
+                onClick={() => {
+                  setPaymentStep("form");
+                  setIsProcessing(false);
+                }}
+              >
+                Try Again
+              </button>
             </div>
           )}
         </div>

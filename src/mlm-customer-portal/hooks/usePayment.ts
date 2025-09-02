@@ -50,26 +50,22 @@ export const usePayment = () => {
     };
 
     const handlePaymentSuccess = async (paymentToken: string) => {
-        if (!selectedPackage) return;
-
-        try {
-            console.log('Payment successful, calling package purchase API...');
-
-            // Call the package purchase API directly
-            await packagePurchaseMutation.mutateAsync({
-                package_id: selectedPackage.id,
-            });
-
-            console.log('Package purchase completed successfully');
-
-            // Close modal and reset state
-            setIsPaymentModalOpen(false);
-            setSelectedPackage(null);
-
-        } catch (error) {
-            console.error('Package purchase failed:', error);
-            // Handle error - could show error message to user
+        if (!selectedPackage) {
+            throw new Error('No package selected');
         }
+
+        console.log('Payment successful, calling package purchase API...');
+
+        // Call the package purchase API directly
+        await packagePurchaseMutation.mutateAsync({
+            package_id: selectedPackage.id,
+        });
+
+        console.log('Package purchase completed successfully');
+
+        // Close modal and reset state
+        setIsPaymentModalOpen(false);
+        setSelectedPackage(null);
     };
 
     const closePaymentModal = () => {
