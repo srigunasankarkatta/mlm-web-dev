@@ -5,12 +5,7 @@ import AgGridTable from "../../components/ui/AgGridTable";
 import UserAvatarCell from "../../components/ui/UserAvatarCell";
 import StatusBadgeCell from "../../components/ui/StatusBadgeCell";
 import ActionsCell from "../../components/ui/ActionsCell";
-import {
-  useUsers,
-  useDeleteUser,
-  useToggleUserStatus,
-  useUserStats,
-} from "../../queries/users";
+import { useUsers, useDeleteUser, useUserStats } from "../../queries/users";
 import type { User } from "../../api-services/user-service";
 
 // Import ag-grid styles directly to ensure they're loaded
@@ -22,8 +17,7 @@ const AllUsers: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [packageFilter, setPackageFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("created_at");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(15);
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
@@ -43,7 +37,6 @@ const AllUsers: React.FC = () => {
 
   const { data: userStats } = useUserStats();
   const deleteUserMutation = useDeleteUser();
-  const toggleUserStatusMutation = useToggleUserStatus();
 
   // Extract users and pagination from response
   const users = usersResponse?.users || [];
@@ -124,7 +117,6 @@ const AllUsers: React.FC = () => {
         width: 250,
         minWidth: 200,
         sortable: true,
-        filter: true,
         resizable: true,
       },
       {
@@ -141,7 +133,6 @@ const AllUsers: React.FC = () => {
         width: 120,
         minWidth: 100,
         sortable: true,
-        filter: true,
         resizable: true,
       },
       {
@@ -150,7 +141,6 @@ const AllUsers: React.FC = () => {
         width: 150,
         minWidth: 120,
         sortable: true,
-        filter: true,
         resizable: true,
         valueFormatter: (params: any) => params.value || "No Package",
       },
@@ -160,7 +150,6 @@ const AllUsers: React.FC = () => {
         width: 100,
         minWidth: 80,
         sortable: true,
-        filter: true,
         resizable: true,
         type: "numericColumn",
       },
@@ -170,7 +159,6 @@ const AllUsers: React.FC = () => {
         width: 120,
         minWidth: 100,
         sortable: true,
-        filter: true,
         resizable: true,
         cellStyle: { color: "#059669", fontWeight: "600" },
         valueFormatter: (params: any) => `₹${params.value || "0.00"}`,
@@ -181,7 +169,6 @@ const AllUsers: React.FC = () => {
         width: 120,
         minWidth: 100,
         sortable: true,
-        filter: true,
         resizable: true,
         valueFormatter: (params: any) =>
           new Date(params.value).toLocaleDateString(),
@@ -207,12 +194,12 @@ const AllUsers: React.FC = () => {
   );
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+    <div className="bg-gradient-to-br from-teal-50 to-teal-100 min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl shadow-lg">
+            <div className="p-3 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl shadow-lg">
               <svg
                 className="w-8 h-8 text-white"
                 fill="none"
@@ -228,10 +215,10 @@ const AllUsers: React.FC = () => {
               </svg>
             </div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-900 to-teal-700 bg-clip-text text-transparent">
                 All Users
               </h1>
-              <p className="text-gray-600 mt-1">
+              <p className="text-teal-600 mt-1">
                 Manage and monitor all users in your MLM network.
               </p>
             </div>
@@ -240,9 +227,9 @@ const AllUsers: React.FC = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+          <div className="bg-white rounded-xl shadow-lg border border-teal-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-center">
-              <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg">
+              <div className="p-3 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl shadow-lg">
                 <svg
                   className="w-6 h-6 text-white"
                   fill="none"
@@ -258,8 +245,8 @@ const AllUsers: React.FC = () => {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Users</p>
-                <p className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                <p className="text-sm font-medium text-teal-600">Total Users</p>
+                <p className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-teal-800 bg-clip-text text-transparent">
                   {users.length}
                 </p>
               </div>
@@ -268,9 +255,9 @@ const AllUsers: React.FC = () => {
 
           <div className="bg-white rounded-lg shadow p-6">
             <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg">
+              <div className="p-2 bg-teal-100 rounded-lg">
                 <svg
-                  className="w-6 h-6 text-green-600"
+                  className="w-6 h-6 text-teal-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -433,8 +420,6 @@ const AllUsers: React.FC = () => {
         {isLoading
           ? "Loading users..."
           : `Showing ${filteredUsers.length} users`}
-        {pagination &&
-          ` (Page ${pagination.current_page} of ${pagination.last_page})`}
         {error ? (
           <div className="text-center py-8">
             <div className="text-red-600 mb-4">
@@ -466,14 +451,13 @@ const AllUsers: React.FC = () => {
             rowData={filteredUsers}
             columnDefs={columnDefs}
             height={600}
-            enablePagination={true}
+            enablePagination={false}
             enableSorting={true}
-            enableFiltering={true}
+            enableFiltering={false}
+            enableFloatingFilter={false}
             enableSelection={true}
             enableResizing={true}
             enableColumnMoving={true}
-            paginationPageSize={perPage}
-            paginationPageSizeSelector={[10, 15, 25, 50, 100]}
             selectionType="multiple"
             selectedRows={selectedUsers}
             onGridReady={handleGridReady}
@@ -481,6 +465,118 @@ const AllUsers: React.FC = () => {
             loading={isLoading}
             className="w-full"
           />
+        )}
+
+        {/* Custom Pagination Controls */}
+        {pagination && (
+          <div className="bg-white border-t border-teal-200 px-6 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-teal-700">
+                  Showing{" "}
+                  {(pagination.current_page - 1) * pagination.per_page + 1} to{" "}
+                  {Math.min(
+                    pagination.current_page * pagination.per_page,
+                    pagination.total
+                  )}{" "}
+                  of {pagination.total} results
+                </span>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                {/* Per Page Selector */}
+                <div className="flex items-center space-x-2">
+                  <label htmlFor="perPage" className="text-sm text-teal-700">
+                    Show:
+                  </label>
+                  <select
+                    id="perPage"
+                    value={perPage}
+                    onChange={(e) => {
+                      setPerPage(Number(e.target.value));
+                      setCurrentPage(1); // Reset to first page when changing per page
+                    }}
+                    className="px-2 py-1 border border-teal-300 rounded text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent text-teal-700"
+                  >
+                    <option value={10}>10</option>
+                    <option value={15}>15</option>
+                    <option value={25}>25</option>
+                    <option value={50}>50</option>
+                    <option value={100}>100</option>
+                  </select>
+                </div>
+
+                {/* Pagination Buttons */}
+                <div className="flex items-center space-x-1">
+                  <button
+                    onClick={() => setCurrentPage(1)}
+                    disabled={pagination.current_page === 1}
+                    className="px-2 py-1 text-sm border border-teal-300 rounded hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed text-teal-700 transition-colors duration-200"
+                  >
+                    First
+                  </button>
+                  <button
+                    onClick={() => setCurrentPage(pagination.current_page - 1)}
+                    disabled={pagination.current_page === 1}
+                    className="px-2 py-1 text-sm border border-teal-300 rounded hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed text-teal-700 transition-colors duration-200"
+                  >
+                    Previous
+                  </button>
+
+                  {/* Page Numbers */}
+                  <div className="flex items-center space-x-1">
+                    {Array.from(
+                      { length: Math.min(5, pagination.last_page) },
+                      (_, i) => {
+                        let pageNum;
+                        if (pagination.last_page <= 5) {
+                          pageNum = i + 1;
+                        } else if (pagination.current_page <= 3) {
+                          pageNum = i + 1;
+                        } else if (
+                          pagination.current_page >=
+                          pagination.last_page - 2
+                        ) {
+                          pageNum = pagination.last_page - 4 + i;
+                        } else {
+                          pageNum = pagination.current_page - 2 + i;
+                        }
+
+                        return (
+                          <button
+                            key={pageNum}
+                            onClick={() => setCurrentPage(pageNum)}
+                            className={`px-3 py-1 text-sm border rounded transition-all duration-200 ${
+                              pageNum === pagination.current_page
+                                ? "bg-teal-600 text-white border-teal-600 shadow-md"
+                                : "border-teal-300 hover:bg-teal-50 text-teal-700 hover:border-teal-400"
+                            }`}
+                          >
+                            {pageNum}
+                          </button>
+                        );
+                      }
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() => setCurrentPage(pagination.current_page + 1)}
+                    disabled={pagination.current_page === pagination.last_page}
+                    className="px-2 py-1 text-sm border border-teal-300 rounded hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed text-teal-700 transition-colors duration-200"
+                  >
+                    Next
+                  </button>
+                  <button
+                    onClick={() => setCurrentPage(pagination.last_page)}
+                    disabled={pagination.current_page === pagination.last_page}
+                    className="px-2 py-1 text-sm border border-teal-300 rounded hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed text-teal-700 transition-colors duration-200"
+                  >
+                    Last
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>

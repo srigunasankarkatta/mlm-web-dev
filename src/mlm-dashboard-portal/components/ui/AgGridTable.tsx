@@ -45,6 +45,7 @@ export interface AgGridTableProps {
   enablePagination?: boolean;
   enableSorting?: boolean;
   enableFiltering?: boolean;
+  enableFloatingFilter?: boolean;
   enableSelection?: boolean;
   enableResizing?: boolean;
   enableColumnMoving?: boolean;
@@ -77,7 +78,8 @@ const AgGridTable: React.FC<AgGridTableProps> = ({
   width = "100%",
   enablePagination = true,
   enableSorting = true,
-  enableFiltering = true,
+  enableFiltering = false,
+  enableFloatingFilter = false,
   enableSelection = false,
   enableResizing = true,
   enableColumnMoving = true,
@@ -105,7 +107,7 @@ const AgGridTable: React.FC<AgGridTableProps> = ({
         sortable: enableSorting,
         filter: enableFiltering,
         resizable: enableResizing,
-        floatingFilter: enableFiltering,
+        floatingFilter: enableFloatingFilter,
         minWidth: 100,
         flex: 1,
       },
@@ -147,6 +149,7 @@ const AgGridTable: React.FC<AgGridTableProps> = ({
       paginationPageSizeSelector,
       enableSorting,
       enableFiltering,
+      enableFloatingFilter,
       enableSelection,
       enableResizing,
       enableColumnMoving,

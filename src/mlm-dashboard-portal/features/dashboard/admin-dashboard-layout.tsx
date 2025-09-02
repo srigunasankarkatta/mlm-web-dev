@@ -74,7 +74,7 @@ const AdminDashboardLayout: React.FC<{ children: React.ReactNode }> = ({
           </div>
 
           {/* Main Content Card */}
-          <div className={styles["content-card"]}>{children}</div>
+          <div className={clsx(styles["content-card"], "bg-gradient-to-br from-teal-100 to-teal-200")}>{children}</div>
         </div>
       </div>
     </div>
