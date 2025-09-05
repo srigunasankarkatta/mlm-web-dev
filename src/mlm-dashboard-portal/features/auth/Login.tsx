@@ -161,7 +161,7 @@ const Login: React.FC = () => {
                 required
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-opacity-50 transition-colors ${
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-opacity-50 transition-colors text-gray-900 ${
                   errors.email
                     ? COLOR_CLASSES.input.error
                     : COLOR_CLASSES.input.default
@@ -192,7 +192,7 @@ const Login: React.FC = () => {
                   required
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-opacity-50 transition-colors ${
+                  className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-opacity-50 transition-colors text-gray-900 ${
                     errors.password
                       ? COLOR_CLASSES.input.error
                       : COLOR_CLASSES.input.default

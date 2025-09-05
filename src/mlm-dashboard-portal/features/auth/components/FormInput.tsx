@@ -51,7 +51,7 @@ const FormInput: React.FC<FormInputProps> = ({
           onChange={onChange}
           disabled={disabled}
           placeholder={placeholder}
-          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 ${
             rightElement ? "pr-12" : ""
           } ${
             error

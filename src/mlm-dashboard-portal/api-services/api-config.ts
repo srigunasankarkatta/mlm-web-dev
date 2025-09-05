@@ -29,6 +29,7 @@ export const API_CONFIG = {
             bulkDelete: '/users/bulk-delete',
         },
         dashboard: {
+            overview: '/admin/dashboard',
             stats: '/dashboard/stats',
             recentActivity: '/dashboard/recent-activity',
             charts: '/dashboard/charts',
@@ -62,7 +63,7 @@ export const API_CONFIG = {
 
     // App configuration
     app: {
-        name: import.meta.env.VITE_APP_NAME || 'Quadra Core MLM Portal',
+        name: import.meta.env.VITE_APP_NAME || ' Core MLM Portal',
         version: import.meta.env.VITE_APP_VERSION || '1.0.0',
         environment: import.meta.env.VITE_APP_ENVIRONMENT || 'development',
     },

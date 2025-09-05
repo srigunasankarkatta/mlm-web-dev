@@ -549,8 +549,8 @@
   align-items: center;
   justify-content: center;
   padding: 0.875rem 1rem;
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
-  color: white;
+  background: linear-gradient(135deg, $bg-primary, $bg-primary);
+  color: #3333;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   font-size: 0.9rem;

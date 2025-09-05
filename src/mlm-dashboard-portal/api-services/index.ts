@@ -17,6 +17,7 @@ export { default as AuthService } from './auth-service';
 export { default as AdminAuthService } from './admin-auth-service';
 export { default as UsersService } from './users-service';
 export { default as MLMService } from './mlm-service';
+export { default as DashboardService, dashboardService } from './dashboard-service';
 
 // Configuration
 export { API_CONFIG, getBaseURL, buildApiUrl } from './api-config';

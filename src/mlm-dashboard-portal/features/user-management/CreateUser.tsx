@@ -16,7 +16,7 @@ const CreateUser: React.FC = () => {
   const navigate = useNavigate();
   const createUserMutation = useCreateUser();
   const { data: packagesResponse } = usePackages();
-  const packages = packagesResponse?.data || [];
+  const packages = packagesResponse?.packages || [];
 
   const [formData, setFormData] = useState<CreateUserFormData>({
     name: "",
@@ -151,7 +151,7 @@ const CreateUser: React.FC = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-gray-900 ${
                     errors.name ? "border-red-300" : "border-gray-300"
                   }`}
                   placeholder="Enter full name"
@@ -175,7 +175,7 @@ const CreateUser: React.FC = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-gray-900 ${
                     errors.email ? "border-red-300" : "border-gray-300"
                   }`}
                   placeholder="Enter email address"
@@ -199,7 +199,7 @@ const CreateUser: React.FC = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-gray-900 ${
                     errors.password ? "border-red-300" : "border-gray-300"
                   }`}
                   placeholder="Enter password"

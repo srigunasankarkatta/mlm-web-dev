@@ -354,16 +354,7 @@ const AllPackages: React.FC = () => {
               />
             )}
 
-            {/* Debug info */}
-            <div className="mt-4 p-4 bg-gray-100 rounded text-sm">
-              <p>Debug Info:</p>
-              <p>Loading: {isLoading ? "Yes" : "No"}</p>
-              <p>Error: {error ? error.message : "None"}</p>
-              <p>Filtered Packages: {filteredPackages.length}</p>
-              <p>Column Definitions: {columnDefs.length}</p>
-              <p>First Package: {filteredPackages[0]?.name || "None"}</p>
-              <p>API Response: {packagesResponse ? "Received" : "None"}</p>
-            </div>
+           
           </div>
         </div>
 

@@ -179,7 +179,7 @@ const EditPackage: React.FC = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-gray-900 ${
                     errors.name ? "border-red-300" : "border-gray-300"
                   }`}
                   placeholder="Enter package name"
@@ -205,7 +205,7 @@ const EditPackage: React.FC = () => {
                   onChange={handleInputChange}
                   min="0.01"
                   step="0.01"
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-gray-900 ${
                     errors.price ? "border-red-300" : "border-gray-300"
                   }`}
                   placeholder="0.00"
@@ -228,7 +228,7 @@ const EditPackage: React.FC = () => {
                   name="level_unlock"
                   value={formData.level_unlock}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
+                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-gray-900 ${
                     errors.level_unlock ? "border-red-300" : "border-gray-300"
                   }`}
                 >
@@ -259,7 +259,7 @@ const EditPackage: React.FC = () => {
                   value={formData.description}
                   onChange={handleInputChange}
                   rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-gray-900"
                   placeholder="Enter package description (optional)"
                 />
               </div>

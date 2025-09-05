@@ -19,11 +19,9 @@ import CustomerLoginPage from "../mlm-customer-portal/pages/LoginPage";
 import CustomerRegisterPage from "../mlm-customer-portal/pages/RegisterPage";
 
 // Import existing components
-import Home from "../features/home/Home";
 import Services from "../features/services/Services";
 import Work from "../features/work/Work";
 import About from "../features/about/About";
-import Contact from "../features/contact/Contact";
 import CaseStudyDetail from "../features/work/CaseStudyDetail";
 import ServiceDetail from "../features/services/ServiceDetail";
 import AllUsers from "../mlm-dashboard-portal/features/user-management/AllUsers";
@@ -45,13 +43,11 @@ const AppRouter: React.FC<AppRouterProps> = ({ currentUserRole }) => {
     <Routes>
       {/* Public Routes - Always accessible */}
       <Route path="/" element={<Navigate to="/customer" replace />} />
-      <Route path="/home" element={<Home />} />
       <Route path="/services" element={<Services />} />
       <Route path="/services/:serviceId" element={<ServiceDetail />} />
       <Route path="/work" element={<Work />} />
       <Route path="/work/:caseStudyId" element={<CaseStudyDetail />} />
       <Route path="/about" element={<About />} />
-      <Route path="/contact" element={<Contact />} />
 
       {/* Customer Portal Routes - Public access */}
       <Route path="/customer/*" element={<CustomerPortal />} />
