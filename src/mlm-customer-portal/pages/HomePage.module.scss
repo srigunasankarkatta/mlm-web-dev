@@ -5,17 +5,42 @@
 .homePage {
   .heroSection {
     text-align: center;
-    padding: 4rem 0 6rem;
+    padding: 3rem 0 6rem;
     position: relative;
-    
+
     @media (min-width: 768px) {
       padding: 6rem 0 8rem;
     }
-    
-    .heroContent {
-      max-width: 800px;
+
+    .heroContainer {
+      max-width: 1200px;
       margin: 0 auto;
-      
+      padding: 0 1rem;
+
+      @media (min-width: 768px) {
+        padding: 0 2rem;
+      }
+    }
+
+    .heroContent {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      align-items: center;
+
+      @media (min-width: 1024px) {
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+      }
+    }
+
+    .heroLeft {
+      text-align: center;
+
+      @media (min-width: 1024px) {
+        text-align: left;
+      }
+
       .heroTitle {
         font-size: 3rem;
         font-weight: 800;
@@ -23,11 +48,11 @@
         margin-bottom: 1.5rem;
         line-height: 1.2;
         letter-spacing: -0.025em;
-        
+
         @media (min-width: 768px) {
           font-size: 4rem;
         }
-        
+
         .highlight {
           background: $gradient-primary;
           -webkit-background-clip: text;
@@ -35,7 +60,7 @@
           background-clip: text;
         }
       }
-      
+
       .heroSubtitle {
         font-size: 1.25rem;
         color: $text-secondary;
@@ -44,23 +69,32 @@
         max-width: 600px;
         margin-left: auto;
         margin-right: auto;
-        
+
         @media (min-width: 768px) {
           font-size: 1.5rem;
         }
+
+        @media (min-width: 1024px) {
+          margin-left: 0;
+          margin-right: 0;
+        }
       }
-      
+
       .heroButtons {
         display: flex;
         flex-direction: column;
         gap: 1rem;
         align-items: center;
-        
+
         @media (min-width: 640px) {
           flex-direction: row;
           justify-content: center;
         }
-        
+
+        @media (min-width: 1024px) {
+          justify-content: flex-start;
+        }
+
         .primaryButton {
           background: $gradient-primary;
           color: $white;
@@ -71,19 +105,21 @@
           text-decoration: none;
           border: 2px solid transparent;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow: 
-            0 8px 25px rgba($primary-500, 0.25),
+          box-shadow: 0 8px 25px rgba($primary-500, 0.25),
             inset 0 1px 0 rgba($white, 0.2);
-          
+
           &:hover {
             transform: translateY(-4px);
-            box-shadow: 
-              0 16px 40px rgba($primary-500, 0.35),
+            box-shadow: 0 16px 40px rgba($primary-500, 0.35),
               inset 0 1px 0 rgba($white, 0.3);
-            background: linear-gradient(135deg, $primary-600 0%, $primary-700 100%);
+            background: linear-gradient(
+              135deg,
+              $primary-600 0%,
+              $primary-700 100%
+            );
           }
         }
-        
+
         .secondaryButton {
           color: $primary-600;
           padding: 1rem 2rem;
@@ -94,68 +130,96 @@
           background: rgba($primary-50, 0.8);
           border: 2px solid rgba($primary-200, 0.5);
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          
+
           &:hover {
             color: $primary-700;
             background: rgba($primary-100, 0.9);
             border-color: $primary-300;
             transform: translateY(-2px);
-            box-shadow: 
-              0 8px 25px rgba($primary-500, 0.15),
+            box-shadow: 0 8px 25px rgba($primary-500, 0.15),
               inset 0 1px 0 rgba($primary-200, 0.2);
+          }
+        }
+      }
+
+      .heroBullets {
+        margin-top: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+
+        @media (min-width: 1024px) {
+          align-items: flex-start;
+        }
+
+        .bulletItem {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          font-size: 1rem;
+          color: $text-secondary;
+
+          .bulletIcon {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: $success-500;
+            flex-shrink: 0;
+          }
+        }
+      }
+    }
+
+    .heroRight {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .heroVisual {
+        width: 100%;
+        max-width: 600px;
+        height: 80vh;
+        position: relative;
+
+        @media (max-width: 768px) {
+          height: 60vh; // Smaller height on mobile
+        }
+
+        @media (max-width: 480px) {
+          height: 50vh; // Even smaller on very small screens
+        }
+
+        .heroMLMTree {
+          width: 100%;
+          height: 100%;
+
+          .treeWrapper {
+            height: 100%; // Use full height of parent container
           }
         }
       }
     }
   }
-  
-  .plansSection {
-    padding: 4rem 0;
-    background: rgba($primary-50, 0.3);
-    
-    .sectionHeader {
-      text-align: center;
-      margin-bottom: 3rem;
-      
-      .sectionTitle {
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: $text-primary;
-        margin-bottom: 1rem;
-        
-        @media (min-width: 768px) {
-          font-size: 3rem;
-        }
-      }
-      
-      .sectionSubtitle {
-        font-size: 1.125rem;
-        color: $text-secondary;
-        max-width: 600px;
-        margin: 0 auto;
-        line-height: 1.6;
-      }
-    }
-  }
-  
-  .incomeTypesSection {
+
+  .howItWorksSection {
     padding: 6rem 0;
-    
+    background: rgba($primary-50, 0.2);
+
     .sectionHeader {
       text-align: center;
       margin-bottom: 4rem;
-      
+
       .sectionTitle {
         font-size: 2.5rem;
         font-weight: 800;
         color: $text-primary;
         margin-bottom: 1rem;
-        
+
         @media (min-width: 768px) {
           font-size: 3rem;
         }
       }
-      
+
       .sectionSubtitle {
         font-size: 1.125rem;
         color: $text-secondary;
@@ -164,71 +228,1023 @@
         line-height: 1.6;
       }
     }
-    
-    .incomeGrid {
+
+    .stepsGrid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 2rem;
       max-width: 1200px;
       margin: 0 auto;
-      
+
       @media (min-width: 768px) {
         grid-template-columns: repeat(2, 1fr);
         gap: 2.5rem;
       }
-      
+
       @media (min-width: 1024px) {
         grid-template-columns: repeat(4, 1fr);
         gap: 2rem;
       }
     }
+
+    .stepCard {
+      text-align: center;
+      padding: 2rem;
+      background: $white;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba($primary-200, 0.1);
+      border: 1px solid rgba($primary-200, 0.2);
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 32px rgba($primary-200, 0.2);
+      }
+
+      .stepIcon {
+        width: 4rem;
+        height: 4rem;
+        background: $gradient-primary;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+
+        .stepIconSvg {
+          width: 2rem;
+          height: 2rem;
+          color: $white;
+        }
+      }
+
+      .stepTitle {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin-bottom: 1rem;
+      }
+
+      .stepDescription {
+        font-size: 1rem;
+        color: $text-secondary;
+        line-height: 1.6;
+      }
+    }
   }
-  
+
+  .packagesSection {
+    padding: 6rem 0;
+    background: $white;
+
+    .sectionHeader {
+      text-align: center;
+      margin-bottom: 4rem;
+
+      .sectionTitle {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: $text-primary;
+        margin-bottom: 1rem;
+
+        @media (min-width: 768px) {
+          font-size: 3rem;
+        }
+      }
+
+      .sectionSubtitle {
+        font-size: 1.125rem;
+        color: $text-secondary;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+    }
+
+    .packagesGrid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2.5rem;
+      }
+
+      @media (min-width: 1024px) {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+      }
+    }
+
+    .packagesSlider {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+
+      .sliderContainer {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+
+        .sliderButton {
+          background: $white;
+          border: 2px solid $primary-200;
+          border-radius: 50%;
+          width: 48px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          z-index: 2;
+          flex-shrink: 0;
+
+          &:hover {
+            background: $primary-50;
+            border-color: $primary-400;
+            transform: scale(1.1);
+          }
+
+          &:active {
+            transform: scale(0.95);
+          }
+
+          .sliderIcon {
+            width: 20px;
+            height: 20px;
+            color: $primary-600;
+          }
+        }
+
+        .sliderTrack {
+          flex: 1;
+          overflow: hidden;
+          border-radius: 20px;
+
+          .sliderWrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            width: 100%;
+
+            .sliderSlide {
+              min-width: 100%;
+              flex-shrink: 0;
+              padding: 0 1rem;
+
+              .packageCard {
+                max-width: 400px;
+                margin: 0 auto;
+              }
+
+              // Desktop view: show 3 cards side by side
+              @media (min-width: 801px) {
+                min-width: 33.333%;
+                padding: 0 0.75rem;
+
+                .packageCard {
+                  max-width: none;
+                  margin: 0;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .sliderIndicators {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+
+        .indicator {
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+          border: none;
+          background: rgba($primary-300, 0.4);
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: rgba($primary-400, 0.6);
+            transform: scale(1.2);
+          }
+
+          &.activeIndicator {
+            background: $primary-500;
+            transform: scale(1.3);
+          }
+        }
+      }
+
+      .autoSlideToggle {
+        display: flex;
+        justify-content: center;
+        margin-top: 1.5rem;
+
+        .toggleButton {
+          background: $primary-50;
+          border: 2px solid $primary-200;
+          border-radius: 25px;
+          padding: 0.5rem 1.5rem;
+          font-size: 0.875rem;
+          font-weight: 600;
+          color: $primary-600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: $primary-100;
+            border-color: $primary-300;
+            transform: translateY(-2px);
+          }
+
+          &.activeToggle {
+            background: $primary-500;
+            border-color: $primary-500;
+            color: $white;
+          }
+        }
+      }
+
+      // Desktop optimizations
+      @media (min-width: 801px) {
+        .sliderContainer {
+          .sliderButton {
+            width: 52px;
+            height: 52px;
+
+            .sliderIcon {
+              width: 22px;
+              height: 22px;
+            }
+          }
+        }
+
+        .sliderIndicators {
+          margin-top: 2.5rem;
+
+          .indicator {
+            width: 14px;
+            height: 14px;
+          }
+        }
+      }
+
+      // Mobile responsive adjustments
+      @media (max-width: 800px) {
+        .sliderContainer {
+          .sliderButton {
+            width: 40px;
+            height: 40px;
+
+            .sliderIcon {
+              width: 16px;
+              height: 16px;
+            }
+          }
+
+          .sliderTrack {
+            .sliderWrapper {
+              .sliderSlide {
+                padding: 0 0.5rem;
+              }
+            }
+          }
+        }
+
+        .sliderIndicators {
+          margin-top: 1.5rem;
+
+          .indicator {
+            width: 10px;
+            height: 10px;
+          }
+        }
+      }
+    }
+
+    .packageCard {
+      background: $white;
+      border: 2px solid rgba($primary-200, 0.3);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+
+      &:hover {
+        transform: translateY(-4px);
+        border-color: $primary-400;
+        box-shadow: 0 12px 40px rgba($primary-200, 0.2);
+      }
+
+      .packageHeader {
+        margin-bottom: 2rem;
+
+        .packageName {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: $text-primary;
+          margin-bottom: 0.5rem;
+        }
+
+        .packagePrice {
+          font-size: 3rem;
+          font-weight: 800;
+          color: $primary-600;
+        }
+      }
+
+      .packageFeatures {
+        margin-bottom: 2rem;
+
+        .featureItem {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-bottom: 1rem;
+          font-size: 1rem;
+          color: $text-secondary;
+
+          .featureIcon {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: $success-500;
+            flex-shrink: 0;
+          }
+        }
+      }
+
+      .packageButton {
+        width: 100%;
+        background: $gradient-primary;
+        color: $white;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1.125rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba($primary-500, 0.3);
+        }
+      }
+    }
+  }
+
+  .mlmTreeSection {
+    padding: 6rem 0;
+    background: rgba($primary-50, 0.2);
+
+    .sectionHeader {
+      text-align: center;
+      margin-bottom: 4rem;
+
+      .sectionTitle {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: $text-primary;
+        margin-bottom: 1rem;
+
+        @media (min-width: 768px) {
+          font-size: 3rem;
+        }
+      }
+
+      .sectionSubtitle {
+        font-size: 1.125rem;
+        color: $text-secondary;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+    }
+
+    .glassmorphismCard {
+      width: 80vw;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 4px 16px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      position: relative;
+      overflow: hidden;
+
+      // Gradient overlay for enhanced glass effect
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.1) 0%,
+          rgba(255, 255, 255, 0.05) 50%,
+          rgba(255, 255, 255, 0.1) 100%
+        );
+        border-radius: 24px;
+        pointer-events: none;
+      }
+
+      // Responsive adjustments
+      @media (max-width: 768px) {
+        width: 90vw;
+        padding: 1.5rem;
+        border-radius: 20px;
+
+        &::before {
+          border-radius: 20px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        width: 95vw;
+        padding: 1rem;
+        border-radius: 16px;
+
+        &::before {
+          border-radius: 16px;
+        }
+      }
+    }
+  }
+
+  .incomeExamplesSection {
+    padding: 6rem 0;
+    background: rgba($primary-50, 0.2);
+
+    .sectionHeader {
+      text-align: center;
+      margin-bottom: 4rem;
+
+      .sectionTitle {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: $text-primary;
+        margin-bottom: 1rem;
+
+        @media (min-width: 768px) {
+          font-size: 3rem;
+        }
+      }
+
+      .sectionSubtitle {
+        font-size: 1.125rem;
+        color: $text-secondary;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+    }
+
+    .examplesGrid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto 3rem;
+
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2.5rem;
+      }
+    }
+
+    .exampleCard {
+      background: $white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba($primary-200, 0.1);
+      border: 1px solid rgba($primary-200, 0.2);
+
+      .exampleTitle {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $text-primary;
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+
+      .exampleBreakdown {
+        .exampleItem {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.75rem 0;
+          border-bottom: 1px solid rgba($primary-200, 0.2);
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          .exampleAmount {
+            font-weight: 700;
+            color: $primary-600;
+          }
+        }
+
+        .exampleTotal {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem 0;
+          margin-top: 1rem;
+          border-top: 2px solid $primary-200;
+          font-weight: 700;
+          font-size: 1.125rem;
+
+          .exampleTotalAmount {
+            color: $primary-600;
+            font-size: 1.25rem;
+          }
+        }
+      }
+    }
+
+    .calculatorCta {
+      text-align: center;
+
+      .calculatorButton {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: $gradient-primary;
+        color: $white;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1.125rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba($primary-500, 0.3);
+        }
+
+        .calculatorIcon {
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+      }
+    }
+  }
+
+  .eligibilitySection {
+    padding: 4rem 0;
+    background: $white;
+
+    .eligibilityCard {
+      max-width: 800px;
+      margin: 0 auto;
+      background: linear-gradient(
+        135deg,
+        rgba($warning-50, 0.8),
+        rgba($warning-100, 0.4)
+      );
+      border: 2px solid rgba($warning-200, 0.5);
+      border-radius: 16px;
+      padding: 2rem;
+
+      .eligibilityHeader {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+
+        .eligibilityIcon {
+          width: 2rem;
+          height: 2rem;
+          color: $warning-600;
+        }
+
+        .eligibilityTitle {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: $text-primary;
+        }
+      }
+
+      .eligibilityContent {
+        .eligibilityNotice {
+          font-size: 1.125rem;
+          color: $text-primary;
+          margin-bottom: 1.5rem;
+          line-height: 1.6;
+        }
+
+        .eligibilityRules {
+          list-style: none;
+          padding: 0;
+
+          li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            color: $text-secondary;
+
+            &::before {
+              content: "•";
+              color: $warning-600;
+              font-weight: bold;
+              font-size: 1.25rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .leaderboardSection {
+    padding: 6rem 0;
+    background: rgba($primary-50, 0.2);
+
+    .sectionHeader {
+      text-align: center;
+      margin-bottom: 4rem;
+
+      .sectionTitle {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: $text-primary;
+        margin-bottom: 1rem;
+
+        @media (min-width: 768px) {
+          font-size: 3rem;
+        }
+      }
+
+      .sectionSubtitle {
+        font-size: 1.125rem;
+        color: $text-secondary;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+    }
+
+    .leaderboardGrid {
+      max-width: 800px;
+      margin: 0 auto 3rem;
+
+      .leaderboardItem {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.5rem;
+        background: $white;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba($primary-200, 0.1);
+        border: 1px solid rgba($primary-200, 0.2);
+
+        .leaderboardRank {
+          font-size: 1.5rem;
+          font-weight: 800;
+          color: $primary-600;
+          min-width: 3rem;
+        }
+
+        .leaderboardAvatar {
+          width: 3rem;
+          height: 3rem;
+          background: $gradient-primary;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .leaderboardAvatarIcon {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: $white;
+          }
+        }
+
+        .leaderboardInfo {
+          flex: 1;
+
+          .leaderboardName {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: $text-primary;
+            margin-bottom: 0.25rem;
+          }
+
+          .leaderboardPackage {
+            font-size: 0.9rem;
+            color: $text-secondary;
+          }
+        }
+
+        .leaderboardEarnings {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: $primary-600;
+        }
+      }
+    }
+
+    .leaderboardCta {
+      text-align: center;
+
+      .leaderboardButton {
+        background: $gradient-primary;
+        color: $white;
+        padding: 1rem 2rem;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 1.125rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba($primary-500, 0.3);
+        }
+      }
+    }
+  }
+
+  .testimonialsSection {
+    padding: 6rem 0;
+    background: $white;
+
+    .sectionHeader {
+      text-align: center;
+      margin-bottom: 4rem;
+
+      .sectionTitle {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: $text-primary;
+        margin-bottom: 1rem;
+
+        @media (min-width: 768px) {
+          font-size: 3rem;
+        }
+      }
+
+      .sectionSubtitle {
+        font-size: 1.125rem;
+        color: $text-secondary;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+    }
+
+    .testimonialsGrid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2.5rem;
+      }
+
+      @media (min-width: 1024px) {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+      }
+    }
+
+    .testimonialCard {
+      background: $white;
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba($primary-200, 0.1);
+      border: 1px solid rgba($primary-200, 0.2);
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 32px rgba($primary-200, 0.2);
+      }
+
+      .testimonialContent {
+        margin-bottom: 1.5rem;
+
+        .testimonialText {
+          font-size: 1rem;
+          color: $text-secondary;
+          line-height: 1.6;
+          font-style: italic;
+        }
+      }
+
+      .testimonialAuthor {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+
+        .testimonialAvatar {
+          width: 3rem;
+          height: 3rem;
+          background: $gradient-primary;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          .testimonialAvatarIcon {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: $white;
+          }
+        }
+
+        .testimonialInfo {
+          .testimonialName {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: $text-primary;
+            margin-bottom: 0.25rem;
+          }
+
+          .testimonialLocation {
+            font-size: 0.9rem;
+            color: $text-secondary;
+          }
+        }
+      }
+    }
+  }
+
+  .faqSection {
+    padding: 6rem 0;
+    background: rgba($primary-50, 0.2);
+
+    .sectionHeader {
+      text-align: center;
+      margin-bottom: 4rem;
+
+      .sectionTitle {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: $text-primary;
+        margin-bottom: 1rem;
+
+        @media (min-width: 768px) {
+          font-size: 3rem;
+        }
+      }
+
+      .sectionSubtitle {
+        font-size: 1.125rem;
+        color: $text-secondary;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+    }
+
+    .faqList {
+      max-width: 800px;
+      margin: 0 auto;
+
+      .faqItem {
+        background: $white;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba($primary-200, 0.1);
+        border: 1px solid rgba($primary-200, 0.2);
+        overflow: hidden;
+
+        .faqQuestion {
+          width: 100%;
+          padding: 1.5rem;
+          background: none;
+          border: none;
+          text-align: left;
+          font-size: 1.125rem;
+          font-weight: 600;
+          color: $text-primary;
+          cursor: pointer;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: rgba($primary-50, 0.5);
+          }
+
+          .faqIcon {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: $primary-600;
+            transition: transform 0.3s ease;
+
+            &.faqIconOpen {
+              transform: rotate(180deg);
+            }
+          }
+        }
+
+        .faqAnswer {
+          padding: 0 1.5rem 1.5rem;
+          background: rgba($primary-50, 0.1);
+
+          p {
+            font-size: 1rem;
+            color: $text-secondary;
+            line-height: 1.6;
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+
   .ctaSection {
     padding: 6rem 0;
     background: $gradient-primary;
     text-align: center;
     position: relative;
     overflow: hidden;
-    
+
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      background: 
-        radial-gradient(circle at 20% 80%, rgba($white, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba($white, 0.08) 0%, transparent 50%);
+      background: radial-gradient(
+          circle at 20% 80%,
+          rgba($white, 0.1) 0%,
+          transparent 50%
+        ),
+        radial-gradient(
+          circle at 80% 20%,
+          rgba($white, 0.08) 0%,
+          transparent 50%
+        );
       pointer-events: none;
     }
-    
+
     .ctaContent {
       position: relative;
       z-index: 1;
       max-width: 700px;
       margin: 0 auto;
-      
+
       .ctaTitle {
         font-size: 2.5rem;
         font-weight: 800;
         color: $white;
         margin-bottom: 1.5rem;
         line-height: 1.2;
-        
+
         @media (min-width: 768px) {
           font-size: 3rem;
         }
       }
-      
+
       .ctaSubtitle {
         font-size: 1.25rem;
         color: rgba($white, 0.9);
         margin-bottom: 2.5rem;
         line-height: 1.6;
       }
-      
+
+      .ctaButtons {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+
+        @media (min-width: 640px) {
+          flex-direction: row;
+          justify-content: center;
+        }
+      }
+
       .ctaButton {
         background: $white;
         color: $primary-600;
@@ -239,17 +1255,163 @@
         text-decoration: none;
         border: 2px solid transparent;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 
-          0 8px 25px rgba($white, 0.3),
+        box-shadow: 0 8px 25px rgba($white, 0.3),
           inset 0 1px 0 rgba($primary-100, 0.1);
-        
+
         &:hover {
           transform: translateY(-4px);
-          box-shadow: 
-            0 16px 40px rgba($white, 0.4),
+          box-shadow: 0 16px 40px rgba($white, 0.4),
             inset 0 1px 0 rgba($primary-100, 0.2);
           background: rgba($primary-50, 0.95);
           color: $primary-700;
+        }
+      }
+
+      .ctaSecondaryButton {
+        color: $white;
+        padding: 1.25rem 3rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 1.25rem;
+        text-decoration: none;
+        background: rgba($white, 0.1);
+        border: 2px solid rgba($white, 0.3);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover {
+          background: rgba($white, 0.2);
+          border-color: rgba($white, 0.5);
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+
+  .footer {
+    background: $text-primary;
+    color: $white;
+    padding: 4rem 0 2rem;
+
+    .footerContent {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3rem;
+      }
+
+      @media (min-width: 1024px) {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 2rem;
+      }
+    }
+
+    .footerSection {
+      .footerLogo {
+        h3 {
+          font-size: 1.5rem;
+          font-weight: 800;
+          color: $white;
+          margin-bottom: 0.5rem;
+        }
+
+        p {
+          color: rgba($white, 0.8);
+          font-size: 1rem;
+        }
+      }
+
+      .footerTitle {
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: $white;
+        margin-bottom: 1rem;
+      }
+
+      .footerLinks {
+        list-style: none;
+        padding: 0;
+
+        li {
+          margin-bottom: 0.5rem;
+
+          a {
+            color: rgba($white, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+
+            &:hover {
+              color: $white;
+            }
+          }
+        }
+      }
+
+      .footerContact {
+        .contactItem {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-bottom: 1rem;
+          color: rgba($white, 0.8);
+
+          .contactIcon {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: $primary-400;
+          }
+        }
+      }
+
+      .footerSocial {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+
+        .socialLink {
+          width: 2.5rem;
+          height: 2.5rem;
+          background: rgba($white, 0.1);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: $primary-500;
+            transform: translateY(-2px);
+          }
+
+          .socialIcon {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: $white;
+          }
+        }
+      }
+    }
+
+    .footerBottom {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba($white, 0.1);
+      text-align: center;
+
+      .footerCopyright {
+        p {
+          color: rgba($white, 0.8);
+          margin-bottom: 0.5rem;
+        }
+
+        .footerDisclaimer {
+          font-size: 0.9rem;
+          color: rgba($white, 0.6);
         }
       }
     }

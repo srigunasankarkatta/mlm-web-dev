@@ -4,6 +4,7 @@ import { useInitialLoader } from "./hooks/useInitialLoader";
 import { useAuth } from "./contexts/AuthContext";
 import AppRouter from "./components/AppRouter";
 import DashboardLayout from "./components/DashboardLayout";
+import ScrollToTop from "./mlm-customer-portal/components/ScrollToTop";
 
 function App() {
   // Initialize dark mode
@@ -17,6 +18,7 @@ function App() {
   return (
     <>
       <Router>
+        <ScrollToTop />
         <div className="min-h-screen bg-white dark:bg-primary-navy transition-colors duration-300">
           {/* <Navbar /> */}
           <main className="relative">

@@ -1,0 +1,113 @@
+@use "../../styles/color-palette" as *;
+
+.mlmTreeContainer {
+  background: transparent;
+  padding: 0;
+  margin: 0;
+
+  .treeWrapper {
+    width: 100%;
+    height: 80vh;
+    position: relative;
+    overflow: hidden;
+
+    // Responsive height adjustments
+    @media (max-width: 768px) {
+      height: 60vh; // Smaller height on mobile for better usability
+    }
+
+    @media (max-width: 480px) {
+      height: 50vh; // Even smaller on very small screens
+    }
+
+    // Tree link styles
+    :global(.rd3t-link) {
+      stroke: $primary-400;
+      stroke-width: 2.5;
+      fill: none;
+      transition: all 0.8s ease;
+    }
+
+    // Node styles
+    :global(.rd3t-node) {
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+}
+
+// Node animation styles
+.nodeCircle {
+  transition: all 0.3s ease;
+  filter: drop-shadow(0 2px 4px rgba($primary-200, 0.3));
+
+  &:hover {
+    filter: drop-shadow(0 4px 8px rgba($primary-200, 0.4));
+  }
+}
+
+.nodeText {
+  user-select: none;
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgba($black, 0.3);
+}
+
+.earningsLabel {
+  filter: drop-shadow(0 2px 4px rgba($primary-200, 0.3));
+  transition: all 0.3s ease;
+}
+
+.earningsText {
+  user-select: none;
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgba($black, 0.3);
+}
+
+.teamLabel {
+  filter: drop-shadow(0 2px 4px rgba($primary-200, 0.3));
+  transition: all 0.3s ease;
+}
+
+.teamText {
+  user-select: none;
+  pointer-events: none;
+  text-shadow: 0 1px 2px rgba($black, 0.3);
+}
+
+// Animation keyframes
+@keyframes nodePop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes linkDraw {
+  0% {
+    stroke-dasharray: 0, 1000;
+  }
+  100% {
+    stroke-dasharray: 1000, 0;
+  }
+}
+
+// Apply animations to new nodes
+:global(.rd3t-node) {
+  animation: nodePop 0.6s ease-out;
+}
+
+:global(.rd3t-link) {
+  animation: linkDraw 0.8s ease-out;
+}
