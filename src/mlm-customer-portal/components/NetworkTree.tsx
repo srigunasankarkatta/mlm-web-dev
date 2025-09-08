@@ -4,6 +4,31 @@ import { useUserTeamTree } from "../hooks/useProfile";
 import { TeamTreeNode } from "../api-services/profile-service";
 import styles from "./NetworkTree.module.scss";
 
+// Custom diagonal path function with enhanced curves
+const diagonalPath = (linkData: any) => {
+  const { source, target } = linkData;
+  const sourceX = source.x;
+  const sourceY = source.y;
+  const targetX = target.x;
+  const targetY = target.y;
+
+  // Calculate the distance and angle for better curve control
+  const deltaX = targetX - sourceX;
+  const deltaY = targetY - sourceY;
+  const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+  // Create control points for a smooth diagonal curve
+  const controlPoint1X = sourceX + deltaX * 0.3;
+  const controlPoint1Y = sourceY + deltaY * 0.7;
+  const controlPoint2X = sourceX + deltaX * 0.7;
+  const controlPoint2Y = sourceY + deltaY * 0.3;
+
+  // Create a smooth diagonal path with two control points for better curves
+  const path = `M${sourceX},${sourceY}C${controlPoint1X},${controlPoint1Y} ${controlPoint2X},${controlPoint2Y} ${targetX},${targetY}`;
+
+  return path;
+};
+
 interface NetworkNode {
   name: string;
   attributes?: {
@@ -37,8 +62,10 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
   useEffect(() => {
     const updateTreePosition = () => {
       const containerWidth = window.innerWidth;
+      const containerHeight = window.innerHeight;
       const centerX = Math.max(containerWidth / 2, 400);
-      setTreeTranslate({ x: centerX, y: 100 });
+      const centerY = Math.max(containerHeight / 4, 150);
+      setTreeTranslate({ x: centerX, y: centerY });
     };
 
     updateTreePosition();
@@ -87,48 +114,37 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
   const renderCustomNode = ({ nodeDatum, toggleNode }: any) => {
     const isActive = nodeDatum.attributes?.status === "active";
     const isCurrentUser = nodeDatum.attributes?.level === 1; // Root user is level 1
+    const level = nodeDatum.attributes?.level || 1;
 
     const nodeRadius = isCurrentUser ? 35 : 28;
-    const nodeColor = isCurrentUser
-      ? "url(#currentUserGradient)"
-      : isActive
-      ? "url(#activeGradient)"
-      : "url(#inactiveGradient)";
+
+    // Determine node color based on level using color palette
+    let nodeColor;
+    if (isCurrentUser) {
+      nodeColor = "url(#currentUserGradient)"; // Dark blue for current user
+    } else if (!isActive) {
+      nodeColor = "url(#inactiveGradient)"; // Red for inactive
+    } else {
+      // Use different colors based on level
+      switch (level) {
+        case 2:
+          nodeColor = "url(#level2Gradient)"; // Teal for level 2
+          break;
+        case 3:
+          nodeColor = "url(#level3Gradient)"; // Light blue for level 3
+          break;
+        case 4:
+          nodeColor = "url(#level4Gradient)"; // Very light blue for level 4
+          break;
+        default:
+          nodeColor = "url(#activeGradient)"; // Default blue for other levels
+      }
+    }
 
     return (
       <g>
-        {/* Gradient definitions */}
+        {/* Filter definitions */}
         <defs>
-          <linearGradient
-            id="currentUserGradient"
-            x1="0%"
-            y1="0%"
-            x2="100%"
-            y2="100%"
-          >
-            <stop offset="0%" stopColor="#3b82f6" />
-            <stop offset="100%" stopColor="#1d4ed8" />
-          </linearGradient>
-          <linearGradient
-            id="activeGradient"
-            x1="0%"
-            y1="0%"
-            x2="100%"
-            y2="100%"
-          >
-            <stop offset="0%" stopColor="#10b981" />
-            <stop offset="100%" stopColor="#059669" />
-          </linearGradient>
-          <linearGradient
-            id="inactiveGradient"
-            x1="0%"
-            y1="0%"
-            x2="100%"
-            y2="100%"
-          >
-            <stop offset="0%" stopColor="#ef4444" />
-            <stop offset="100%" stopColor="#dc2626" />
-          </linearGradient>
           <filter id="glow">
             <feGaussianBlur stdDeviation="3" result="coloredBlur" />
             <feMerge>
@@ -305,6 +321,77 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
 
   return (
     <div className={styles.networkTreeContainer}>
+      {/* Global gradient definitions */}
+      <svg style={{ position: "absolute", width: 0, height: 0 }}>
+        <defs>
+          <linearGradient
+            id="currentUserGradient"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
+          >
+            <stop offset="0%" stopColor="#0b2b52" />
+            <stop offset="100%" stopColor="#0e3f7a" />
+          </linearGradient>
+          <linearGradient
+            id="activeGradient"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
+          >
+            <stop offset="0%" stopColor="#1256a8" />
+            <stop offset="100%" stopColor="#1677d6" />
+          </linearGradient>
+          <linearGradient
+            id="inactiveGradient"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
+          >
+            <stop offset="0%" stopColor="#ef4444" />
+            <stop offset="100%" stopColor="#dc2626" />
+          </linearGradient>
+          <linearGradient
+            id="level2Gradient"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
+          >
+            <stop offset="0%" stopColor="#1e90ff" />
+            <stop offset="100%" stopColor="#4daaff" />
+          </linearGradient>
+          <linearGradient
+            id="level3Gradient"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
+          >
+            <stop offset="0%" stopColor="#99cfff" />
+            <stop offset="100%" stopColor="#cfe0ff" />
+          </linearGradient>
+          <linearGradient
+            id="level4Gradient"
+            x1="0%"
+            y1="0%"
+            x2="100%"
+            y2="100%"
+          >
+            <stop offset="0%" stopColor="#cfe0ff" />
+            <stop offset="100%" stopColor="#e6f0ff" />
+          </linearGradient>
+          <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="rgba(11, 43, 82, 0.8)" />
+            <stop offset="50%" stopColor="rgba(30, 144, 255, 0.7)" />
+            <stop offset="100%" stopColor="rgba(77, 170, 255, 0.6)" />
+          </linearGradient>
+        </defs>
+      </svg>
+
       <div className={styles.treeHeader}>
         <div>
           <h2 className={styles.treeTitle}>Your Network Tree</h2>
@@ -322,31 +409,23 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
         <div className={styles.legend}>
           <div className={styles.legendItem}>
             <div className={`${styles.legendDot} ${styles.currentUser}`}></div>
-            <span>You</span>
+            <span>You (Level 1)</span>
           </div>
           <div className={styles.legendItem}>
-            <div className={`${styles.legendDot} ${styles.active}`}></div>
-            <span>Active</span>
+            <div className={`${styles.legendDot} ${styles.level2}`}></div>
+            <span>Level 2</span>
+          </div>
+          <div className={styles.legendItem}>
+            <div className={`${styles.legendDot} ${styles.level3}`}></div>
+            <span>Level 3</span>
+          </div>
+          <div className={styles.legendItem}>
+            <div className={`${styles.legendDot} ${styles.level4}`}></div>
+            <span>Level 4+</span>
           </div>
           <div className={styles.legendItem}>
             <div className={`${styles.legendDot} ${styles.inactive}`}></div>
             <span>Inactive</span>
-          </div>
-          <div className={styles.legendItem}>
-            <div
-              className={styles.legendDot}
-              style={{
-                background: "#3b82f6",
-                color: "white",
-                fontSize: "10px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              1
-            </div>
-            <span>Has Children</span>
           </div>
         </div>
       </div>
@@ -355,11 +434,11 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
         <Tree
           data={treeData}
           orientation="vertical"
-          pathFunc="step"
-          nodeSize={{ x: 250, y: 150 }}
-          separation={{ siblings: 1.2, nonSiblings: 1.5 }}
+          pathFunc={diagonalPath}
+          nodeSize={{ x: 120, y: 80 }}
+          separation={{ siblings: 1.0, nonSiblings: 1.5 }}
           translate={treeTranslate}
-          scaleExtent={{ min: 0.5, max: 3.0 }}
+          scaleExtent={{ min: 0.3, max: 2.5 }}
           initialDepth={maxDepth}
           renderCustomNodeElement={renderCustomNode}
           onNodeClick={handleNodeClick}
@@ -367,6 +446,9 @@ const NetworkTree: React.FC<NetworkTreeProps> = ({ userId, maxDepth = 3 }) => {
           draggable={true}
           shouldCollapseNeighborNodes={false}
           enableLegacyTransitions={true}
+          depthFactor={150}
+          collapsible={true}
+          transitionDuration={300}
         />
 
         {/* Floating controls */}

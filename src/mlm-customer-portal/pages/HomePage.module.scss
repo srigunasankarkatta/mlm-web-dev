@@ -5,51 +5,91 @@
 .homePage {
   .heroSection {
     text-align: center;
-    padding: 3rem 0 6rem;
+    // padding: 2rem 0 4rem;
     position: relative;
 
+    @media (min-width: 480px) {
+      // padding: 3rem 0 6rem;
+    }
+
     @media (min-width: 768px) {
-      padding: 6rem 0 8rem;
+      // padding: 6rem 0 8rem;
+    }
+
+    @media (min-width: 1440px) {
+      // padding: 8rem 0 10rem;
     }
 
     .heroContainer {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 0 1rem;
+      // padding: 0 0.75rem;
+
+      @media (min-width: 480px) {
+        // padding: 0 1rem;
+      }
 
       @media (min-width: 768px) {
-        padding: 0 2rem;
+        // padding: 0 2rem;
+      }
+
+      @media (min-width: 1440px) {
+        max-width: 1400px;
+        // padding: 0 3rem;
       }
     }
 
     .heroContent {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 3rem;
+      display: flex;
+      width: 100%;
+      height: 100%;
       align-items: center;
+      justify-content: center;
+      // min-height: 80vh;
 
-      @media (min-width: 1024px) {
-        grid-template-columns: 1fr 1fr;
-        gap: 4rem;
+      @media (max-width: 768px) {
+        min-height: 70vh;
+        padding: 1rem 0;
+      }
+
+      @media (min-width: 1440px) {
+        min-height: 85vh;
       }
     }
 
     .heroLeft {
       text-align: center;
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
 
-      @media (min-width: 1024px) {
+      @media (min-width: 768px) {
         text-align: left;
       }
 
       .heroTitle {
-        font-size: 3rem;
+        font-size: 2rem;
         font-weight: 800;
         color: $text-primary;
         margin-bottom: 1.5rem;
         line-height: 1.2;
         letter-spacing: -0.025em;
 
+        @media (min-width: 480px) {
+          font-size: 2.5rem;
+        }
+
         @media (min-width: 768px) {
+          font-size: 3rem;
+        }
+
+        @media (min-width: 1024px) {
+          font-size: 3.5rem;
+        }
+
+        @media (min-width: 1440px) {
           font-size: 4rem;
         }
 
@@ -62,21 +102,27 @@
       }
 
       .heroSubtitle {
-        font-size: 1.25rem;
+        font-size: 1rem;
         color: $text-secondary;
-        margin-bottom: 2.5rem;
+        margin-bottom: 2rem;
         line-height: 1.6;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
+        max-width: 100%;
+
+        @media (min-width: 480px) {
+          font-size: 1.125rem;
+        }
 
         @media (min-width: 768px) {
-          font-size: 1.5rem;
+          font-size: 1.25rem;
+          margin-bottom: 2.5rem;
         }
 
         @media (min-width: 1024px) {
-          margin-left: 0;
-          margin-right: 0;
+          font-size: 1.375rem;
+        }
+
+        @media (min-width: 1440px) {
+          font-size: 1.5rem;
         }
       }
 
@@ -85,28 +131,49 @@
         flex-direction: column;
         gap: 1rem;
         align-items: center;
+        margin-bottom: 2rem;
 
-        @media (min-width: 640px) {
+        @media (min-width: 480px) {
           flex-direction: row;
           justify-content: center;
+          gap: 1.5rem;
         }
 
-        @media (min-width: 1024px) {
-          justify-content: flex-start;
+        @media (min-width: 768px) {
+          gap: 2rem;
+        }
+
+        @media (min-width: 1440px) {
+          gap: 2.5rem;
         }
 
         .primaryButton {
           background: $gradient-primary;
           color: $white;
-          padding: 1rem 2rem;
-          border-radius: 16px;
+          padding: 0.875rem 1.5rem;
+          border-radius: 12px;
           font-weight: 700;
-          font-size: 1.125rem;
+          font-size: 0.9rem;
           text-decoration: none;
           border: 2px solid transparent;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           box-shadow: 0 8px 25px rgba($primary-500, 0.25),
             inset 0 1px 0 rgba($white, 0.2);
+          width: 100%;
+          max-width: 200px;
+
+          @media (min-width: 480px) {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            border-radius: 16px;
+            width: auto;
+            max-width: none;
+          }
+
+          @media (min-width: 1440px) {
+            padding: 1.25rem 2.5rem;
+            font-size: 1.125rem;
+          }
 
           &:hover {
             transform: translateY(-4px);
@@ -122,14 +189,29 @@
 
         .secondaryButton {
           color: $primary-600;
-          padding: 1rem 2rem;
-          border-radius: 16px;
+          padding: 0.875rem 1.5rem;
+          border-radius: 12px;
           font-weight: 600;
-          font-size: 1.125rem;
+          font-size: 0.9rem;
           text-decoration: none;
           background: rgba($primary-50, 0.8);
           border: 2px solid rgba($primary-200, 0.5);
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          width: 100%;
+          max-width: 200px;
+
+          @media (min-width: 480px) {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+            border-radius: 16px;
+            width: auto;
+            max-width: none;
+          }
+
+          @media (min-width: 1440px) {
+            padding: 1.25rem 2.5rem;
+            font-size: 1.25rem;
+          }
 
           &:hover {
             color: $primary-700;
@@ -143,28 +225,54 @@
       }
 
       .heroBullets {
-        margin-top: 2rem;
+        margin-top: 1.5rem;
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.75rem;
         align-items: center;
 
-        @media (min-width: 1024px) {
-          align-items: flex-start;
+        @media (min-width: 768px) {
+          margin-top: 2rem;
+          gap: 1rem;
+        }
+
+        @media (min-width: 1440px) {
+          margin-top: 2.5rem;
+          gap: 1.25rem;
         }
 
         .bulletItem {
           display: flex;
           align-items: center;
           gap: 0.75rem;
-          font-size: 1rem;
+          font-size: 0.9rem;
           color: $text-secondary;
+          text-align: center;
+
+          @media (min-width: 480px) {
+            font-size: 1rem;
+            text-align: left;
+          }
+
+          @media (min-width: 1440px) {
+            font-size: 1.125rem;
+          }
 
           .bulletIcon {
-            width: 1.25rem;
-            height: 1.25rem;
+            width: 1.125rem;
+            height: 1.125rem;
             color: $success-500;
             flex-shrink: 0;
+
+            @media (min-width: 480px) {
+              width: 1.25rem;
+              height: 1.25rem;
+            }
+
+            @media (min-width: 1440px) {
+              width: 1.375rem;
+              height: 1.375rem;
+            }
           }
         }
       }
@@ -174,29 +282,136 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex: 0 0 auto;
+      width: 300px;
+      height: 100%;
+      min-height: 400px;
 
-      .heroVisual {
+      @media (max-width: 1024px) {
+        width: 250px;
+        min-height: 350px;
+      }
+
+      @media (max-width: 768px) {
         width: 100%;
-        max-width: 600px;
-        height: 80vh;
-        position: relative;
+        height: 300px;
+        min-height: 300px;
+      }
+
+      @media (max-width: 480px) {
+        height: 250px;
+        min-height: 250px;
+      }
+
+      @media (min-width: 1440px) {
+        width: 350px;
+        min-height: 500px;
+      }
+
+      .mlmTreeContainer {
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
 
         @media (max-width: 768px) {
-          height: 60vh; // Smaller height on mobile
+          padding: 0.75rem;
+          border-radius: 12px;
+          justify-content: center;
         }
 
         @media (max-width: 480px) {
-          height: 50vh; // Even smaller on very small screens
+          padding: 0.5rem;
+          border-radius: 10px;
         }
 
         .heroMLMTree {
           width: 100%;
-          height: 100%;
+          height: 500px;
+          transform: translateX(-10%);
+
+          @media (max-width: 1024px) {
+            transform: translateX(-8%);
+          }
+
+          @media (max-width: 768px) {
+            transform: translateX(0);
+            height: 100%;
+          }
+
+          @media (max-width: 480px) {
+            height: 100%;
+          }
 
           .treeWrapper {
-            height: 100%; // Use full height of parent container
+            height: 100%;
           }
         }
+      }
+    }
+
+    // Main Glassmorphism Card Container
+    .glassmorphismCard {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 32px;
+      padding: 0;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+
+      .cardContent {
+        display: flex;
+        align-items: stretch;
+        gap: 2rem;
+        padding: 2rem;
+        min-height: 400px;
+
+        @media (max-width: 1024px) {
+          padding: 1.75rem;
+          gap: 1.5rem;
+          min-height: 350px;
+        }
+
+        @media (max-width: 768px) {
+          flex-direction: column;
+          padding: 1.5rem;
+          gap: 1.5rem;
+          min-height: auto;
+        }
+
+        @media (max-width: 480px) {
+          padding: 1.25rem;
+          gap: 1rem;
+        }
+
+        @media (min-width: 1440px) {
+          padding: 2.5rem;
+          gap: 3rem;
+          min-height: 500px;
+        }
+      }
+
+      // Full width on all screen sizes
+      @media (max-width: 768px) {
+        border-radius: 24px;
+      }
+
+      @media (max-width: 480px) {
+        border-radius: 20px;
       }
     }
   }

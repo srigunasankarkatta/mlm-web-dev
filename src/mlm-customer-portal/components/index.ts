@@ -9,3 +9,4 @@ export { default as Footer } from './Footer';
 export { default as NetworkTree } from './NetworkTree';
 export { default as ProtectedRoute } from './ProtectedRoute';
 export { default as RazorpayPopup } from './RazorpayPopup';
+export { default as TransactionsTable } from './TransactionsTable';

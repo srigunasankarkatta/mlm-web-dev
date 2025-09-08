@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Calculator } from "lucide-react";
+// @ts-ignore
 import IncomeCalculator from "../../components/IncomeCalculator";
 import CustomerLayout from "../components/CustomerLayout";
 import styles from "./IncomeCalculatorPage.module.scss";
@@ -15,7 +16,7 @@ const IncomeCalculatorPage: React.FC = () => {
   return (
     <CustomerLayout>
       <div className={styles.calculatorPage}>
-        {/* Header */}
+        {/* Page Header */}
         <div className={styles.pageHeader}>
           <div className={styles.headerContent}>
             <button onClick={handleGoBack} className={styles.backButton}>

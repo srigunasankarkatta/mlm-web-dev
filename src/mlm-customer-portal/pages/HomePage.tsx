@@ -130,51 +130,61 @@ const HomePage: React.FC = () => {
         <section className={styles.heroSection}>
           <div className={styles.heroContainer}>
             <div className={styles.heroContent}>
-              <div className={styles.heroLeft}>
-                <h1 className={styles.heroTitle}>
-                  Start Earning with{" "}
-                  <span className={styles.highlight}>Simple, Transparent</span>{" "}
-                  Income Plans
-                </h1>
-                <h2 className={styles.heroSubtitle}>
-                  Buy a package, grow your network — earn Direct, Level, Club &
-                  Auto Pool bonuses.
-                </h2>
+              {/* Main Glassmorphism Card Container */}
+              <div className={styles.glassmorphismCard}>
+                <div className={styles.cardContent}>
+                  <div className={styles.heroLeft}>
+                    <h1 className={styles.heroTitle}>
+                      Start Earning with{" "}
+                      <span className={styles.highlight}>
+                        Simple, Transparent
+                      </span>{" "}
+                      Income Plans
+                    </h1>
+                    <h2 className={styles.heroSubtitle}>
+                      Buy a package, grow your network — earn Direct, Level,
+                      Club & Auto Pool bonuses.
+                    </h2>
 
-                <div className={styles.heroButtons}>
-                  <button
-                    onClick={() => handlePlanSelect(MLM_PLANS[0])}
-                    className={styles.primaryButton}
-                  >
-                    Get Started — Buy Package
-                  </button>
-                  <button
-                    onClick={() => scrollToSection("how-it-works")}
-                    className={styles.secondaryButton}
-                  >
-                    How it Works
-                  </button>
-                </div>
+                    <div className={styles.heroButtons}>
+                      <button
+                        onClick={() => handlePlanSelect(MLM_PLANS[0])}
+                        className={styles.primaryButton}
+                      >
+                        Get Started — Buy Package
+                      </button>
+                      <button
+                        onClick={() => scrollToSection("how-it-works")}
+                        className={styles.secondaryButton}
+                      >
+                        How it Works
+                      </button>
+                    </div>
 
-                <div className={styles.heroBullets}>
-                  <div className={styles.bulletItem}>
-                    <CheckCircle className={styles.bulletIcon} />
-                    <span>Lifetime packages — upgrade anytime</span>
+                    <div className={styles.heroBullets}>
+                      <div className={styles.bulletItem}>
+                        <CheckCircle className={styles.bulletIcon} />
+                        <span>Lifetime packages — upgrade anytime</span>
+                      </div>
+                      <div className={styles.bulletItem}>
+                        <CheckCircle className={styles.bulletIcon} />
+                        <span>Direct rewards for first 4 refers</span>
+                      </div>
+                      <div className={styles.bulletItem}>
+                        <CheckCircle className={styles.bulletIcon} />
+                        <span>
+                          Club & Auto-pool bonuses on group completion
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div className={styles.bulletItem}>
-                    <CheckCircle className={styles.bulletIcon} />
-                    <span>Direct rewards for first 4 refers</span>
-                  </div>
-                  <div className={styles.bulletItem}>
-                    <CheckCircle className={styles.bulletIcon} />
-                    <span>Club & Auto-pool bonuses on group completion</span>
-                  </div>
-                </div>
-              </div>
 
-              <div className={styles.heroRight}>
-                <div className={styles.heroVisual}>
-                  <MLMTree className={styles.heroMLMTree} />
+                  {/* MLM Tree Container on Right Side */}
+                  <div className={styles.heroRight}>
+                    <div className={styles.mlmTreeContainer}>
+                      <MLMTree className={styles.heroMLMTree} />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -356,19 +366,6 @@ const HomePage: React.FC = () => {
                 {isAutoSlide ? "Pause" : "Play"} Auto-slide
               </button>
             </div>
-          </div>
-        </section>
-
-        {/* MLM Network Tree Section */}
-        <section className={styles.mlmTreeSection}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Network Structure</h2>
-            <p className={styles.sectionSubtitle}>
-              Visualize your MLM network growth and earnings potential
-            </p>
-          </div>
-          <div className={styles.glassmorphismCard}>
-            <MLMTree />
           </div>
         </section>
 

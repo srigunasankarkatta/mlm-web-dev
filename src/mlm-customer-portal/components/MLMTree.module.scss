@@ -4,28 +4,70 @@
   background: transparent;
   padding: 0;
   margin: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 
   .treeWrapper {
     width: 100%;
-    height: 80vh;
+    height: 100%;
     position: relative;
-    overflow: hidden;
+    overflow: auto;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 
-    // Responsive height adjustments
-    @media (max-width: 768px) {
-      height: 60vh; // Smaller height on mobile for better usability
-    }
-
-    @media (max-width: 480px) {
-      height: 50vh; // Even smaller on very small screens
-    }
-
-    // Tree link styles
+    // Tree link styles - minimalist approach
     :global(.rd3t-link) {
-      stroke: $primary-400;
-      stroke-width: 2.5;
+      stroke: #6b7280;
+      stroke-width: 2;
       fill: none;
-      transition: all 0.8s ease;
+      transition: all 0.3s ease;
+    }
+
+    // Ensure SVG is properly positioned for horizontal layout
+    :global(.rd3t-svg) {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    // Tree container positioning
+    :global(.rd3t-tree-container) {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    // Force horizontal orientation
+    :global(.rd3t-tree-container svg) {
+      width: 100%;
+      height: 100%;
+    }
+
+    // Ensure proper horizontal flow
+    :global(.rd3t-node) {
+      transform-origin: center;
+    }
+
+    // Disable zoom and pan interactions
+    :global(.rd3t-svg) {
+      pointer-events: none;
+    }
+
+    :global(.rd3t-tree-container) {
+      pointer-events: none;
+    }
+
+    // Re-enable pointer events for nodes only
+    :global(.rd3t-node) {
+      pointer-events: auto;
     }
 
     // Node styles
@@ -40,42 +82,26 @@
   }
 }
 
-// Node animation styles
+// Minimalist node styles
 .nodeCircle {
-  transition: all 0.3s ease;
-  filter: drop-shadow(0 2px 4px rgba($primary-200, 0.3));
+  transition: all 0.2s ease;
 
   &:hover {
-    filter: drop-shadow(0 4px 8px rgba($primary-200, 0.4));
+    fill: #374151;
+    transform: scale(1.05);
   }
 }
 
 .nodeText {
   user-select: none;
   pointer-events: none;
-  text-shadow: 0 1px 2px rgba($black, 0.3);
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
-.earningsLabel {
-  filter: drop-shadow(0 2px 4px rgba($primary-200, 0.3));
-  transition: all 0.3s ease;
-}
-
-.earningsText {
+.detailText {
   user-select: none;
   pointer-events: none;
-  text-shadow: 0 1px 2px rgba($black, 0.3);
-}
-
-.teamLabel {
-  filter: drop-shadow(0 2px 4px rgba($primary-200, 0.3));
-  transition: all 0.3s ease;
-}
-
-.teamText {
-  user-select: none;
-  pointer-events: none;
-  text-shadow: 0 1px 2px rgba($black, 0.3);
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
 // Animation keyframes
@@ -110,4 +136,31 @@
 
 :global(.rd3t-link) {
   animation: linkDraw 0.8s ease-out;
+}
+
+// Global SVG text styling to ensure white color and light font weight
+:global(.rd3t-node text) {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+  font-weight: 200 !important;
+}
+
+// More specific selectors for react-d3-tree
+:global(.rd3t-tree-container text) {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+  font-weight: 200 !important;
+}
+
+:global(.rd3t-svg text) {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+  font-weight: 200 !important;
+}
+
+// Target all text elements within the tree container
+:global(.mlmTreeContainer text) {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+  font-weight: 200 !important;
 }

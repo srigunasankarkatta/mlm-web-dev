@@ -76,6 +76,43 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba($primary-500, 0.15);
   }
+
+  .legendDot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    &.currentUser {
+      background: linear-gradient(135deg, #0c4a6e, #075985);
+      box-shadow: 0 2px 4px rgba(12, 74, 110, 0.3);
+    }
+
+    &.level2 {
+      background: linear-gradient(135deg, #14b8a6, #0d9488);
+      box-shadow: 0 2px 4px rgba(20, 184, 166, 0.3);
+    }
+
+    &.level3 {
+      background: linear-gradient(135deg, #7dd3fc, #38bdf8);
+      box-shadow: 0 2px 4px rgba(125, 211, 252, 0.3);
+    }
+
+    &.level4 {
+      background: linear-gradient(135deg, #bae6fd, #7dd3fc);
+      box-shadow: 0 2px 4px rgba(186, 230, 253, 0.3);
+    }
+
+    &.active {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      box-shadow: 0 2px 4px rgba(14, 165, 233, 0.3);
+    }
+
+    &.inactive {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+    }
+  }
 }
 
 .legendDot {
@@ -100,15 +137,27 @@
 }
 
 .currentUser {
-  background: $gradient-primary;
-  border-color: $primary-600;
-  box-shadow: 0 4px 15px rgba($primary-500, 0.4);
+  background: linear-gradient(135deg, #0b2b52, #0e3f7a);
+  border-color: #0e3f7a;
+  box-shadow: 0 4px 15px rgba(11, 43, 82, 0.4);
 }
 
-.active {
-  background: linear-gradient(135deg, $success-500, $success-600);
-  border-color: $success-600;
-  box-shadow: 0 4px 15px rgba($success-500, 0.4);
+.level2 {
+  background: linear-gradient(135deg, #1e90ff, #4daaff);
+  border-color: #4daaff;
+  box-shadow: 0 4px 15px rgba(30, 144, 255, 0.4);
+}
+
+.level3 {
+  background: linear-gradient(135deg, #99cfff, #cfe0ff);
+  border-color: #cfe0ff;
+  box-shadow: 0 4px 15px rgba(153, 207, 255, 0.4);
+}
+
+.level4 {
+  background: linear-gradient(135deg, #cfe0ff, #e6f0ff);
+  border-color: #e6f0ff;
+  box-shadow: 0 4px 15px rgba(207, 224, 255, 0.4);
 }
 
 .inactive {
@@ -128,6 +177,32 @@
   overflow: hidden;
   position: relative;
   z-index: 5;
+
+  // Enhanced diagonal path styling
+  :global(.rd3t-link) {
+    fill: none;
+    stroke: url(#pathGradient);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 2px 4px rgba($primary-500, 0.2));
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+      stroke: url(#pathGradient);
+      stroke-width: 3;
+      filter: drop-shadow(0 3px 6px rgba($primary-500, 0.3));
+    }
+  }
+
+  // Force vertical orientation
+  :global(.rd3t-tree-container) {
+    transform-origin: center top;
+  }
+
+  :global(.rd3t-svg) {
+    transform-origin: center top;
+  }
 
   &::before {
     content: "";

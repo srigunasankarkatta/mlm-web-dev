@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Tree } from "react-d3-tree";
-import { ChevronDown, ChevronRight, DollarSign, Users } from "lucide-react";
 import styles from "./MLMTree.module.scss";
 
 interface TreeNode {
@@ -16,131 +15,90 @@ interface MLMTreeProps {
 }
 
 const MLMTree: React.FC<MLMTreeProps> = ({ className }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const treeContainerRef = useRef<HTMLDivElement>(null);
 
-  // Generate random number of children (1-3)
-  const getRandomChildrenCount = () => Math.floor(Math.random() * 3) + 1;
-
-  // Generate random earnings (800-2000)
+  const getRandomChildrenCount = () => Math.floor(Math.random() * 3) + 1; // 1-3
   const getRandomEarnings = () => Math.floor(Math.random() * 1200) + 800;
 
-  // Generate random team size (5-25)
-  const getRandomTeamSize = () => Math.floor(Math.random() * 20) + 5;
-
-  // Function to calculate total team size recursively
   const calculateTeamSize = (node: TreeNode): number => {
-    if (!node.children || node.children.length === 0) {
-      return 1; // The node itself
-    }
-    return (
-      1 +
-      node.children.reduce((sum, child) => sum + calculateTeamSize(child), 0)
-    );
+    if (!node.children || node.children.length === 0) return 1;
+    return 1 + node.children.reduce((sum, c) => sum + calculateTeamSize(c), 0);
   };
 
-  // Generate the tree data with random children
+  // Generate a 3-level tree: root (level 0) -> regional managers (level 1) -> team leads (level 2)
   const generateTreeData = (): TreeNode => {
-    const children = [
-      {
-        name: "B1",
-        role: "Regional Manager",
-        earnings: 8750,
-        teamSize: 0, // Will be calculated
-        children: Array.from({ length: getRandomChildrenCount() }, (_, i) => ({
-          name: `C${i + 1}`,
-          role: "Team Lead",
-          earnings: getRandomEarnings(),
-          teamSize: getRandomTeamSize(),
-        })),
-      },
-      {
-        name: "B2",
-        role: "Regional Manager",
-        earnings: 9200,
-        teamSize: 0, // Will be calculated
-        children: Array.from({ length: 2 }, (_, i) => ({
-          name: `C${i + 3}`,
-          role: "Team Lead",
-          earnings: getRandomEarnings(),
-          teamSize: getRandomTeamSize(),
-        })),
-      },
-      {
-        name: "B3",
-        role: "Regional Manager",
-        earnings: 7800,
-        teamSize: 0, // Will be calculated
-        children: Array.from({ length: getRandomChildrenCount() }, (_, i) => ({
-          name: `C${i + 6}`,
-          role: "Team Lead",
-          earnings: getRandomEarnings(),
-          teamSize: getRandomTeamSize(),
-        })),
-      },
-      {
-        name: "B4",
-        role: "Regional Manager",
-        earnings: 6500,
-        teamSize: 0, // Will be calculated
-        children: Array.from({ length: getRandomChildrenCount() }, (_, i) => ({
-          name: `C${i + 9}`,
-          role: "Team Lead",
-          earnings: getRandomEarnings(),
-          teamSize: getRandomTeamSize(),
-        })),
-      },
-    ];
+    const MAX_LEVEL = 2; // 0,1,2 => three levels
 
-    // Calculate team sizes for each child
-    children.forEach((child) => {
-      child.teamSize = calculateTeamSize(child) - 1; // Subtract 1 to exclude the child itself
+    const createNode = (
+      name: string,
+      role: string,
+      earnings: number,
+      level: number
+    ): TreeNode => {
+      const children =
+        level < MAX_LEVEL
+          ? Array.from({ length: getRandomChildrenCount() }, (_, i) => {
+              // decide child naming & role based on next level
+              const childLevel = level + 1;
+              const childName =
+                childLevel === 1 ? `B${i + 1}` : `C${i + 1}`; // level1 B, level2 C
+              const childRole =
+                childLevel === 1 ? "Regional Manager" : "Team Lead";
+              const childEarnings =
+                childLevel === 1
+                  ? getRandomEarnings() + 5000
+                  : getRandomEarnings() + 2000;
+
+              return createNode(childName, childRole, childEarnings, childLevel);
+            })
+          : [];
+
+      const node: TreeNode = {
+        name,
+        role,
+        earnings,
+        teamSize: 0,
+        children: children.length > 0 ? children : undefined,
+      };
+
+      return node;
+    };
+
+    // root with 4 regional managers
+    const regionalManagers = Array.from({ length: 4 }, (_, i) =>
+      createNode(
+        `B${i + 1}`,
+        "Regional Manager",
+        getRandomEarnings() + 5000,
+        1
+      )
+    );
+
+    // set team size for regional managers
+    regionalManagers.forEach((m) => {
+      m.teamSize = calculateTeamSize(m) - 1;
     });
 
     const treeData: TreeNode = {
       name: "A",
       role: "Chief Executive",
       earnings: 15420,
-      teamSize: 0, // Will be calculated
-      children,
+      teamSize: 0,
+      children: regionalManagers,
     };
 
-    // Calculate total team size
-    treeData.teamSize = calculateTeamSize(treeData) - 1; // Subtract 1 to exclude A itself
+    treeData.teamSize = calculateTeamSize(treeData) - 1;
 
     return treeData;
   };
 
-  // Generate the tree data
   const treeData = generateTreeData();
 
-  // Filter data based on expansion state
-  const getFilteredData = (data: TreeNode, level: number = 0): TreeNode => {
-    if (!isExpanded && level >= 2) {
-      return { ...data, children: undefined };
-    }
-
-    if (data.children) {
-      return {
-        ...data,
-        children: data.children.map((child) =>
-          getFilteredData(child, level + 1)
-        ),
-      };
-    }
-
-    return data;
-  };
-
-  const filteredData = getFilteredData(treeData);
-
-  // Update dimensions on mount and resize
   useEffect(() => {
     const updateDimensions = () => {
       if (treeContainerRef.current) {
-        const { width, height } =
-          treeContainerRef.current.getBoundingClientRect();
+        const { width, height } = treeContainerRef.current.getBoundingClientRect();
         setDimensions({ width, height });
       }
     };
@@ -150,99 +108,282 @@ const MLMTree: React.FC<MLMTreeProps> = ({ className }) => {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
-  // Auto-expand after component mounts
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsExpanded(true);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
+  // Custom diagonal cubic Bezier path for horizontal orientation
+  const customDiagonalPath = (linkDatum: any) => {
+    const source = linkDatum.source;
+    const target = linkDatum.target;
 
-  const handleToggle = () => {
-    setIsExpanded(!isExpanded);
+    const sourceX = source.x;
+    const sourceY = source.y;
+    const targetX = target.x;
+    const targetY = target.y;
+
+    const midY = (sourceY + targetY) / 2;
+
+    // note: react-d3-tree horizontal uses (y = horizontal, x = vertical)
+    return `M ${sourceY} ${sourceX}
+            C ${midY} ${sourceX}
+              ${midY} ${targetX}
+              ${targetY} ${targetX}`;
   };
 
-  const renderCustomNode = ({ nodeDatum, toggleNode }: any) => {
-    const isManager =
-      nodeDatum.role === "Chief Executive" ||
-      nodeDatum.role === "Regional Manager";
+  const renderCustomNode = ({ nodeDatum }: any) => {
+    const isCEO = nodeDatum.role === "Chief Executive";
+    const isManager = nodeDatum.role === "Regional Manager";
     const isTeamLead = nodeDatum.role === "Team Lead";
+    const isMember = nodeDatum.role === "Member";
+    const isSupervisor = nodeDatum.role === "Supervisor";
+    const isCoordinator = nodeDatum.role === "Coordinator";
+
+    const nodeRadius = isCEO
+      ? 30
+      : isManager
+      ? 25
+      : isTeamLead
+      ? 20
+      : isSupervisor
+      ? 18
+      : isCoordinator
+      ? 16
+      : 14;
+
+    const textY = isCEO
+      ? 50
+      : isManager
+      ? 45
+      : isTeamLead
+      ? 40
+      : isSupervisor
+      ? 38
+      : isCoordinator
+      ? 36
+      : 34;
+
+    const fontSize = isCEO
+      ? "16"
+      : isManager
+      ? "14"
+      : isTeamLead
+      ? "12"
+      : isSupervisor
+      ? "11"
+      : isCoordinator
+      ? "10"
+      : "9";
+
+    const displayRole = isCEO
+      ? "CEO"
+      : isManager
+      ? "Manager"
+      : isTeamLead
+      ? "Team Lead"
+      : isSupervisor
+      ? "Supervisor"
+      : isCoordinator
+      ? "Coordinator"
+      : "Member";
 
     return (
       <g>
-        {/* Node circle */}
         <circle
-          r={isManager ? 30 : isTeamLead ? 24 : 18}
-          fill={isManager ? "#198c64" : isTeamLead ? "#47a383" : "#75baa2"}
-          stroke="#fff"
-          strokeWidth="2.5"
+          r={nodeRadius}
+          fill="#1f2937"
+          stroke="none"
           className={styles.nodeCircle}
         />
 
-        {/* Node content */}
         <text
           textAnchor="middle"
-          dy=".35em"
           x="0"
-          y="0"
-          fill="white"
-          fontSize={isManager ? "12" : isTeamLead ? "10" : "8"}
-          fontWeight="600"
+          y={textY}
+          fill="#1f2937"
+          fontSize={fontSize}
+          fontWeight="400"
           className={styles.nodeText}
         >
-          {nodeDatum.name.split(" ")[0]}
+          {displayRole}
         </text>
 
-        {/* Earnings label for managers */}
-        {isManager && (
-          <g transform="translate(0, 40)">
-            <rect
-              x="-35"
-              y="-8"
-              width="70"
-              height="16"
-              rx="8"
-              fill="rgba(25, 140, 100, 0.9)"
-              className={styles.earningsLabel}
-            />
+        {isCEO && (
+          <g transform="translate(0, 65)">
             <text
               textAnchor="middle"
-              dy=".35em"
               x="0"
               y="0"
-              fill="white"
-              fontSize="8"
-              fontWeight="600"
-              className={styles.earningsText}
+              fill="#6b7280"
+              fontSize="10"
+              fontWeight="300"
+              className={styles.detailText}
             >
-              ${nodeDatum.earnings.toLocaleString()}
+              Department: Executive
+            </text>
+            <text
+              textAnchor="middle"
+              x="0"
+              y="15"
+              fill="#6b7280"
+              fontSize="10"
+              fontWeight="300"
+              className={styles.detailText}
+            >
+              Earnings: ${nodeDatum.earnings?.toLocaleString?.() ?? ""}
+            </text>
+            <text
+              textAnchor="middle"
+              x="0"
+              y="30"
+              fill="#6b7280"
+              fontSize="10"
+              fontWeight="300"
+              className={styles.detailText}
+            >
+              Team Size: {nodeDatum.teamSize} members
             </text>
           </g>
         )}
 
-        {/* Team size label for team leads */}
-        {isTeamLead && (
-          <g transform="translate(0, 35)">
-            <rect
-              x="-30"
-              y="-6"
-              width="60"
-              height="12"
-              rx="6"
-              fill="rgba(71, 163, 131, 0.9)"
-              className={styles.teamLabel}
-            />
+        {isManager && (
+          <g transform="translate(0, 60)">
             <text
               textAnchor="middle"
-              dy=".35em"
               x="0"
               y="0"
-              fill="white"
-              fontSize="7"
-              fontWeight="600"
-              className={styles.teamText}
+              fill="#6b7280"
+              fontSize="9"
+              fontWeight="300"
+              className={styles.detailText}
             >
-              {nodeDatum.teamSize} members
+              Department: Regional
+            </text>
+            <text
+              textAnchor="middle"
+              x="0"
+              y="12"
+              fill="#6b7280"
+              fontSize="9"
+              fontWeight="300"
+              className={styles.detailText}
+            >
+              Earnings: ${nodeDatum.earnings?.toLocaleString?.() ?? ""}
+            </text>
+            <text
+              textAnchor="middle"
+              x="0"
+              y="24"
+              fill="#6b7280"
+              fontSize="9"
+              fontWeight="300"
+              className={styles.detailText}
+            >
+              Team Size: {nodeDatum.teamSize} members
+            </text>
+          </g>
+        )}
+
+        {isTeamLead && (
+          <g transform="translate(0, 55)">
+            <text
+              textAnchor="middle"
+              x="0"
+              y="0"
+              fill="#6b7280"
+              fontSize="8"
+              fontWeight="300"
+              className={styles.detailText}
+            >
+              Department: Operations
+            </text>
+            <text
+              textAnchor="middle"
+              x="0"
+              y="10"
+              fill="#6b7280"
+              fontSize="8"
+              fontWeight="300"
+              className={styles.detailText}
+            >
+              Team Size: {nodeDatum.teamSize} members
+            </text>
+            <text
+              textAnchor="middle"
+              x="0"
+              y="20"
+              fill="#6b7280"
+              fontSize="8"
+              fontWeight="300"
+              className={styles.detailText}
+            >
+              Weekly Hours: 40
+            </text>
+          </g>
+        )}
+
+        {isSupervisor && (
+          <g transform="translate(0, 50)">
+            <text
+              textAnchor="middle"
+              x="0"
+              y="0"
+              fill="#6b7280"
+              fontSize="7"
+              fontWeight="300"
+              className={styles.detailText}
+            >
+              Department: Field
+            </text>
+            <text
+              textAnchor="middle"
+              x="0"
+              y="9"
+              fill="#6b7280"
+              fontSize="7"
+              fontWeight="300"
+              className={styles.detailText}
+            >
+              Team Size: {nodeDatum.teamSize} members
+            </text>
+          </g>
+        )}
+
+        {isCoordinator && (
+          <g transform="translate(0, 45)">
+            <text
+              textAnchor="middle"
+              x="0"
+              y="0"
+              fill="#6b7280"
+              fontSize="7"
+              fontWeight="300"
+              className={styles.detailText}
+            >
+              Department: Support
+            </text>
+            <text
+              textAnchor="middle"
+              x="0"
+              y="9"
+              fill="#6b7280"
+              fontSize="7"
+              fontWeight="300"
+              className={styles.detailText}
+            >
+              Team Size: {nodeDatum.teamSize} members
+            </text>
+          </g>
+        )}
+
+        {isMember && (
+          <g transform="translate(0, 40)">
+            <text
+              textAnchor="middle"
+              x="0"
+              y="0"
+              fill="#6b7280"
+              fontSize="6"
+              fontWeight="300"
+              className={styles.detailText}
+            >
+              Department: General
             </text>
           </g>
         )}
@@ -255,17 +396,17 @@ const MLMTree: React.FC<MLMTreeProps> = ({ className }) => {
       <div className={styles.treeWrapper} ref={treeContainerRef}>
         {dimensions.width > 0 && (
           <Tree
-            data={filteredData}
-            orientation="vertical"
-            translate={{ x: dimensions.width / 2, y: dimensions.height / 6 }}
-            pathFunc="step"
+            data={treeData}
+            orientation="horizontal"
+            translate={{ x: 100, y: dimensions.height / 2 }}
+            pathFunc={customDiagonalPath}
             pathClassFunc={() => styles.treeLink}
-            nodeSize={{ x: 180, y: 100 }}
-            separation={{ siblings: 0.8, nonSiblings: 1.0 }}
-            transitionDuration={800}
+            nodeSize={{ x: 150, y: 100 }}
+            separation={{ siblings: 1.8, nonSiblings: 2.5 }}
+            transitionDuration={600}
             renderCustomNodeElement={renderCustomNode}
-            zoom={1.2}
-            scaleExtent={{ min: 0.8, max: 1.8 }}
+            zoom={0.6}
+            scaleExtent={{ min: 0.3, max: 1.0 }}
             enableLegacyTransitions={true}
           />
         )}

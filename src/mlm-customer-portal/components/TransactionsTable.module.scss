@@ -1,0 +1,320 @@
+.transactionsTableContainer {
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.tableActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.tableInfo {
+  h3 {
+    margin: 0 0 4px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+  }
+}
+
+.transactionCount {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.exportButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.exportButton {
+  padding: 8px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.agGridContainer {
+  height: 400px;
+  width: 100%;
+}
+
+.tableRow {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #f8fafc !important;
+  }
+}
+
+// Transaction ID styling
+.transactionId {
+  font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+  font-size: 12px;
+  color: #6366f1;
+  font-weight: 600;
+}
+
+// Type badge styling
+.typeBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.type-purchase {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.type-commission {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.type-bonus {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.type-withdrawal {
+  background: #fce7f3;
+  color: #be185d;
+}
+
+.type-refund {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.typeDefault {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+// Status badge styling
+.statusBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-failed {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.status-cancelled {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.statusDefault {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+// Amount styling
+.amount {
+  font-weight: 600;
+  color: #059669;
+  font-size: 14px;
+}
+
+// Package info styling
+.packageInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.packageName {
+  font-weight: 600;
+  color: #111827;
+  font-size: 14px;
+}
+
+.packageLevel {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+// Payment method badge styling
+.methodBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.method-bank_transfer {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.method-razorpay {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.method-cashfree {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.method-wallet {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.methodDefault {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+// Description styling
+.description {
+  display: block;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #374151;
+  font-size: 13px;
+}
+
+// Date info styling
+.dateInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.date {
+  font-weight: 500;
+  color: #111827;
+  font-size: 13px;
+}
+
+.time {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+// AG Grid custom styling
+:global(.ag-theme-alpine) {
+  --ag-header-background-color: #f9fafb;
+  --ag-header-foreground-color: #374151;
+  --ag-border-color: #e5e7eb;
+  --ag-row-hover-color: #f8fafc;
+  --ag-selected-row-background-color: #eff6ff;
+  --ag-font-size: 12px;
+  --ag-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+}
+
+:global(.ag-theme-alpine .ag-header-cell) {
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6b7280;
+}
+
+:global(.ag-theme-alpine .ag-cell) {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+}
+
+:global(.ag-theme-alpine .ag-row) {
+  border-bottom: 1px solid #f3f4f6;
+}
+
+:global(.ag-theme-alpine .ag-row:hover) {
+  background-color: #f8fafc;
+}
+
+:global(.ag-theme-alpine .ag-pagination-panel) {
+  padding: 12px 20px;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+:global(.ag-overlay-loading-center) {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+:global(.ag-overlay-no-rows-center) {
+  font-size: 14px;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .tableActions {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .exportButtons {
+    justify-content: center;
+  }
+
+  .agGridContainer {
+    height: 300px;
+  }
+
+  .description {
+    max-width: 120px;
+  }
+}

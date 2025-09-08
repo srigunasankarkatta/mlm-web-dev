@@ -59,6 +59,16 @@ export const API_CONFIG = {
             commissions: '/mlm/commissions',
             network: '/mlm/network',
         },
+        transactions: {
+            list: '/transactions',
+            package: (packageId: string | number) => `/transactions/package/${packageId}`,
+            details: (id: string | number) => `/transactions/${id}`,
+            summary: '/transactions/summary',
+            export: '/transactions/export',
+            types: '/transactions/types',
+            paymentMethods: '/transactions/payment-methods',
+            statuses: '/transactions/statuses',
+        },
     },
 
     // Request timeouts
