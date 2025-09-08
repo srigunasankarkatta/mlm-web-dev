@@ -4,62 +4,76 @@
 
 .customerPortalContainer {
   min-height: 100vh;
-  background: linear-gradient(135deg, $bg-primary 0%, $bg-secondary 20%, $bg-tertiary 100%);
+  background: linear-gradient(
+    135deg,
+    $bg-primary 0%,
+    $bg-secondary 20%,
+    $bg-tertiary 100%
+  );
   position: relative;
   overflow-x: hidden;
-  
+
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
-      radial-gradient(circle at 20% 80%, rgba($primary-200, 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba($primary-300, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, rgba($primary-100, 0.08) 0%, transparent 50%);
+    background: radial-gradient(
+        circle at 20% 80%,
+        rgba($primary-200, 0.15) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 80% 20%,
+        rgba($primary-300, 0.1) 0%,
+        transparent 50%
+      ),
+      radial-gradient(
+        circle at 40% 40%,
+        rgba($primary-100, 0.08) 0%,
+        transparent 50%
+      );
     pointer-events: none;
   }
 }
 
 // Professional Navigation Bar
-  .navigation {
-    background: rgba($white, 0.95);
-    backdrop-filter: blur(20px);
-    border-bottom: 2px solid $border-light;
-    box-shadow: 
-      0 4px 20px $shadow-light,
-      0 1px 0 rgba($primary-100, 0.1);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-  
+.navigation {
+  background: rgba($white, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 2px solid $border-light;
+  box-shadow: 0 4px 20px $shadow-light, 0 1px 0 rgba($primary-100, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
   .navContainer {
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 1.5rem;
-    
+
     @media (min-width: 768px) {
       padding: 0 2rem;
     }
   }
-  
+
   .navContent {
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 4.5rem;
   }
-  
+
   .logo {
     display: flex;
     align-items: center;
     gap: 1rem;
     text-decoration: none;
-    
+
     .logoIcon {
       width: 3rem;
       height: 3rem;
@@ -68,19 +82,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 
-        0 8px 25px rgba($primary-500, 0.25),
+      box-shadow: 0 8px 25px rgba($primary-500, 0.25),
         inset 0 1px 0 rgba($white, 0.2);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      
+
       &:hover {
         transform: scale(1.05) rotate(5deg);
-        box-shadow: 
-          0 12px 35px rgba($primary-500, 0.35),
+        box-shadow: 0 12px 35px rgba($primary-500, 0.35),
           inset 0 1px 0 rgba($white, 0.3);
       }
     }
-    
+
     .logoText {
       font-size: 1.75rem;
       font-weight: 800;
@@ -91,16 +103,16 @@
       letter-spacing: -0.025em;
     }
   }
-  
+
   .navItems {
     display: none;
-    
+
     @media (min-width: 768px) {
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
-    
+
     .navItem {
       position: relative;
       text-decoration: none;
@@ -112,27 +124,27 @@
       border-radius: 12px;
       background: transparent;
       // border: 2px solid transparent;
-      
+
       &:hover {
         color: $primary-600;
         // background: rgba($primary-50, 0.8);
         border-color: rgba($primary-200, 0.5);
         transform: translateY(-2px);
-        // box-shadow: 
+        // box-shadow:
         //   0 8px 25px rgba($primary-500, 0.15),
         //   inset 0 1px 0 rgba($primary-100, 0.2);
       }
-      
+
       &.active {
         color: $primary-700;
         // background: rgba($primary-100, 0.9);
         border-color: $primary-300;
-        // box-shadow: 
+        // box-shadow:
         //   0 8px 25px rgba($primary-500, 0.2),
         //   inset 0 1px 0 rgba($primary-200, 0.3);
-        
+
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           bottom: -2px;
           left: 50%;
@@ -146,16 +158,16 @@
       }
     }
   }
-  
+
   .authButtons {
     display: none;
-    
+
     @media (min-width: 768px) {
       display: flex;
       align-items: center;
       gap: 1rem;
     }
-    
+
     .loginBtn {
       color: $primary-600;
       font-weight: 600;
@@ -168,18 +180,17 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      
+
       &:hover {
         color: $primary-700;
         background: rgba($primary-100, 0.9);
         border-color: $primary-300;
         transform: translateY(-2px);
-        box-shadow: 
-          0 8px 25px rgba($primary-500, 0.15),
+        box-shadow: 0 8px 25px rgba($primary-500, 0.15),
           inset 0 1px 0 rgba($primary-200, 0.2);
       }
     }
-    
+
     .getStartedBtn {
       background: $gradient-primary;
       color: $white;
@@ -189,56 +200,99 @@
       text-decoration: none;
       border: 2px solid transparent;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 
-        0 8px 25px rgba($primary-500, 0.25),
+      box-shadow: 0 8px 25px rgba($primary-500, 0.25),
         inset 0 1px 0 rgba($white, 0.2);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      
+
       &:hover {
         transform: translateY(-3px);
-        box-shadow: 
-          0 12px 35px rgba($primary-500, 0.35),
+        box-shadow: 0 12px 35px rgba($primary-500, 0.35),
           inset 0 1px 0 rgba($white, 0.3);
         background: linear-gradient(135deg, $primary-600 0%, $primary-700 100%);
       }
     }
   }
-  
+
+  // User Info Styles
+  .userInfo {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: rgba($primary-50, 0.6);
+    border: 1px solid rgba($primary-200, 0.4);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba($primary-100, 0.8);
+      border-color: $primary-300;
+    }
+  }
+
+  .userName {
+    color: $primary-700;
+    font-weight: 600;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
+  }
+
+  .mobileUserInfo {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba($primary-50, 0.6);
+    border: 1px solid rgba($primary-200, 0.4);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+  }
+
+  .mobileUserName {
+    color: $primary-700;
+    font-weight: 600;
+    font-size: 0.875rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+  }
+
   .mobileMenuButton {
     display: block;
-    
+
     @media (min-width: 768px) {
       display: none;
     }
-    
+
     color: $primary-600;
     padding: 0.75rem;
     border-radius: 12px;
     background: rgba($primary-50, 0.8);
     border: 2px solid rgba($primary-200, 0.5);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     &:hover {
       color: $primary-700;
       background: rgba($primary-100, 0.9);
       border-color: $primary-300;
       transform: scale(1.05);
-      box-shadow: 
-        0 8px 25px rgba($primary-500, 0.15),
+      box-shadow: 0 8px 25px rgba($primary-500, 0.15),
         inset 0 1px 0 rgba($primary-200, 0.2);
     }
   }
-  
+
   .mobileMenu {
     border-top: 2px solid $border-light;
     background: rgba($white, 0.98);
     backdrop-filter: blur(20px);
-    
+
     .mobileNavItems {
       padding: 1.5rem 1rem;
-      
+
       .mobileNavItem {
         display: block;
         padding: 1rem 1.25rem;
@@ -249,36 +303,34 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         background: rgba($primary-50, 0.5);
         border: 2px solid transparent;
-        
+
         &.active {
           color: $primary-700;
           background: rgba($primary-100, 0.9);
           border-color: $primary-300;
-          box-shadow: 
-            0 8px 25px rgba($primary-500, 0.15),
+          box-shadow: 0 8px 25px rgba($primary-500, 0.15),
             inset 0 1px 0 rgba($primary-200, 0.2);
         }
-        
+
         &:not(.active) {
           color: $text-secondary;
-          
+
           &:hover {
             color: $primary-600;
             background: rgba($primary-100, 0.8);
             border-color: rgba($primary-200, 0.5);
             transform: translateY(-2px);
-            box-shadow: 
-              0 8px 25px rgba($primary-500, 0.1),
+            box-shadow: 0 8px 25px rgba($primary-500, 0.1),
               inset 0 1px 0 rgba($primary-100, 0.1);
           }
         }
       }
-      
+
       .mobileAuthButtons {
         padding-top: 1.5rem;
         border-top: 2px solid $border-light;
         margin-top: 1.5rem;
-        
+
         .mobileLoginBtn {
           width: 100%;
           text-align: left;
@@ -291,7 +343,7 @@
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           text-decoration: none;
           display: block;
-          
+
           &:hover {
             color: $primary-700;
             background: rgba($primary-100, 0.9);
@@ -299,7 +351,7 @@
             transform: translateY(-2px);
           }
         }
-        
+
         .mobileGetStartedBtn {
           width: 100%;
           background: $gradient-primary;
@@ -313,9 +365,13 @@
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           text-decoration: none;
           display: block;
-          
+
           &:hover {
-            background: linear-gradient(135deg, $primary-600 0%, $primary-700 100%);
+            background: linear-gradient(
+              135deg,
+              $primary-600 0%,
+              $primary-700 100%
+            );
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba($primary-500, 0.25);
           }
@@ -332,11 +388,11 @@
   padding-top: 6.5rem;
   position: relative;
   z-index: 1;
-  
+
   // @media (min-width: 768px) {
   //   padding: 3rem 2rem;
   // }
-  
+
   // @media (min-width: 1024px) {
   //   padding: 4rem 2rem;
   //   padding-top: 7rem;

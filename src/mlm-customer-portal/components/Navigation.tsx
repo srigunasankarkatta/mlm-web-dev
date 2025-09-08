@@ -13,11 +13,13 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     CustomerAuthService.isAuthenticated()
   );
+  const [user, setUser] = useState(CustomerAuthService.getCurrentUser());
 
   // Listen for authentication state changes
   useEffect(() => {
     const checkAuthStatus = () => {
       setIsAuthenticated(CustomerAuthService.isAuthenticated());
+      setUser(CustomerAuthService.getCurrentUser());
     };
 
     // Check auth status on mount and when location changes
@@ -109,9 +111,11 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
           <div className={styles.authButtons}>
             {isAuthenticated ? (
               <>
-                <Link to="/customer/dashboard" className={styles.loginBtn}>
-                  Dashboard
-                </Link>
+                <div className={styles.userInfo}>
+                  <span className={styles.userName}>
+                    {user?.name || "User"}
+                  </span>
+                </div>
                 <button onClick={handleLogout} className={styles.getStartedBtn}>
                   Logout
                 </button>
@@ -169,13 +173,11 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
               <div className={styles.mobileAuthButtons}>
                 {isAuthenticated ? (
                   <>
-                    <Link
-                      to="/customer/dashboard"
-                      className={styles.mobileLoginBtn}
-                      onClick={closeMobileMenu}
-                    >
-                      Dashboard
-                    </Link>
+                    <div className={styles.mobileUserInfo}>
+                      <span className={styles.mobileUserName}>
+                        {user?.name || "User"}
+                      </span>
+                    </div>
                     <button
                       onClick={() => {
                         handleLogout();
