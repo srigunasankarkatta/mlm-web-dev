@@ -7,6 +7,8 @@ import ProfilePage from "./pages/ProfilePage";
 import FAQPage from "./pages/FAQPage";
 import NetworkPage from "./pages/NetworkPage";
 import IncomeCalculatorPage from "./pages/IncomeCalculatorPage";
+import WalletPage from "./pages/WalletPage";
+import WalletDemoPage from "./pages/WalletDemoPage";
 
 import { ToastProvider } from "./components/ToastContext";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -64,6 +66,15 @@ const CustomerPortal: React.FC = () => {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/wallet"
+              element={
+                <ProtectedRoute>
+                  <WalletPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/wallet-demo" element={<WalletDemoPage />} />
             <Route path="/faq" element={<FAQPage />} />
           </Routes>
         </main>

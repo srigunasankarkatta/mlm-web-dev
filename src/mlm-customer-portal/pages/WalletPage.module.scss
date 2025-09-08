@@ -1,0 +1,11 @@
+@import "../../styles/color-palette.scss";
+
+.walletPage {
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    rgba($primary-50, 0.1),
+    rgba($primary-100, 0.05)
+  );
+  padding: 0;
+}

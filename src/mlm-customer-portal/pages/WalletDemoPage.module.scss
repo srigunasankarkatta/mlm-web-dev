@@ -1,0 +1,36 @@
+@import "../../styles/color-palette.scss";
+
+.walletDemoPage {
+  min-height: 100vh;
+  background: linear-gradient(
+    135deg,
+    rgba($primary-50, 0.1),
+    rgba($primary-100, 0.05)
+  );
+  padding: 2rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: $white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba($primary-500, 0.08);
+  border: 1px solid rgba($primary-200, 0.2);
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0 0 1rem 0;
+  }
+
+  p {
+    font-size: 1.125rem;
+    color: $text-muted;
+    margin: 0;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}

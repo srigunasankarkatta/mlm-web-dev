@@ -20,8 +20,21 @@ export const useIncomeSummary = (): UseQueryResult<IncomeHistoryResponse['data']
     return useQuery({
         queryKey: ['incomeSummary'],
         queryFn: async () => {
-            const response = await IncomeService.getIncomeHistory({ per_page: 1 });
-            return response.data.summary;
+            try {
+                const response = await IncomeService.getIncomeHistory({ per_page: 1 });
+                return response?.data?.summary || {
+                    total_income: "0.00",
+                    total_transactions: 0,
+                    income_by_type: {}
+                };
+            } catch (error) {
+                console.error('Error fetching income summary:', error);
+                return {
+                    total_income: "0.00",
+                    total_transactions: 0,
+                    income_by_type: {}
+                };
+            }
         },
         staleTime: 5 * 60 * 1000, // 5 minutes
         gcTime: 10 * 60 * 1000, // 10 minutes

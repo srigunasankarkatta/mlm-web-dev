@@ -1,0 +1,280 @@
+@import "../../styles/color-palette.scss";
+
+.withdrawalForm {
+  background: $white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba($primary-500, 0.08);
+  border: 1px solid rgba($primary-200, 0.2);
+  overflow: hidden;
+}
+
+.formHeader {
+  padding: 2rem 2rem 1rem 2rem;
+  background: linear-gradient(
+    135deg,
+    rgba($primary-50, 0.3),
+    rgba($primary-100, 0.1)
+  );
+  border-bottom: 1px solid rgba($primary-200, 0.2);
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $text-primary;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    color: $text-muted;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+}
+
+.form {
+  padding: 2rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+
+  label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $text-secondary;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.formInput,
+.formSelect,
+.formTextarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba($primary-200, 0.3);
+  border-radius: 0.5rem;
+  background: $white;
+  font-size: 0.875rem;
+  color: $text-primary;
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-500;
+    box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
+  }
+
+  &:hover {
+    border-color: rgba($primary-300, 0.5);
+  }
+
+  &.error {
+    border-color: $error-500;
+    box-shadow: 0 0 0 3px rgba($error-500, 0.1);
+  }
+
+  &::placeholder {
+    color: rgba($text-muted, 0.6);
+  }
+}
+
+.formTextarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.amountInput {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .currencySymbol {
+    position: absolute;
+    left: 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $text-muted;
+    z-index: 1;
+  }
+
+  .formInput {
+    padding-left: 2.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+}
+
+.amountLimits {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: $text-muted;
+
+  span {
+    padding: 0.25rem 0.5rem;
+    background: rgba($primary-100, 0.3);
+    border-radius: 0.25rem;
+    font-weight: 500;
+  }
+}
+
+.feeCalculation {
+  background: rgba($primary-50, 0.3);
+  border: 1px solid rgba($primary-200, 0.3);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+
+  .feeRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: $text-secondary;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .feeRowTotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba($primary-200, 0.3);
+    font-size: 1rem;
+    font-weight: 600;
+    color: $text-primary;
+  }
+}
+
+.paymentDetails {
+  margin-bottom: 1.5rem;
+
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba($primary-200, 0.3);
+  }
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.errorText {
+  display: block;
+  font-size: 0.75rem;
+  color: $error-500;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+.formActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid rgba($primary-200, 0.3);
+}
+
+.resetButton,
+.submitButton {
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.resetButton {
+  background: $white;
+  color: $text-secondary;
+  border: 1px solid rgba($primary-200, 0.3);
+
+  &:hover:not(:disabled) {
+    background: rgba($primary-50, 0.3);
+    border-color: rgba($primary-300, 0.5);
+  }
+}
+
+.submitButton {
+  background: $primary-500;
+  color: $white;
+
+  &:hover:not(:disabled) {
+    background: $primary-600;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba($primary-500, 0.3);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .formHeader {
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
+
+    h2 {
+      font-size: 1.25rem;
+    }
+  }
+
+  .form {
+    padding: 1.5rem;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .formActions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .resetButton,
+  .submitButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .formHeader {
+    padding: 1rem 1rem 0.75rem 1rem;
+  }
+
+  .form {
+    padding: 1rem;
+  }
+
+  .amountLimits {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .feeCalculation {
+    padding: 0.75rem;
+  }
+}

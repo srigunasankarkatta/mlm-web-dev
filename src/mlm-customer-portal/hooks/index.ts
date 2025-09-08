@@ -14,3 +14,16 @@ export {
     usePaymentMethods,
     useTransactionStatuses
 } from './useTransactions';
+
+export {
+    useWalletBalance,
+    useWalletTransactions,
+    useWalletSummary,
+    useDashboardStats,
+    useWithdrawals,
+    useWithdrawalLimits,
+    useWithdrawalRequest,
+    useWalletState,
+    useWalletUtils,
+    WALLET_QUERY_KEYS
+} from './useWallet';

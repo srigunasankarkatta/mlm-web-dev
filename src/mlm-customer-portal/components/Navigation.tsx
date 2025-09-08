@@ -52,6 +52,7 @@ const Navigation: React.FC<NavigationProps> = ({ className }) => {
       ? [
           { path: "/customer/dashboard", label: "Dashboard" },
           { path: "/customer/network", label: "Network" },
+          { path: "/customer/wallet", label: "Wallet" },
           { path: "/customer/profile", label: "Profile" },
         ]
       : []),

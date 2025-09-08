@@ -4,6 +4,7 @@ export { default as customerPackageService } from './package-service';
 export { PaymentService } from './payment-service';
 export { default as ProfileService } from './profile-service';
 export { default as transactionsService } from './transactions-service';
+export { default as WalletService } from './wallet-service';
 export { defaultApiService, generalApiService, createCustomApiService } from './api-service-factory';
 export { API_CONFIG, getBaseURL, getCustomerBaseURL, buildApiUrl, buildCustomerApiUrl } from './api-config';
 
@@ -52,8 +53,17 @@ export type {
 } from './profile-service';
 
 export type {
-  Transaction,
-  TransactionsResponse,
-  TransactionsParams,
-  TransactionsListResponse,
-} from './transactions-service';
+  WalletBalance,
+  WalletsData,
+  WalletTransaction,
+  WalletTransactionsResponse,
+  WalletSummary,
+  DashboardStats,
+  WithdrawalRequest,
+  WithdrawalResponse,
+  Withdrawal,
+  WithdrawalsResponse,
+  WithdrawalLimits,
+  TransactionQueryParams,
+  WithdrawalQueryParams,
+} from './wallet-service';
