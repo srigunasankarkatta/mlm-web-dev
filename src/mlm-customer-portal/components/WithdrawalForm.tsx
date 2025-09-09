@@ -41,7 +41,8 @@ const WithdrawalForm: React.FC<WithdrawalFormProps> = ({
   // Calculate fee and net amount when amount changes
   useEffect(() => {
     if (limits && formData.amount > 0) {
-      const feePercentage = parseFloat(limits.withdrawal_fee_percentage) / 100;
+      const feePercentage =
+        parseFloat(limits.withdrawal_fee_percentage || "0") / 100;
       const fee = formData.amount * feePercentage;
       const net = formData.amount - fee;
 
@@ -53,26 +54,44 @@ const WithdrawalForm: React.FC<WithdrawalFormProps> = ({
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
+    // Debug: Log limits data to understand what we're receiving
+    if (limits) {
+      console.log("Withdrawal limits data:", limits);
+    }
+
     // Amount validation
     if (!formData.amount || formData.amount <= 0) {
       newErrors.amount = "Amount is required and must be greater than 0";
     } else if (limits) {
-      const minAmount = parseFloat(limits.minimum_withdrawal);
-      const maxAmount = parseFloat(limits.maximum_withdrawal);
+      const minAmount = limits.minimum_withdrawal
+        ? parseFloat(limits.minimum_withdrawal)
+        : null;
+      const maxAmount = limits.maximum_withdrawal
+        ? parseFloat(limits.maximum_withdrawal)
+        : null;
+      const availableAmount = limits.available_for_withdrawal
+        ? parseFloat(limits.available_for_withdrawal)
+        : null;
 
-      if (formData.amount < minAmount) {
+      if (minAmount && !isNaN(minAmount) && formData.amount < minAmount) {
         newErrors.amount = `Minimum withdrawal amount is ${formatCurrency(
           minAmount
         )}`;
-      } else if (formData.amount > maxAmount) {
+      } else if (
+        maxAmount &&
+        !isNaN(maxAmount) &&
+        formData.amount > maxAmount
+      ) {
         newErrors.amount = `Maximum withdrawal amount is ${formatCurrency(
           maxAmount
         )}`;
       } else if (
-        formData.amount > parseFloat(limits.available_for_withdrawal)
+        availableAmount &&
+        !isNaN(availableAmount) &&
+        formData.amount > availableAmount
       ) {
         newErrors.amount = `Insufficient balance. Available: ${formatCurrency(
-          limits.available_for_withdrawal
+          availableAmount
         )}`;
       }
     }
@@ -89,15 +108,12 @@ const WithdrawalForm: React.FC<WithdrawalFormProps> = ({
     }
 
     if (!formData.payment_details.account_name.trim()) {
-      newErrors.account_name = "Account name is required";
+      newErrors.account_name = "Account holder name is required";
     }
 
     if (!formData.payment_details.routing_number.trim()) {
       newErrors.routing_number = "Routing number is required";
-    } 
-    // else if (!/^\d{10}$/.test(formData.payment_details.routing_number)) {
-    //   newErrors.routing_number = "Routing number must be 9 digits";
-    // }
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -150,9 +166,9 @@ const WithdrawalForm: React.FC<WithdrawalFormProps> = ({
       amount: 0,
       method: "bank_transfer",
       payment_details: {
-        account_name: "",
-        account_number: "",
         bank_name: "",
+        account_number: "",
+        account_name: "",
         routing_number: "",
       },
       user_notes: "",
@@ -212,26 +228,45 @@ const WithdrawalForm: React.FC<WithdrawalFormProps> = ({
           {errors.amount && (
             <span className={styles.errorText}>{errors.amount}</span>
           )}
-          {limits && (
+          {limits ? (
             <div className={styles.amountLimits}>
-              <span>Min: {formatCurrency(limits.minimum_withdrawal)}</span>
-              <span>Max: {formatCurrency(limits.maximum_withdrawal)}</span>
               <span>
-                Available: {formatCurrency(limits.available_for_withdrawal)}
+                Min:{" "}
+                {limits.minimum_withdrawal
+                  ? formatCurrency(limits.minimum_withdrawal)
+                  : "Not set"}
               </span>
+              <span>
+                Max:{" "}
+                {limits.maximum_withdrawal
+                  ? formatCurrency(limits.maximum_withdrawal)
+                  : "Not set"}
+              </span>
+              <span>
+                Available:{" "}
+                {limits.available_for_withdrawal
+                  ? formatCurrency(limits.available_for_withdrawal)
+                  : "Not available"}
+              </span>
+            </div>
+          ) : (
+            <div className={styles.amountLimits}>
+              <span>Loading withdrawal limits...</span>
             </div>
           )}
         </div>
 
         {/* Fee Calculation */}
-        {limits && formData.amount > 0 && (
+        {limits && formData.amount > 0 && limits.withdrawal_fee_percentage && (
           <div className={styles.feeCalculation}>
             <div className={styles.feeRow}>
               <span>Withdrawal Amount:</span>
               <span>{formatCurrency(formData.amount)}</span>
             </div>
             <div className={styles.feeRow}>
-              <span>Processing Fee ({limits.withdrawal_fee_percentage}%):</span>
+              <span>
+                Processing Fee ({limits.withdrawal_fee_percentage || "0"}%):
+              </span>
               <span>-{formatCurrency(calculatedFee)}</span>
             </div>
             <div className={styles.feeRowTotal}>
@@ -251,6 +286,8 @@ const WithdrawalForm: React.FC<WithdrawalFormProps> = ({
             className={styles.formSelect}
           >
             <option value="bank_transfer">Bank Transfer</option>
+            <option value="upi">UPI</option>
+            <option value="wallet">Digital Wallet</option>
           </select>
         </div>
 
@@ -302,7 +339,7 @@ const WithdrawalForm: React.FC<WithdrawalFormProps> = ({
 
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
-              <label htmlFor="account_name">Account Name</label>
+              <label htmlFor="account_name">Account Holder Name</label>
               <input
                 id="account_name"
                 type="text"
@@ -313,7 +350,7 @@ const WithdrawalForm: React.FC<WithdrawalFormProps> = ({
                 className={`${styles.formInput} ${
                   errors.account_name ? styles.error : ""
                 }`}
-                placeholder="Enter account name"
+                placeholder="Enter account holder name"
               />
               {errors.account_name && (
                 <span className={styles.errorText}>{errors.account_name}</span>
@@ -333,7 +370,6 @@ const WithdrawalForm: React.FC<WithdrawalFormProps> = ({
                   errors.routing_number ? styles.error : ""
                 }`}
                 placeholder="Enter routing number"
-                maxLength={10}
               />
               {errors.routing_number && (
                 <span className={styles.errorText}>

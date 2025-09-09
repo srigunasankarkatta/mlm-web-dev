@@ -202,6 +202,32 @@ export const useAdminWalletUtils = () => {
         return colorMap[category] || '#6B7280';
     };
 
+    const getStatusIcon = (status: string): string => {
+        const iconMap: { [key: string]: string } = {
+            pending: 'clock',
+            approved: 'check-circle',
+            rejected: 'x-circle',
+            processing: 'loader',
+            completed: 'check',
+            failed: 'alert-circle',
+            cancelled: 'x',
+        };
+        return iconMap[status.toLowerCase()] || 'help-circle';
+    };
+
+    const getStatusColor = (status: string): string => {
+        const colorMap: { [key: string]: string } = {
+            pending: 'warning',
+            approved: 'success',
+            rejected: 'error',
+            processing: 'info',
+            completed: 'success',
+            failed: 'error',
+            cancelled: 'error',
+        };
+        return colorMap[status.toLowerCase()] || 'default';
+    };
+
     return {
         formatCurrency,
         formatNumber,
@@ -211,6 +237,8 @@ export const useAdminWalletUtils = () => {
         getTransactionTypeColor,
         getTransactionCategoryIcon,
         getTransactionCategoryColor,
+        getStatusIcon,
+        getStatusColor,
     };
 };
 

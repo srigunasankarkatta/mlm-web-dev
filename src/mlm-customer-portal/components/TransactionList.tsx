@@ -142,7 +142,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                   <div className={styles.transactionDetails}>
                     <div className={styles.transactionHeader}>
                       <h4 className={styles.transactionDescription}>
-                        {transaction.description}
+                        {transaction.description || "No description"}
                       </h4>
                       <div className={styles.transactionAmount}>
                         <span
@@ -161,23 +161,27 @@ const TransactionList: React.FC<TransactionListProps> = ({
                     <div className={styles.transactionMeta}>
                       <div className={styles.transactionInfo}>
                         <span className={styles.walletName}>
-                          {transaction.wallet_display_name}
+                          {transaction.wallet_display_name || "Unknown Wallet"}
                         </span>
                         <span className={styles.separator}>•</span>
                         <span className={styles.category}>
-                          {transaction.category.replace("_", " ").toUpperCase()}
+                          {transaction.category
+                            ? transaction.category
+                                .replace("_", " ")
+                                .toUpperCase()
+                            : "N/A"}
                         </span>
                         <span className={styles.separator}>•</span>
                         <span className={styles.referenceId}>
-                          {transaction.reference_id}
+                          {transaction.reference_id || "N/A"}
                         </span>
                       </div>
                       <div className={styles.transactionTime}>
                         <span className={styles.date}>
-                          {transaction.formatted_date}
+                          {transaction.formatted_date || "N/A"}
                         </span>
                         <span className={styles.time}>
-                          {transaction.formatted_time}
+                          {transaction.formatted_time || "N/A"}
                         </span>
                       </div>
                     </div>
@@ -189,7 +193,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                         styles[getStatusColor(transaction.status)]
                       }`}
                     >
-                      {transaction.status.toUpperCase()}
+                      {(transaction.status || "unknown").toUpperCase()}
                     </span>
                   </div>
                 </div>
@@ -203,7 +207,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                           Balance Before:
                         </span>
                         <span className={styles.detailValue}>
-                          {formatCurrency(transaction.balance_before)}
+                          {formatCurrency(transaction.balance_before || "0")}
                         </span>
                       </div>
                       <div className={styles.detailRow}>
@@ -211,7 +215,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                           Balance After:
                         </span>
                         <span className={styles.detailValue}>
-                          {formatCurrency(transaction.balance_after)}
+                          {formatCurrency(transaction.balance_after || "0")}
                         </span>
                       </div>
                       <div className={styles.detailRow}>
@@ -219,7 +223,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                           Transaction Type:
                         </span>
                         <span className={styles.detailValue}>
-                          {transaction.type.toUpperCase()}
+                          {(transaction.type || "unknown").toUpperCase()}
                         </span>
                       </div>
                       <div className={styles.detailRow}>
@@ -227,7 +231,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                           Reference ID:
                         </span>
                         <span className={styles.detailValue}>
-                          {transaction.reference_id}
+                          {transaction.reference_id || "N/A"}
                         </span>
                       </div>
                     </div>
