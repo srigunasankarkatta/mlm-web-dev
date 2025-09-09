@@ -32,6 +32,12 @@ import AllPackages from "../mlm-dashboard-portal/features/package-management/All
 import CreatePackage from "../mlm-dashboard-portal/features/package-management/CreatePackage";
 import EditPackage from "../mlm-dashboard-portal/features/package-management/EditPackage";
 import PackageDetail from "../mlm-dashboard-portal/features/package-management/PackageDetail";
+import AdminWalletPage from "../mlm-dashboard-portal/pages/AdminWalletPage";
+import AdminWalletOverviewPage from "../mlm-dashboard-portal/pages/AdminWalletOverviewPage";
+import AdminWalletListPage from "../mlm-dashboard-portal/pages/AdminWalletListPage";
+import AdminWalletTransactionsPage from "../mlm-dashboard-portal/pages/AdminWalletTransactionsPage";
+import AdminWalletWithdrawalsPage from "../mlm-dashboard-portal/pages/AdminWalletWithdrawalsPage";
+import AdminWalletManualPage from "../mlm-dashboard-portal/pages/AdminWalletManualPage";
 import DashboardLayout from "../components/DashboardLayout";
 
 interface AppRouterProps {
@@ -131,6 +137,50 @@ const AppRouter: React.FC<AppRouterProps> = ({ currentUserRole }) => {
         element={
           <AdminDashboardLayout>
             <EditPackage />
+          </AdminDashboardLayout>
+        }
+      />
+      <Route
+        path="/admin/wallets"
+        element={<Navigate to="/admin/wallets/overview" replace />}
+      />
+      <Route
+        path="/admin/wallets/overview"
+        element={
+          <AdminDashboardLayout>
+            <AdminWalletOverviewPage />
+          </AdminDashboardLayout>
+        }
+      />
+      <Route
+        path="/admin/wallets/list"
+        element={
+          <AdminDashboardLayout>
+            <AdminWalletListPage />
+          </AdminDashboardLayout>
+        }
+      />
+      <Route
+        path="/admin/wallets/transactions"
+        element={
+          <AdminDashboardLayout>
+            <AdminWalletTransactionsPage />
+          </AdminDashboardLayout>
+        }
+      />
+      <Route
+        path="/admin/wallets/withdrawals"
+        element={
+          <AdminDashboardLayout>
+            <AdminWalletWithdrawalsPage />
+          </AdminDashboardLayout>
+        }
+      />
+      <Route
+        path="/admin/wallets/manual"
+        element={
+          <AdminDashboardLayout>
+            <AdminWalletManualPage />
           </AdminDashboardLayout>
         }
       />

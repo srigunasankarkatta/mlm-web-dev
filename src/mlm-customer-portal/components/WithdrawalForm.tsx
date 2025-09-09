@@ -19,17 +19,17 @@ const WithdrawalForm: React.FC<WithdrawalFormProps> = ({
   isLoading = false,
   className = "",
 }) => {
-  const { formatCurrency, formatNumber } = useWalletUtils();
+  const { formatCurrency } = useWalletUtils();
 
   const [formData, setFormData] = useState<WithdrawalRequest>({
     wallet_type: "earning",
     amount: 0,
     method: "bank_transfer",
     payment_details: {
-      bank_name: "",
+      account_name: "",
       account_number: "",
-      account_holder_name: "",
-      ifsc_code: "",
+      bank_name: "",
+      routing_number: "",
     },
     user_notes: "",
   });
@@ -88,19 +88,16 @@ const WithdrawalForm: React.FC<WithdrawalFormProps> = ({
       newErrors.account_number = "Account number must be 9-18 digits";
     }
 
-    if (!formData.payment_details.account_holder_name.trim()) {
-      newErrors.account_holder_name = "Account holder name is required";
+    if (!formData.payment_details.account_name.trim()) {
+      newErrors.account_name = "Account name is required";
     }
 
-    if (!formData.payment_details.ifsc_code.trim()) {
-      newErrors.ifsc_code = "IFSC code is required";
-    } else if (
-      !/^[A-Z]{4}0[A-Z0-9]{6}$/.test(
-        formData.payment_details.ifsc_code.toUpperCase()
-      )
-    ) {
-      newErrors.ifsc_code = "Invalid IFSC code format";
-    }
+    if (!formData.payment_details.routing_number.trim()) {
+      newErrors.routing_number = "Routing number is required";
+    } 
+    // else if (!/^\d{10}$/.test(formData.payment_details.routing_number)) {
+    //   newErrors.routing_number = "Routing number must be 9 digits";
+    // }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -153,10 +150,10 @@ const WithdrawalForm: React.FC<WithdrawalFormProps> = ({
       amount: 0,
       method: "bank_transfer",
       payment_details: {
-        bank_name: "",
+        account_name: "",
         account_number: "",
-        account_holder_name: "",
-        ifsc_code: "",
+        bank_name: "",
+        routing_number: "",
       },
       user_notes: "",
     });
@@ -254,8 +251,6 @@ const WithdrawalForm: React.FC<WithdrawalFormProps> = ({
             className={styles.formSelect}
           >
             <option value="bank_transfer">Bank Transfer</option>
-            <option value="upi">UPI</option>
-            <option value="wallet">Digital Wallet</option>
           </select>
         </div>
 
@@ -307,49 +302,43 @@ const WithdrawalForm: React.FC<WithdrawalFormProps> = ({
 
           <div className={styles.formRow}>
             <div className={styles.formGroup}>
-              <label htmlFor="account_holder_name">Account Holder Name</label>
+              <label htmlFor="account_name">Account Name</label>
               <input
-                id="account_holder_name"
+                id="account_name"
                 type="text"
-                value={formData.payment_details.account_holder_name}
+                value={formData.payment_details.account_name}
                 onChange={(e) =>
-                  handlePaymentDetailChange(
-                    "account_holder_name",
-                    e.target.value
-                  )
+                  handlePaymentDetailChange("account_name", e.target.value)
                 }
                 className={`${styles.formInput} ${
-                  errors.account_holder_name ? styles.error : ""
+                  errors.account_name ? styles.error : ""
                 }`}
-                placeholder="Enter account holder name"
+                placeholder="Enter account name"
               />
-              {errors.account_holder_name && (
-                <span className={styles.errorText}>
-                  {errors.account_holder_name}
-                </span>
+              {errors.account_name && (
+                <span className={styles.errorText}>{errors.account_name}</span>
               )}
             </div>
 
             <div className={styles.formGroup}>
-              <label htmlFor="ifsc_code">IFSC Code</label>
+              <label htmlFor="routing_number">Routing Number</label>
               <input
-                id="ifsc_code"
+                id="routing_number"
                 type="text"
-                value={formData.payment_details.ifsc_code}
+                value={formData.payment_details.routing_number}
                 onChange={(e) =>
-                  handlePaymentDetailChange(
-                    "ifsc_code",
-                    e.target.value.toUpperCase()
-                  )
+                  handlePaymentDetailChange("routing_number", e.target.value)
                 }
                 className={`${styles.formInput} ${
-                  errors.ifsc_code ? styles.error : ""
+                  errors.routing_number ? styles.error : ""
                 }`}
-                placeholder="Enter IFSC code"
-                maxLength={11}
+                placeholder="Enter routing number"
+                maxLength={10}
               />
-              {errors.ifsc_code && (
-                <span className={styles.errorText}>{errors.ifsc_code}</span>
+              {errors.routing_number && (
+                <span className={styles.errorText}>
+                  {errors.routing_number}
+                </span>
               )}
             </div>
           </div>

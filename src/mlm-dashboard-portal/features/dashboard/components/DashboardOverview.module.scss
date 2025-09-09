@@ -1,0 +1,523 @@
+@import "../../dashboard/styles/color-palette.scss";
+
+.dashboardContainer {
+  padding: 1.5rem;
+  background: $bg-primary;
+  min-height: 100vh;
+}
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 16rem;
+}
+
+.loadingSpinner {
+  animation: spin 1s linear infinite;
+  border-radius: 50%;
+  height: 8rem;
+  width: 8rem;
+  border-bottom: 2px solid $primary-600;
+}
+
+.errorContainer {
+  background: $error-50;
+  border: 1px solid $error-200;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+
+  .errorIcon {
+    color: $error-600;
+    font-size: 3.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .errorTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $error-800;
+    margin-bottom: 0.5rem;
+  }
+
+  .errorMessage {
+    color: $error-600;
+  }
+}
+
+.noDataContainer {
+  background: $gray-50;
+  border: 1px solid $gray-200;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  text-align: center;
+
+  .noDataIcon {
+    color: $gray-500;
+    font-size: 3.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .noDataTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $gray-800;
+    margin-bottom: 0.5rem;
+  }
+
+  .noDataMessage {
+    color: $gray-600;
+  }
+}
+
+.headerSection {
+  background: linear-gradient(135deg, $primary-600, $primary-700);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  color: $text-white;
+  margin-bottom: 2rem;
+
+  .headerTitle {
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .headerSubtitle {
+    color: $primary-100;
+  }
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  background: $white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba($primary-500, 0.1),
+    0 4px 6px -2px rgba($primary-500, 0.05);
+  border: 1px solid $primary-100;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 20px 25px -5px rgba($primary-500, 0.1),
+      0 10px 10px -5px rgba($primary-500, 0.04);
+    transform: translateY(-0.25rem);
+  }
+
+  .statIcon {
+    padding: 0.75rem;
+    background: linear-gradient(135deg, $primary-500, $primary-600);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba($primary-500, 0.1);
+    margin-bottom: 1rem;
+    display: inline-block;
+
+    .icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      color: $text-white;
+    }
+  }
+
+  .statContent {
+    .statLabel {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: $primary-600;
+      margin-bottom: 0.5rem;
+    }
+
+    .statValue {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, $primary-600, $primary-800);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+  }
+}
+
+.analyticsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.analyticsCard {
+  background: $white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba($primary-500, 0.1),
+    0 4px 6px -2px rgba($primary-500, 0.05);
+  border: 1px solid $primary-100;
+  padding: 1.5rem;
+
+  .cardTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $primary-900;
+    margin-bottom: 1rem;
+  }
+
+  .analyticsItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid $border-light;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .analyticsLabel {
+      color: $primary-600;
+      font-weight: 500;
+    }
+
+    .analyticsValue {
+      font-weight: 600;
+      color: $primary-900;
+    }
+  }
+}
+
+.packagesCard {
+  background: $white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba($primary-500, 0.1),
+    0 4px 6px -2px rgba($primary-500, 0.05);
+  border: 1px solid $primary-100;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  .cardTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $primary-900;
+    margin-bottom: 1rem;
+  }
+
+  .packagesList {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .packageItem {
+    background: $primary-50;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    border: 1px solid $primary-200;
+
+    .packageName {
+      font-weight: 600;
+      color: $primary-900;
+      margin-bottom: 0.25rem;
+    }
+
+    .packageLevel {
+      font-size: 0.875rem;
+      color: $primary-600;
+      margin-bottom: 0.5rem;
+    }
+
+    .packageDetails {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.875rem;
+
+      .packageLabel {
+        color: $text-muted;
+      }
+
+      .packageValue {
+        color: $text-primary;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .packagesSummary {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid $primary-200;
+
+    .summaryItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+
+      .summaryLabel {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: $primary-900;
+      }
+
+      .summaryValue {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: $primary-600;
+      }
+    }
+  }
+}
+
+.recentUsersCard {
+  background: $white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba($primary-500, 0.1),
+    0 4px 6px -2px rgba($primary-500, 0.05);
+  border: 1px solid $primary-100;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  .cardTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $primary-900;
+    margin-bottom: 1rem;
+  }
+
+  .usersList {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .userItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem;
+    background: $primary-50;
+    border-radius: 0.5rem;
+
+    .userInfo {
+      .userName {
+        font-weight: 500;
+        color: $primary-900;
+        margin-bottom: 0.25rem;
+      }
+
+      .userEmail {
+        font-size: 0.875rem;
+        color: $primary-600;
+      }
+    }
+
+    .userStats {
+      text-align: right;
+
+      .userBalance {
+        font-size: 0.875rem;
+        color: $primary-600;
+        margin-bottom: 0.25rem;
+      }
+
+      .userDate {
+        font-size: 0.75rem;
+        color: $primary-500;
+      }
+    }
+  }
+}
+
+.recentActivitiesCard {
+  background: $white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba($primary-500, 0.1),
+    0 4px 6px -2px rgba($primary-500, 0.05);
+  border: 1px solid $primary-100;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  .cardTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $primary-900;
+    margin-bottom: 1rem;
+  }
+
+  .activitiesList {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .activityItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem;
+    background: $primary-50;
+    border-radius: 0.5rem;
+
+    .activityInfo {
+      .activityDescription {
+        font-weight: 500;
+        color: $primary-900;
+        margin-bottom: 0.25rem;
+      }
+
+      .activityType {
+        font-size: 0.875rem;
+        color: $primary-600;
+        text-transform: capitalize;
+      }
+    }
+
+    .activityStats {
+      text-align: right;
+
+      .activityAmount {
+        font-weight: 600;
+        color: $primary-600;
+        margin-bottom: 0.25rem;
+      }
+
+      .activityDate {
+        font-size: 0.75rem;
+        color: $primary-500;
+      }
+    }
+  }
+}
+
+.mlmStatsCard {
+  background: $white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba($primary-500, 0.1),
+    0 4px 6px -2px rgba($primary-500, 0.05);
+  border: 1px solid $primary-100;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+
+  .cardTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $primary-900;
+    margin-bottom: 1rem;
+  }
+
+  .statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .statItem {
+    text-align: center;
+    padding: 1rem;
+    background: $primary-50;
+    border-radius: 0.5rem;
+
+    .statValue {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $primary-600;
+      margin-bottom: 0.25rem;
+    }
+
+    .statLabel {
+      font-size: 0.875rem;
+      color: $primary-600;
+    }
+  }
+}
+
+.growthMetricsCard {
+  background: $white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba($primary-500, 0.1),
+    0 4px 6px -2px rgba($primary-500, 0.05);
+  border: 1px solid $primary-100;
+  padding: 1.5rem;
+
+  .cardTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $primary-900;
+    margin-bottom: 1rem;
+  }
+
+  .metricsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  .metricSection {
+    padding: 1rem;
+    background: $primary-50;
+    border-radius: 0.5rem;
+
+    .metricTitle {
+      font-weight: 600;
+      color: $primary-900;
+      margin-bottom: 0.5rem;
+    }
+
+    .metricItem {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+
+      .metricLabel {
+        color: $primary-600;
+        font-weight: 500;
+      }
+
+      .metricValue {
+        font-weight: 600;
+        color: $primary-600;
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .dashboardContainer {
+    padding: 1rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .analyticsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .mlmStatsCard .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .growthMetricsCard .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .mlmStatsCard .statsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

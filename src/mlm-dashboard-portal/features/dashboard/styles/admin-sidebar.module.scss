@@ -4,7 +4,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: $gradient-dark; // Use teal dark gradient
+  background: $gradient-dark; // Use navy dark gradient
   color: $text-white;
   overflow: hidden;
   position: relative;
@@ -557,7 +557,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px  #051c14;;
+  box-shadow: 0 2px 8px #051c14;
   position: relative;
   overflow: hidden;
 

@@ -1,0 +1,322 @@
+@use "../../../features/dashboard/styles/color-palette" as *;
+
+.statisticsContainer {
+  padding: 1.5rem;
+  background: $white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba($primary-500, 0.08);
+  border: 1px solid rgba($primary-200, 0.2);
+}
+
+.statisticsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid $border-light;
+
+  .headerContent {
+    flex: 1;
+
+    .title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: $text-primary;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: $text-muted;
+      margin: 0;
+    }
+  }
+
+  .headerActions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+}
+
+.exportButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: $primary-500;
+  color: $text-white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $primary-600;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba($primary-500, 0.3);
+  }
+
+  i {
+    font-size: 1rem;
+  }
+}
+
+.loadingContainer,
+.errorContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  text-align: center;
+
+  p {
+    font-size: 1.1rem;
+    color: $text-muted;
+    margin: 0;
+  }
+}
+
+.errorContainer {
+  p {
+    color: $error-500;
+  }
+}
+
+.walletTypeGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.walletTypeCard {
+  background: $white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba($primary-500, 0.08);
+  border: 1px solid rgba($primary-200, 0.2);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba($primary-500, 0.12);
+  }
+
+  .walletTypeIcon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, $primary-500, $primary-600);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+
+    i {
+      font-size: 1.5rem;
+      color: $text-white;
+    }
+  }
+
+  .walletTypeContent {
+    h4 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: $text-primary;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .walletTypeBalance {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $primary-600;
+      margin: 0 0 1rem 0;
+    }
+
+    .walletTypeStats {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+
+      span {
+        font-size: 0.875rem;
+        color: $text-muted;
+
+        &.walletTypeCount {
+          font-weight: 600;
+        }
+
+        &.walletTypeTransactions {
+          color: $text-secondary;
+        }
+      }
+    }
+  }
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.summaryCard {
+  background: $white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba($primary-500, 0.08);
+  border: 1px solid rgba($primary-200, 0.2);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba($primary-500, 0.12);
+  }
+
+  .summaryIcon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.5rem;
+    background: linear-gradient(135deg, $primary-500, $primary-600);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+
+    i {
+      font-size: 1.25rem;
+      color: $text-white;
+    }
+  }
+
+  .summaryContent {
+    h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: $text-primary;
+      margin: 0 0 0.5rem 0;
+    }
+
+    .summaryValue {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: $primary-600;
+      margin: 0;
+    }
+  }
+}
+
+.recentActivity {
+  background: $white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba($primary-500, 0.08);
+  border: 1px solid rgba($primary-200, 0.2);
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .activityList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .activityItem {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba($primary-50, 0.3);
+    border-radius: 0.75rem;
+    border: 1px solid rgba($primary-200, 0.2);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba($primary-100, 0.5);
+    }
+
+    .activityIcon {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.5rem;
+      background: linear-gradient(135deg, $primary-500, $primary-600);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      i {
+        font-size: 1rem;
+        color: $text-white;
+      }
+    }
+
+    .activityContent {
+      flex: 1;
+
+      .activityDescription {
+        font-size: 0.875rem;
+        color: $text-primary;
+        margin: 0 0 0.25rem 0;
+        font-weight: 500;
+      }
+
+      .activityAmount {
+        font-size: 0.875rem;
+        color: $primary-600;
+        margin: 0;
+        font-weight: 600;
+      }
+    }
+
+    .activityTime {
+      font-size: 0.75rem;
+      color: $text-muted;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .statisticsHeader {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+
+    .headerActions {
+      justify-content: stretch;
+      flex-wrap: wrap;
+    }
+  }
+
+  .walletTypeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .summaryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .exportButton {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .summaryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .statisticsContainer {
+    padding: 1rem;
+  }
+}

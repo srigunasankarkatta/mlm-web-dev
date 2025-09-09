@@ -1,5 +1,5 @@
 import React from "react";
-import DashboardOverview from "./components/DashboardOverview";
+import DashboardOverview from "./components/Overview";
 
 const AdminDashboard: React.FC = () => {
   return (

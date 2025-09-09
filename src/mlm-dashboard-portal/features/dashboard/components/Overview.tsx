@@ -1,42 +1,39 @@
 import React from "react";
+import styles from "./DashboardOverview.module.scss";
 
 const DashboardOverview: React.FC = () => {
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className={styles.dashboardContainer}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Dashboard Overview
-          </h1>
-          <p className="text-gray-600 mt-2">
+        <div className={styles.headerSection}>
+          <h1 className={styles.headerTitle}>Dashboard Overview</h1>
+          <p className={styles.headerSubtitle}>
             Welcome back! Here's what's happening with your MLM business.
           </p>
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <svg
-                  className="w-6 h-6 text-blue-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
-                  />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Users</p>
-                <p className="text-2xl font-semibold text-gray-900">2,847</p>
-              </div>
+        <div className={styles.statsGrid}>
+          <div className={styles.statCard}>
+            <div className={styles.statIcon}>
+              <svg
+                className={styles.icon}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+                />
+              </svg>
+            </div>
+            <div className={styles.statContent}>
+              <p className={styles.statLabel}>Total Users</p>
+              <p className={styles.statValue}>2,847</p>
             </div>
             <div className="mt-4">
               <span className="text-green-600 text-sm font-medium">+12%</span>
@@ -46,27 +43,53 @@ const DashboardOverview: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <svg
-                  className="w-6 h-6 text-green-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                  />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Revenue</p>
-                <p className="text-2xl font-semibold text-gray-900">$45,231</p>
-              </div>
+          <div className={styles.statCard}>
+            <div className={styles.statIcon}>
+              <svg
+                className={styles.icon}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <div className={styles.statContent}>
+              <p className={styles.statLabel}>Active Users</p>
+              <p className={styles.statValue}>1,234</p>
+            </div>
+            <div className="mt-4">
+              <span className="text-green-600 text-sm font-medium">+8%</span>
+              <span className="text-gray-600 text-sm ml-2">
+                from last month
+              </span>
+            </div>
+          </div>
+
+          <div className={styles.statCard}>
+            <div className={styles.statIcon}>
+              <svg
+                className={styles.icon}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                />
+              </svg>
+            </div>
+            <div className={styles.statContent}>
+              <p className={styles.statLabel}>Revenue</p>
+              <p className={styles.statValue}>$45,231</p>
             </div>
             <div className="mt-4">
               <span className="text-green-600 text-sm font-medium">+8.2%</span>
@@ -76,62 +99,28 @@ const DashboardOverview: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <svg
-                  className="w-6 h-6 text-purple-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                  />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
-                  Active Packages
-                </p>
-                <p className="text-2xl font-semibold text-gray-900">156</p>
-              </div>
+          <div className={styles.statCard}>
+            <div className={styles.statIcon}>
+              <svg
+                className={styles.icon}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                />
+              </svg>
+            </div>
+            <div className={styles.statContent}>
+              <p className={styles.statLabel}>Growth Rate</p>
+              <p className={styles.statValue}>23.5%</p>
             </div>
             <div className="mt-4">
-              <span className="text-green-600 text-sm font-medium">+3.1%</span>
-              <span className="text-gray-600 text-sm ml-2">
-                from last month
-              </span>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-yellow-100 rounded-lg">
-                <svg
-                  className="w-6 h-6 text-yellow-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                  />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Growth Rate</p>
-                <p className="text-2xl font-semibold text-gray-900">23.5%</p>
-              </div>
-            </div>
-            <div className="mt-4">
-              <span className="text-green-600 text-sm font-medium">+2.4%</span>
+              <span className="text-green-600 text-sm font-medium">+2.1%</span>
               <span className="text-gray-600 text-sm ml-2">
                 from last month
               </span>
@@ -139,85 +128,224 @@ const DashboardOverview: React.FC = () => {
           </div>
         </div>
 
-        {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
-              User Growth Trend
-            </h3>
-            <div className="h-64 bg-gray-100 rounded flex items-center justify-center">
-              <p className="text-gray-500">Chart Component - User Growth</p>
+        {/* Analytics Grid */}
+        <div className={styles.analyticsGrid}>
+          <div className={styles.analyticsCard}>
+            <h3 className={styles.cardTitle}>User Analytics</h3>
+            <div className={styles.analyticsItem}>
+              <span className={styles.analyticsLabel}>New Users</span>
+              <span className={styles.analyticsValue}>342</span>
+            </div>
+            <div className={styles.analyticsItem}>
+              <span className={styles.analyticsLabel}>Income Distributed</span>
+              <span className={styles.analyticsValue}>$12,450</span>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
-              Revenue Distribution
-            </h3>
-            <div className="h-64 bg-gray-100 rounded flex items-center justify-center">
-              <p className="text-gray-500">
-                Chart Component - Revenue Distribution
-              </p>
+          <div className={styles.analyticsCard}>
+            <h3 className={styles.cardTitle}>Package Analytics</h3>
+            <div className={styles.analyticsItem}>
+              <span className={styles.analyticsLabel}>New Users</span>
+              <span className={styles.analyticsValue}>156</span>
+            </div>
+            <div className={styles.analyticsItem}>
+              <span className={styles.analyticsLabel}>Income Distributed</span>
+              <span className={styles.analyticsValue}>$8,230</span>
             </div>
           </div>
         </div>
 
-        {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h3 className="text-lg font-medium text-gray-900">
-              Recent Activity
-            </h3>
-          </div>
-          <div className="p-6">
-            <div className="space-y-4">
-              {[
-                {
-                  user: "John Doe",
-                  action: "joined the network",
-                  time: "2 minutes ago",
-                  type: "join",
-                },
-                {
-                  user: "Jane Smith",
-                  action: "upgraded to Premium package",
-                  time: "15 minutes ago",
-                  type: "upgrade",
-                },
-                {
-                  user: "Mike Johnson",
-                  action: "earned commission",
-                  time: "1 hour ago",
-                  type: "commission",
-                },
-                {
-                  user: "Sarah Wilson",
-                  action: "referred new user",
-                  time: "2 hours ago",
-                  type: "referral",
-                },
-              ].map((activity, index) => (
-                <div key={index} className="flex items-center space-x-3">
-                  <div
-                    className={`w-2 h-2 rounded-full ${
-                      activity.type === "join"
-                        ? "bg-blue-500"
-                        : activity.type === "upgrade"
-                        ? "bg-green-500"
-                        : activity.type === "commission"
-                        ? "bg-yellow-500"
-                        : "bg-purple-500"
-                    }`}
-                  />
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-900">
-                      <span className="font-medium">{activity.user}</span>{" "}
-                      {activity.action}
-                    </p>
-                    <p className="text-xs text-gray-500">{activity.time}</p>
-                  </div>
+        {/* Packages Section */}
+        <div className={styles.packagesCard}>
+          <h3 className={styles.cardTitle}>Package Performance</h3>
+          <div className={styles.packagesList}>
+            <div className={styles.packageItem}>
+              <h4 className={styles.packageName}>Starter Package</h4>
+              <p className={styles.packageLevel}>Level 1</p>
+              <div className={styles.packageDetails}>
+                <div className="flex justify-between text-sm">
+                  <span className={styles.packageLabel}>Price:</span>
+                  <span className={styles.packageValue}>$100</span>
                 </div>
-              ))}
+                <div className="flex justify-between text-sm">
+                  <span className={styles.packageLabel}>Users:</span>
+                  <span className={styles.packageValue}>1,234</span>
+                </div>
+              </div>
+            </div>
+            <div className={styles.packageItem}>
+              <h4 className={styles.packageName}>Premium Package</h4>
+              <p className={styles.packageLevel}>Level 2</p>
+              <div className={styles.packageDetails}>
+                <div className="flex justify-between text-sm">
+                  <span className={styles.packageLabel}>Price:</span>
+                  <span className={styles.packageValue}>$500</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className={styles.packageLabel}>Users:</span>
+                  <span className={styles.packageValue}>567</span>
+                </div>
+              </div>
+            </div>
+            <div className={styles.packageItem}>
+              <h4 className={styles.packageName}>Elite Package</h4>
+              <p className={styles.packageLevel}>Level 3</p>
+              <div className={styles.packageDetails}>
+                <div className="flex justify-between text-sm">
+                  <span className={styles.packageLabel}>Price:</span>
+                  <span className={styles.packageValue}>$1,000</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className={styles.packageLabel}>Users:</span>
+                  <span className={styles.packageValue}>89</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={styles.packagesSummary}>
+            <div className={styles.summaryItem}>
+              <span className={styles.summaryLabel}>Total Revenue:</span>
+              <span className={styles.summaryValue}>$234,567</span>
+            </div>
+            <div className={styles.summaryItem}>
+              <span className={styles.summaryLabel}>Total Users:</span>
+              <span className={styles.summaryValue}>1,890</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Recent Users */}
+        <div className={styles.recentUsersCard}>
+          <h3 className={styles.cardTitle}>Recent Users</h3>
+          <div className={styles.usersList}>
+            <div className={styles.userItem}>
+              <div className={styles.userInfo}>
+                <p className={styles.userName}>John Doe</p>
+                <p className={styles.userEmail}>john@example.com</p>
+              </div>
+              <div className={styles.userStats}>
+                <p className={styles.userBalance}>$1,250</p>
+                <p className={styles.userDate}>2 hours ago</p>
+              </div>
+            </div>
+            <div className={styles.userItem}>
+              <div className={styles.userInfo}>
+                <p className={styles.userName}>Jane Smith</p>
+                <p className={styles.userEmail}>jane@example.com</p>
+              </div>
+              <div className={styles.userStats}>
+                <p className={styles.userBalance}>$850</p>
+                <p className={styles.userDate}>4 hours ago</p>
+              </div>
+            </div>
+            <div className={styles.userItem}>
+              <div className={styles.userInfo}>
+                <p className={styles.userName}>Mike Johnson</p>
+                <p className={styles.userEmail}>mike@example.com</p>
+              </div>
+              <div className={styles.userStats}>
+                <p className={styles.userBalance}>$2,100</p>
+                <p className={styles.userDate}>6 hours ago</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Recent Activities */}
+        <div className={styles.recentActivitiesCard}>
+          <h3 className={styles.cardTitle}>Recent Activities</h3>
+          <div className={styles.activitiesList}>
+            <div className={styles.activityItem}>
+              <div className={styles.activityInfo}>
+                <p className={styles.activityDescription}>
+                  New user registration
+                </p>
+                <p className={styles.activityType}>Registration</p>
+              </div>
+              <div className={styles.activityStats}>
+                <p className={styles.activityAmount}>+$100</p>
+                <p className={styles.activityDate}>1 hour ago</p>
+              </div>
+            </div>
+            <div className={styles.activityItem}>
+              <div className={styles.activityInfo}>
+                <p className={styles.activityDescription}>Package purchase</p>
+                <p className={styles.activityType}>Purchase</p>
+              </div>
+              <div className={styles.activityStats}>
+                <p className={styles.activityAmount}>+$500</p>
+                <p className={styles.activityDate}>3 hours ago</p>
+              </div>
+            </div>
+            <div className={styles.activityItem}>
+              <div className={styles.activityInfo}>
+                <p className={styles.activityDescription}>Commission payout</p>
+                <p className={styles.activityType}>Payout</p>
+              </div>
+              <div className={styles.activityStats}>
+                <p className={styles.activityAmount}>+$75</p>
+                <p className={styles.activityDate}>5 hours ago</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* MLM Tree Stats */}
+        <div className={styles.mlmStatsCard}>
+          <h3 className={styles.cardTitle}>MLM Tree Statistics</h3>
+          <div className={styles.statsGrid}>
+            <div className={styles.statItem}>
+              <p className={styles.statValue}>1,234</p>
+              <p className={styles.statLabel}>Root Users</p>
+            </div>
+            <div className={styles.statItem}>
+              <p className={styles.statValue}>5,678</p>
+              <p className={styles.statLabel}>Users with Directs</p>
+            </div>
+            <div className={styles.statItem}>
+              <p className={styles.statValue}>4.6</p>
+              <p className={styles.statLabel}>Avg Directs</p>
+            </div>
+            <div className={styles.statItem}>
+              <p className={styles.statValue}>12</p>
+              <p className={styles.statLabel}>Max Depth</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Growth Metrics */}
+        <div className={styles.growthMetricsCard}>
+          <h3 className={styles.cardTitle}>Growth Metrics</h3>
+          <div className={styles.metricsGrid}>
+            <div className={styles.metricSection}>
+              <h4 className={styles.metricTitle}>User Growth</h4>
+              <div className={styles.metricItem}>
+                <span className={styles.metricLabel}>This Month:</span>
+                <span className={styles.metricValue}>+342</span>
+              </div>
+              <div className={styles.metricItem}>
+                <span className={styles.metricLabel}>Last Month:</span>
+                <span className={styles.metricValue}>+298</span>
+              </div>
+              <div className={styles.metricItem}>
+                <span className={styles.metricLabel}>Growth Rate:</span>
+                <span className={styles.metricValue}>+14.8%</span>
+              </div>
+            </div>
+            <div className={styles.metricSection}>
+              <h4 className={styles.metricTitle}>Income Growth</h4>
+              <div className={styles.metricItem}>
+                <span className={styles.metricLabel}>This Month:</span>
+                <span className={styles.metricValue}>$12,450</span>
+              </div>
+              <div className={styles.metricItem}>
+                <span className={styles.metricLabel}>Last Month:</span>
+                <span className={styles.metricValue}>$10,230</span>
+              </div>
+              <div className={styles.metricItem}>
+                <span className={styles.metricLabel}>Growth Rate:</span>
+                <span className={styles.metricValue}>+21.7%</span>
+              </div>
             </div>
           </div>
         </div>

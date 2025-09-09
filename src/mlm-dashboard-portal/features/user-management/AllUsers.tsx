@@ -7,6 +7,7 @@ import StatusBadgeCell from "../../components/ui/StatusBadgeCell";
 import ActionsCell from "../../components/ui/ActionsCell";
 import { useUsers, useDeleteUser, useUserStats } from "../../queries/users";
 import type { User } from "../../api-services/user-service";
+import styles from "./AllUsers.module.scss";
 
 // Import ag-grid styles directly to ensure they're loaded
 import "ag-grid-community/styles/ag-grid.css";
@@ -48,142 +49,152 @@ const AllUsers: React.FC = () => {
 
   // Event handlers - Define these BEFORE columnDefs
   const handleViewUser = useCallback(
-    (user: any) => {
-      console.log("View user:", user);
-      navigate(`/admin/users/${user.id}`);
+    (userId: number) => {
+      navigate(`/admin/users/${userId}`);
     },
     [navigate]
   );
 
   const handleEditUser = useCallback(
-    (user: any) => {
-      console.log("Edit user:", user);
-      navigate(`/admin/users/${user.id}/edit`);
+    (userId: number) => {
+      navigate(`/admin/users/${userId}/edit`);
     },
     [navigate]
   );
 
   const handleDeleteUser = useCallback(
-    (user: any) => {
-      if (window.confirm(`Are you sure you want to delete ${user.name}?`)) {
-        deleteUserMutation.mutate(user.id);
+    async (userId: number) => {
+      if (window.confirm("Are you sure you want to delete this user?")) {
+        try {
+          await deleteUserMutation.mutateAsync(userId);
+          // The query will automatically refetch due to invalidation
+        } catch (error) {
+          console.error("Failed to delete user:", error);
+        }
       }
     },
     [deleteUserMutation]
   );
 
-  const handleRowSelected = useCallback((event: any) => {
-    const selectedRows = event.api.getSelectedRows();
-    setSelectedUsers(selectedRows);
+  // Handle bulk actions
+  const handleBulkActivate = useCallback(() => {
+    console.log("Activating users:", selectedUsers);
+    // Implement bulk activation logic
+  }, [selectedUsers]);
+
+  const handleBulkDeactivate = useCallback(() => {
+    console.log("Deactivating users:", selectedUsers);
+    // Implement bulk deactivation logic
+  }, [selectedUsers]);
+
+  const handleBulkExport = useCallback(() => {
+    console.log("Exporting users:", selectedUsers);
+    // Implement bulk export logic
+  }, [selectedUsers]);
+
+  // Clear selection
+  const clearSelection = useCallback(() => {
+    setSelectedUsers([]);
   }, []);
 
-  const handleGridReady = useCallback((event: any) => {
-    console.log("Grid ready:", event);
-    console.log("Grid API:", event.api);
-    console.log("Row data:", event.api.getRenderedNodes());
-    // Auto-size columns on grid ready
-    if (event.api) {
-      event.api.sizeColumnsToFit();
-    }
-  }, []);
-
-  const handleAddUser = useCallback(() => {
-    navigate("/admin/users/create");
-  }, [navigate]);
-
-  const handleBulkAction = useCallback(
-    (action: string) => {
-      if (selectedUsers.length === 0) {
-        alert("Please select users first");
-        return;
-      }
-      console.log(`${action} users:`, selectedUsers);
-      // Implement bulk action logic
-    },
-    [selectedUsers]
-  );
-
-  // Column definitions for ag-grid
-  const columnDefs = useMemo<ColDef[]>(
+  // Column definitions for the data grid
+  const columnDefs: ColDef[] = useMemo(
     () => [
       {
-        headerName: "User",
         field: "name",
-        cellRenderer: UserAvatarCell,
-        cellRendererParams: {
-          getEmail: (params: any) => params.email,
-          getJoinDate: (params: any) => params.created_at,
+        headerName: "",
+        width: 200,
+        cellRenderer: (params: any) => {
+          return <UserAvatarCell value={params.data.name} data={params.data} />;
         },
-        width: 250,
+        sortable: false,
+        filter: false,
+        resizable: false,
+        pinned: "left",
+      },
+      {
+        field: "email",
+        headerName: "Email",
+        flex: 1,
         minWidth: 200,
-        sortable: true,
-        resizable: true,
-      },
-      {
-        headerName: "Status",
-        field: "roles",
-        cellRenderer: StatusBadgeCell,
-        cellRendererParams: {
-          type: "status",
-          getValue: (params: any) =>
-            params.roles && params.roles.includes("customer")
-              ? "Active"
-              : "Admin",
+        cellRenderer: (params: any) => {
+          const user = params.data;
+          return (
+            <div className="flex flex-col">
+              <span className="font-medium text-gray-900">{user.email}</span>
+              <span className="text-sm text-gray-500">ID: {user.id}</span>
+            </div>
+          );
         },
-        width: 120,
-        minWidth: 100,
-        sortable: true,
-        resizable: true,
       },
       {
-        headerName: "Package",
-        field: "package.name",
+        field: "referral_code",
+        headerName: "Referral Code",
+        width: 120,
+        cellRenderer: (params: any) => {
+          const code = params.value;
+          return (
+            <span className="font-mono text-sm bg-gray-100 px-2 py-1 rounded">
+              {code}
+            </span>
+          );
+        },
+      },
+      {
+        field: "sponsor",
+        headerName: "Sponsor",
         width: 150,
-        minWidth: 120,
-        sortable: true,
-        resizable: true,
-        valueFormatter: (params: any) => params.value || "No Package",
+        cellRenderer: (params: any) => {
+          const sponsor = params.data.sponsor;
+          if (!sponsor)
+            return <span className="text-gray-400">No sponsor</span>;
+          return (
+            <div className="flex flex-col">
+              <span className="font-medium text-gray-900">{sponsor.name}</span>
+              <span className="text-sm text-gray-500">{sponsor.email}</span>
+            </div>
+          );
+        },
       },
       {
-        headerName: "Directs",
-        field: "directs_count",
+        field: "package",
+        headerName: "Package",
+        width: 120,
+        cellRenderer: (params: any) => {
+          const pkg = params.data.package;
+          if (!pkg) return <span className="text-gray-400">No package</span>;
+          return (
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+              {pkg.name}
+            </span>
+          );
+        },
+      },
+      {
+        field: "status",
+        headerName: "Status",
         width: 100,
-        minWidth: 80,
-        sortable: true,
-        resizable: true,
-        type: "numericColumn",
+        cellRenderer: StatusBadgeCell,
       },
       {
-        headerName: "Total Income",
-        field: "total_income",
-        width: 120,
-        minWidth: 100,
-        sortable: true,
-        resizable: true,
-        cellStyle: { color: "#059669", fontWeight: "600" },
-        valueFormatter: (params: any) => `₹${params.value || "0.00"}`,
-      },
-      {
-        headerName: "Joined",
         field: "created_at",
+        headerName: "Joined",
         width: 120,
-        minWidth: 100,
-        sortable: true,
-        resizable: true,
-        valueFormatter: (params: any) =>
-          new Date(params.value).toLocaleDateString(),
+        cellRenderer: (params: any) => {
+          const date = new Date(params.value);
+          return date.toLocaleDateString();
+        },
       },
       {
-        headerName: "Actions",
         field: "actions",
+        headerName: "Actions",
+        width: 120,
         cellRenderer: ActionsCell,
         cellRendererParams: {
           onView: handleViewUser,
           onEdit: handleEditUser,
           onDelete: handleDeleteUser,
         },
-        width: 150,
-        minWidth: 120,
         sortable: false,
         filter: false,
         resizable: false,
@@ -194,14 +205,14 @@ const AllUsers: React.FC = () => {
   );
 
   return (
-    <div className="bg-gradient-to-br from-teal-50 to-teal-100 min-h-screen">
+    <div className={styles.usersContainer}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="p-3 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl shadow-lg">
+        <div className={styles.headerSection}>
+          <div className={styles.headerCard}>
+            <div className={styles.headerIcon}>
               <svg
-                className="w-8 h-8 text-white"
+                className={styles.icon}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -214,217 +225,19 @@ const AllUsers: React.FC = () => {
                 />
               </svg>
             </div>
-            <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-900 to-teal-700 bg-clip-text text-transparent">
-                All Users
-              </h1>
-              <p className="text-teal-600 mt-1">
-                Manage and monitor all users in your MLM network.
-              </p>
-            </div>
+            <h1 className={styles.headerTitle}>All Users</h1>
+            <p className={styles.headerSubtitle}>
+              Manage and monitor all users in your MLM network.
+            </p>
           </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-lg border border-teal-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <div className="flex items-center">
-              <div className="p-3 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl shadow-lg">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
-                  />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-teal-600">Total Users</p>
-                <p className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-teal-800 bg-clip-text text-transparent">
-                  {users.length}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-teal-100 rounded-lg">
-                <svg
-                  className="w-6 h-6 text-teal-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
-                  Active Users
-                </p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {userStats?.customer_users ||
-                    users.filter((u) => u.roles && u.roles.includes("customer"))
-                      .length}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-yellow-100 rounded-lg">
-                <svg
-                  className="w-6 h-6 text-yellow-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
-                  New This Month
-                </p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {userStats?.users_with_packages || 0}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <div className="flex items-center">
-              <div className="p-2 bg-red-100 rounded-lg">
-                <svg
-                  className="w-6 h-6 text-red-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">
-                  Without Packages
-                </p>
-                <p className="text-2xl font-semibold text-gray-900">
-                  {userStats?.users_without_packages ||
-                    users.filter((u) => !u.package).length}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Filters and Search */}
-        <div className="bg-white rounded-lg shadow  mb-8">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1">
-              <input
-                type="text"
-                placeholder="Search users by name or email..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div>
-            <div className="flex gap-4">
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="all">All Roles</option>
-                <option value="customer">Customer</option>
-                <option value="admin">Admin</option>
-              </select>
-              <select
-                value={packageFilter}
-                onChange={(e) => setPackageFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="all">All Packages</option>
-                <option value="1">Starter Package</option>
-                <option value="2">Basic Package</option>
-                <option value="3">Premium Package</option>
-                <option value="4">Enterprise Package</option>
-              </select>
-              <button
-                onClick={handleAddUser}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Add User
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Bulk Actions */}
-        {selectedUsers.length > 0 && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <span className="text-sm font-medium text-blue-900">
-                  {selectedUsers.length} user(s) selected
-                </span>
-              </div>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => handleBulkAction("Activate")}
-                  className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors"
-                >
-                  Activate
-                </button>
-                <button
-                  onClick={() => handleBulkAction("Deactivate")}
-                  className="px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition-colors"
-                >
-                  Deactivate
-                </button>
-                <button
-                  onClick={() => handleBulkAction("Export")}
-                  className="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors"
-                >
-                  Export
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {isLoading
-          ? "Loading users..."
-          : `Showing ${filteredUsers.length} users`}
-        {error ? (
-          <div className="text-center py-8">
-            <div className="text-red-600 mb-4">
+        <div className={styles.statsGrid}>
+          <div className={styles.statCard}>
+            <div className={styles.statIcon}>
               <svg
-                className="w-16 h-16 mx-auto mb-4"
+                className={styles.icon}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -433,148 +246,289 @@ const AllUsers: React.FC = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 9v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"
+                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
                 />
               </svg>
-              <p className="text-lg font-semibold">Error loading users</p>
-              <p className="text-sm text-gray-600">{error.message}</p>
             </div>
+            <div className={styles.statContent}>
+              <p className={styles.statLabel}>Total Users</p>
+              <p className={styles.statValue}>{userStats?.total_users || 0}</p>
+            </div>
+          </div>
+
+          <div className={styles.secondaryStatCard}>
+            <div className={`${styles.statIcon} ${styles.tealIcon}`}>
+              <svg
+                className={styles.icon}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <div className={styles.statContent}>
+              <p className={styles.statLabel}>Active Users</p>
+              <p className={styles.statValue}>
+                {userStats?.customer_users || 0}
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.secondaryStatCard}>
+            <div className={`${styles.statIcon} ${styles.yellowIcon}`}>
+              <svg
+                className={styles.icon}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <div className={styles.statContent}>
+              <p className={styles.statLabel}>Pending Users</p>
+              <p className={styles.statValue}>
+                {userStats?.users_without_packages || 0}
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.secondaryStatCard}>
+            <div className={`${styles.statIcon} ${styles.redIcon}`}>
+              <svg
+                className={styles.icon}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <div className={styles.statContent}>
+              <p className={styles.statLabel}>Inactive Users</p>
+              <p className={styles.statValue}>{userStats?.admin_users || 0}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className={styles.filtersCard}>
+          <div className={styles.filtersGrid}>
+            <input
+              type="text"
+              placeholder="Search users..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className={styles.filterInput}
+            />
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className={styles.filterSelect}
+            >
+              <option value="all">All Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="pending">Pending</option>
+            </select>
+            <select
+              value={packageFilter}
+              onChange={(e) => setPackageFilter(e.target.value)}
+              className={styles.filterSelect}
+            >
+              <option value="all">All Packages</option>
+              <option value="1">Starter</option>
+              <option value="2">Premium</option>
+              <option value="3">Elite</option>
+            </select>
+            <button
+              onClick={() => {
+                // Trigger refetch with current filters
+                setCurrentPage(1);
+              }}
+              className={styles.searchButton}
+            >
+              Search
+            </button>
+          </div>
+        </div>
+
+        {/* Selected Users Actions */}
+        {selectedUsers.length > 0 && (
+          <div className={styles.selectedUsersCard}>
+            <div className={styles.selectedUsersInfo}>
+              <span className={styles.selectedCount}>
+                {selectedUsers.length} user(s) selected
+              </span>
+              <button
+                onClick={clearSelection}
+                className="text-sm text-gray-500 hover:text-gray-700"
+              >
+                Clear Selection
+              </button>
+            </div>
+            <div className={styles.actionButtons}>
+              <button
+                onClick={handleBulkActivate}
+                className={`${styles.actionButton} ${styles.activateButton}`}
+              >
+                Activate Selected
+              </button>
+              <button
+                onClick={handleBulkDeactivate}
+                className={`${styles.actionButton} ${styles.deactivateButton}`}
+              >
+                Deactivate Selected
+              </button>
+              <button
+                onClick={handleBulkExport}
+                className={`${styles.actionButton} ${styles.exportButton}`}
+              >
+                Export Selected
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className={styles.errorContainer}>
+            <div className={styles.errorIcon}>⚠️</div>
+            <p className={styles.errorTitle}>Error loading users</p>
+            <p className={styles.errorMessage}>{error.message}</p>
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className={styles.retryButton}
             >
               Retry
             </button>
           </div>
-        ) : (
-          <AgGridTable
-            rowData={filteredUsers}
-            columnDefs={columnDefs}
-            height={600}
-            enablePagination={false}
-            enableSorting={true}
-            enableFiltering={false}
-            enableFloatingFilter={false}
-            enableSelection={true}
-            enableResizing={true}
-            enableColumnMoving={true}
-            selectionType="multiple"
-            selectedRows={selectedUsers}
-            onGridReady={handleGridReady}
-            onRowSelected={handleRowSelected}
-            loading={isLoading}
-            className="w-full"
-          />
         )}
 
-        {/* Custom Pagination Controls */}
+        {/* Loading State */}
+        {isLoading && (
+          <div className="text-center py-8">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <p className="mt-2 text-gray-600">Loading users...</p>
+          </div>
+        )}
+
+        {/* Data Grid */}
+        {!isLoading && !error && (
+          <div className="bg-white rounded-lg shadow">
+            <AgGridTable
+              rowData={filteredUsers}
+              columnDefs={columnDefs}
+              enablePagination={true}
+              paginationPageSize={perPage}
+            />
+          </div>
+        )}
+
+        {/* Pagination */}
         {pagination && (
-          <div className="bg-white border-t border-teal-200 px-6 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-teal-700">
-                  Showing{" "}
-                  {(pagination.current_page - 1) * pagination.per_page + 1} to{" "}
-                  {Math.min(
-                    pagination.current_page * pagination.per_page,
-                    pagination.total
-                  )}{" "}
-                  of {pagination.total} results
-                </span>
+          <div className={styles.paginationContainer}>
+            <div className={styles.paginationInfo}>
+              <span className={styles.paginationText}>
+                Showing{" "}
+                {(pagination.current_page - 1) * pagination.per_page + 1} to{" "}
+                {Math.min(
+                  pagination.current_page * pagination.per_page,
+                  pagination.total
+                )}{" "}
+                of {pagination.total} users
+              </span>
+              <div className={styles.perPageSelector}>
+                <label htmlFor="perPage" className={styles.perPageLabel}>
+                  Show:
+                </label>
+                <select
+                  id="perPage"
+                  value={perPage}
+                  onChange={(e) => {
+                    setPerPage(parseInt(e.target.value));
+                    setCurrentPage(1);
+                  }}
+                  className={styles.perPageSelect}
+                >
+                  <option value={10}>10</option>
+                  <option value={15}>15</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
               </div>
+            </div>
 
-              <div className="flex items-center space-x-2">
-                {/* Per Page Selector */}
-                <div className="flex items-center space-x-2">
-                  <label htmlFor="perPage" className="text-sm text-teal-700">
-                    Show:
-                  </label>
-                  <select
-                    id="perPage"
-                    value={perPage}
-                    onChange={(e) => {
-                      setPerPage(Number(e.target.value));
-                      setCurrentPage(1); // Reset to first page when changing per page
-                    }}
-                    className="px-2 py-1 border border-teal-300 rounded text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent text-teal-700"
-                  >
-                    <option value={10}>10</option>
-                    <option value={15}>15</option>
-                    <option value={25}>25</option>
-                    <option value={50}>50</option>
-                    <option value={100}>100</option>
-                  </select>
-                </div>
+            <div className={styles.paginationButtons}>
+              <button
+                onClick={() => setCurrentPage(1)}
+                disabled={currentPage === 1}
+                className={styles.paginationButton}
+              >
+                First
+              </button>
+              <button
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={styles.paginationButton}
+              >
+                Previous
+              </button>
 
-                {/* Pagination Buttons */}
-                <div className="flex items-center space-x-1">
-                  <button
-                    onClick={() => setCurrentPage(1)}
-                    disabled={pagination.current_page === 1}
-                    className="px-2 py-1 text-sm border border-teal-300 rounded hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed text-teal-700 transition-colors duration-200"
-                  >
-                    First
-                  </button>
-                  <button
-                    onClick={() => setCurrentPage(pagination.current_page - 1)}
-                    disabled={pagination.current_page === 1}
-                    className="px-2 py-1 text-sm border border-teal-300 rounded hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed text-teal-700 transition-colors duration-200"
-                  >
-                    Previous
-                  </button>
-
-                  {/* Page Numbers */}
-                  <div className="flex items-center space-x-1">
-                    {Array.from(
-                      { length: Math.min(5, pagination.last_page) },
-                      (_, i) => {
-                        let pageNum;
-                        if (pagination.last_page <= 5) {
-                          pageNum = i + 1;
-                        } else if (pagination.current_page <= 3) {
-                          pageNum = i + 1;
-                        } else if (
-                          pagination.current_page >=
-                          pagination.last_page - 2
-                        ) {
-                          pageNum = pagination.last_page - 4 + i;
-                        } else {
-                          pageNum = pagination.current_page - 2 + i;
-                        }
-
-                        return (
-                          <button
-                            key={pageNum}
-                            onClick={() => setCurrentPage(pageNum)}
-                            className={`px-3 py-1 text-sm border rounded transition-all duration-200 ${
-                              pageNum === pagination.current_page
-                                ? "bg-teal-600 text-white border-teal-600 shadow-md"
-                                : "border-teal-300 hover:bg-teal-50 text-teal-700 hover:border-teal-400"
-                            }`}
-                          >
-                            {pageNum}
-                          </button>
-                        );
-                      }
+              {/* Page Numbers */}
+              {Array.from({ length: pagination.last_page }, (_, i) => i + 1)
+                .filter(
+                  (page) =>
+                    page === 1 ||
+                    page === pagination.last_page ||
+                    (page >= currentPage - 2 && page <= currentPage + 2)
+                )
+                .map((page, index, array) => (
+                  <React.Fragment key={page}>
+                    {index > 0 && array[index - 1] !== page - 1 && (
+                      <span className="px-2 py-1 text-gray-500">...</span>
                     )}
-                  </div>
+                    <button
+                      onClick={() => setCurrentPage(page)}
+                      className={`${styles.paginationButton} ${
+                        currentPage === page ? styles.activePage : ""
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  </React.Fragment>
+                ))}
 
-                  <button
-                    onClick={() => setCurrentPage(pagination.current_page + 1)}
-                    disabled={pagination.current_page === pagination.last_page}
-                    className="px-2 py-1 text-sm border border-teal-300 rounded hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed text-teal-700 transition-colors duration-200"
-                  >
-                    Next
-                  </button>
-                  <button
-                    onClick={() => setCurrentPage(pagination.last_page)}
-                    disabled={pagination.current_page === pagination.last_page}
-                    className="px-2 py-1 text-sm border border-teal-300 rounded hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed text-teal-700 transition-colors duration-200"
-                  >
-                    Last
-                  </button>
-                </div>
-              </div>
+              <button
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage === pagination.last_page}
+                className={styles.paginationButton}
+              >
+                Next
+              </button>
+              <button
+                onClick={() => setCurrentPage(pagination.last_page)}
+                disabled={currentPage === pagination.last_page}
+                className={styles.paginationButton}
+              >
+                Last
+              </button>
             </div>
           </div>
         )}

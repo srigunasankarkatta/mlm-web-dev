@@ -14,7 +14,7 @@
 
 // Admin Dashboard Content Styling
 :global(.admin-dashboard-content) {
-  padding: 1.5rem;
+
   background: transparent;
   min-height: auto;
   height: auto;
@@ -42,7 +42,7 @@
   flex-direction: column;
   min-height: 100vh;
   height: 100vh;
-  background: $bg-primary; // Light teal background for entire page
+  background: $bg-primary; // Light navy background for entire page
   position: relative;
   padding: 1rem; // Add space outside page content
   overflow: hidden;
@@ -137,7 +137,7 @@
   flex: 1;
   min-width: 0;
   padding: 0; // Remove padding to allow navbar to extend full width
-  background: $bg-primary; // Light teal background for page content
+  background: $bg-primary; // Light navy background for page content
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
@@ -232,7 +232,6 @@
   background: $white;
   border-radius: 12px;
   box-shadow: 0 2px 8px $shadow-light;
-  padding: 1.5rem;
   min-height: 400px;
   height: auto;
   overflow: visible;

@@ -111,10 +111,10 @@ export interface WithdrawalRequest {
     amount: number;
     method: string;
     payment_details: {
-        bank_name: string;
+        account_name: string;
         account_number: string;
-        account_holder_name: string;
-        ifsc_code: string;
+        bank_name: string;
+        routing_number: string;
     };
     user_notes?: string;
 }

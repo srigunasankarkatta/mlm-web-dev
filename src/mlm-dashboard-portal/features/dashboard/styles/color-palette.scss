@@ -1,78 +1,135 @@
-// Teal/Blue-Green Color Palette
-// Based on the provided color scheme
+// Navy Blue Color Palette
+// Based on the main color palette
 
-// Primary Colors
-$primary-50: #f0f7f5; // Very light teal
-$primary-100: #d1e8e0; // Light teal
-$primary-200: #a3d1c1; // Medium light teal
-$primary-300: #75baa2; // Medium teal
-$primary-400: #47a383; // Medium dark teal
-$primary-500: #198c64; // Primary teal
-$primary-600: #147050; // Dark teal
-$primary-700: #0f543c; // Darker teal
-$primary-800: #0a3828; // Very dark teal
-$primary-900: #051c14; // Darkest teal
+// Primary Colors - Navy Blue Palette
+$primary-50: #f0f4f8; // Very light navy
+$primary-100: #d9e2ec; // Light navy
+$primary-200: #bcccdc; // Medium light navy
+$primary-300: #9fb3c8; // Medium navy
+$primary-400: #829ab1; // Medium dark navy
+$primary-500: #486581; // Primary navy
+$primary-600: #334e68; // Dark navy
+$primary-700: #243b53; // Darker navy
+$primary-800: #1a365d; // Very dark navy
+$primary-900: #0f243e; // Darkest navy
 
-// Secondary Colors (Darker variants)
-$secondary-50: #f0f7f5; // Very light teal
-$secondary-100: #d1e8e0; // Light teal
-$secondary-200: #a3d1c1; // Medium light teal
-$secondary-300: #75baa2; // Medium teal
-$secondary-400: #47a383; // Medium dark teal
-$secondary-500: #198c64; // Secondary teal
-$secondary-600: #147050; // Dark teal
-$secondary-700: #0f543c; // Darker teal
-$secondary-800: #0a3828; // Very dark teal (main sidebar color)
-$secondary-900: #051c14; // Darkest teal
+// Secondary Colors - Deep Navy Blue Palette
+$secondary-50: #e8f0f7; // Very light deep navy
+$secondary-100: #c7d6e3; // Light deep navy
+$secondary-200: #a3b8cc; // Medium light deep navy
+$secondary-300: #7d9bb5; // Medium deep navy
+$secondary-400: #5a7a9e; // Medium dark deep navy
+$secondary-500: #2c5282; // Secondary deep navy
+$secondary-600: #2a4a7c; // Dark deep navy
+$secondary-700: #1e3a5f; // Darker deep navy
+$secondary-800: #1a2d4a; // Very dark deep navy (main sidebar color)
+$secondary-900: #0f1f35; // Darkest deep navy
 
 // Accent Colors (Complementary)
-$accent-50: #f0f7f5; // Very light teal
-$accent-100: #d1e8e0; // Light teal
-$accent-200: #a3d1c1; // Medium light teal
-$accent-300: #75baa2; // Medium teal
-$accent-400: #47a383; // Medium dark teal
-$accent-500: #198c64; // Accent teal
-$accent-600: #147050; // Dark teal
-$accent-700: #0f543c; // Darker teal
-$accent-800: #0a3828; // Very dark teal
-$accent-900: #051c14; // Darkest teal
+$accent-50: #f0f4f8; // Very light navy
+$accent-100: #d9e2ec; // Light navy
+$accent-200: #bcccdc; // Medium light navy
+$accent-300: #9fb3c8; // Medium navy
+$accent-400: #829ab1; // Medium dark navy
+$accent-500: #486581; // Accent navy
+$accent-600: #334e68; // Dark navy
+$accent-700: #243b53; // Darker navy
+$accent-800: #1a365d; // Very dark navy
+$accent-900: #0f243e; // Darkest navy
 
 // Background Colors
-$bg-primary: #f0f7f5; // Very light teal background
-$bg-secondary: #d1e8e0; // Light teal background
-$bg-tertiary: #a3d1c1; // Medium light teal background
-$bg-dark: #0a3828; // Very dark teal background
-$background-light:#f0f7f5;
+$bg-primary: #f0f4f8; // Very light navy background
+$bg-secondary: #e8f0f7; // Light navy background
+$bg-tertiary: #d9e2ec; // Medium light navy background
+$bg-dark: #0f243e; // Very dark navy background
+$background-light: #f0f4f8;
 
 // Text Colors
-$text-primary: #051c14; // Darkest teal for primary text
-$text-secondary: #0f543c; // Darker teal for secondary text
-$text-tertiary: #0a3828;
-$text-light: #f0f7f5; // Very light teal for light text
+$text-primary: #0f243e; // Darkest navy for primary text
+$text-secondary: #1e3a5f; // Darker navy for secondary text
+$text-tertiary: #243b53;
+$text-light: #f0f4f8; // Very light navy for light text
 $text-white: #ffffff; // Pure white
-$text-muted: #75baa2; // Medium teal for muted text
+$text-muted: #7d9bb5; // Medium navy for muted text
 
 // Border Colors
-$border-light: #d1e8e0; // Light teal borders
-$border-medium: #a3d1c1; // Medium teal borders
-$border-dark: #75baa2; // Dark teal borders
-$border-primary: #198c64; // Primary teal borders
+$border-light: #d9e2ec; // Light navy borders
+$border-medium: #bcccdc; // Medium navy borders
+$border-dark: #9fb3c8; // Dark navy borders
+$border-primary: #486581; // Primary navy borders
 $error-500: #c72522;
 $error-600: #c72522;
 $error-700: #c72522;
 
-$success-500:#75baa2;
-$success-700:#75baa2;
+$success-50: #f0f4f8;
+$success-100: #d9e2ec;
+$success-200: #bcccdc;
+$success-300: #9fb3c8;
+$success-400: #829ab1;
+$success-500: #486581;
+$success-600: #334e68;
+$success-700: #243b53;
+$success-800: #1a365d;
+$success-900: #0f243e;
+
+// Warning Colors
+$warning-50: #f0f4f8;
+$warning-100: #d9e2ec;
+$warning-200: #bcccdc;
+$warning-300: #9fb3c8;
+$warning-400: #829ab1;
+$warning-500: #486581;
+$warning-600: #334e68;
+$warning-700: #243b53;
+$warning-800: #1a365d;
+$warning-900: #0f243e;
+
+// Error Colors
+$error-50: #fef2f2;
+$error-100: #fee2e2;
+$error-200: #fecaca;
+$error-300: #fca5a5;
+$error-400: #f87171;
+$error-500: #ef4444;
+$error-600: #dc2626;
+$error-700: #b91c1c;
+$error-800: #991b1b;
+$error-900: #7f1d1d;
+
+// Info Colors
+$info-50: #f0f9ff;
+$info-100: #e0f2fe;
+$info-200: #bae6fd;
+$info-300: #7dd3fc;
+$info-400: #38bdf8;
+$info-500: #0ea5e9;
+$info-600: #0284c7;
+$info-700: #0369a1;
+$info-800: #075985;
+$info-900: #0c4a6e;
+
+// Gray Colors
+$gray-50: #f8fafc;
+$gray-100: #f1f5f9;
+$gray-200: #e2e8f0;
+$gray-300: #cbd5e1;
+$gray-400: #94a3b8;
+$gray-500: #64748b;
+$gray-600: #475569;
+$gray-700: #334155;
+$gray-800: #1e293b;
+$gray-900: #0f172a;
+
 // Shadow Colors
-$shadow-light: rgba(15, 54, 41, 0.1); // Light teal shadow
-$shadow-medium: rgba(10, 56, 40, 0.2); // Medium teal shadow
-$shadow-dark: rgba(10, 56, 40, 0.4); // Dark teal shadow
+$shadow-light: rgba(15, 36, 62, 0.1); // Light navy shadow
+$shadow-medium: rgba(15, 36, 62, 0.2); // Medium navy shadow
+$shadow-dark: rgba(15, 36, 62, 0.4); // Dark navy shadow
 
 // Status Colors
-$success: #198c64; // Primary teal for success
-$warning: #a3d1c1; // Medium light teal for warning
-$error: #d1e8e0; // Light teal for error (soft)
-$info: #75baa2; // Medium teal for info
+$success: #486581; // Primary navy for success
+$warning: #bcccdc; // Medium light navy for warning
+$error: #d9e2ec; // Light navy for error (soft)
+$info: #9fb3c8; // Medium navy for info
 
 // Gradients
 $gradient-primary: linear-gradient(135deg, $primary-500 0%, $primary-600 100%);
@@ -106,18 +163,18 @@ $white: #ffffff;
   background: $gradient-dark;
 }
 
-@mixin teal-shadow {
+@mixin navy-shadow {
   box-shadow: 0 4px 20px $shadow-medium;
 }
 
-@mixin teal-border {
+@mixin navy-border {
   border: 1px solid $border-medium;
 }
 
-@mixin teal-focus {
+@mixin navy-focus {
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(25, 140, 100, 0.3);
+    box-shadow: 0 0 0 2px rgba(72, 101, 129, 0.3);
   }
 }
 
@@ -155,6 +212,61 @@ $white: #ffffff;
   --accent-700: #{$accent-700};
   --accent-800: #{$accent-800};
   --accent-900: #{$accent-900};
+
+  --gray-50: #{$gray-50};
+  --gray-100: #{$gray-100};
+  --gray-200: #{$gray-200};
+  --gray-300: #{$gray-300};
+  --gray-400: #{$gray-400};
+  --gray-500: #{$gray-500};
+  --gray-600: #{$gray-600};
+  --gray-700: #{$gray-700};
+  --gray-800: #{$gray-800};
+  --gray-900: #{$gray-900};
+
+  --success-50: #{$success-50};
+  --success-100: #{$success-100};
+  --success-200: #{$success-200};
+  --success-300: #{$success-300};
+  --success-400: #{$success-400};
+  --success-500: #{$success-500};
+  --success-600: #{$success-600};
+  --success-700: #{$success-700};
+  --success-800: #{$success-800};
+  --success-900: #{$success-900};
+
+  --warning-50: #{$warning-50};
+  --warning-100: #{$warning-100};
+  --warning-200: #{$warning-200};
+  --warning-300: #{$warning-300};
+  --warning-400: #{$warning-400};
+  --warning-500: #{$warning-500};
+  --warning-600: #{$warning-600};
+  --warning-700: #{$warning-700};
+  --warning-800: #{$warning-800};
+  --warning-900: #{$warning-900};
+
+  --error-50: #{$error-50};
+  --error-100: #{$error-100};
+  --error-200: #{$error-200};
+  --error-300: #{$error-300};
+  --error-400: #{$error-400};
+  --error-500: #{$error-500};
+  --error-600: #{$error-600};
+  --error-700: #{$error-700};
+  --error-800: #{$error-800};
+  --error-900: #{$error-900};
+
+  --info-50: #{$info-50};
+  --info-100: #{$info-100};
+  --info-200: #{$info-200};
+  --info-300: #{$info-300};
+  --info-400: #{$info-400};
+  --info-500: #{$info-500};
+  --info-600: #{$info-600};
+  --info-700: #{$info-700};
+  --info-800: #{$info-800};
+  --info-900: #{$info-900};
 
   --bg-primary: #{$bg-primary};
   --bg-secondary: #{$bg-secondary};

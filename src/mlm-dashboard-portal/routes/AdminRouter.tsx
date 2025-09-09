@@ -10,6 +10,8 @@ import AllPackages from "../features/package-management/AllPackages";
 import CreatePackage from "../features/package-management/CreatePackage";
 import EditPackage from "../features/package-management/EditPackage";
 import PackageDetail from "../features/package-management/PackageDetail";
+import AdminWalletPage from "../pages/AdminWalletPage";
+import AdminWalletOverviewPage from "../pages/AdminWalletOverviewPage";
 import { useCurrentAdminUser } from "../queries/admin-auth";
 
 const AdminRouter: React.FC = () => {
@@ -108,6 +110,24 @@ const AdminRouter: React.FC = () => {
         element={
           <AdminDashboardLayout>
             <EditPackage />
+          </AdminDashboardLayout>
+        }
+      />
+
+      {/* Wallet Management */}
+      <Route
+        path="/admin/wallets"
+        element={
+          <AdminDashboardLayout>
+            <AdminWalletPage />
+          </AdminDashboardLayout>
+        }
+      />
+      <Route
+        path="/admin/wallets/overview"
+        element={
+          <AdminDashboardLayout>
+            <AdminWalletOverviewPage />
           </AdminDashboardLayout>
         }
       />

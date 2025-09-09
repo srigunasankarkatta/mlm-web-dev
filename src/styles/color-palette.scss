@@ -1,29 +1,29 @@
 // Blue Color Palette
 // Based on the provided blue color scheme
 
-// Primary Colors
-$primary-50: #f3f8ff; // Very light blue
-$primary-100: #e6f0ff; // Light blue
-$primary-200: #cfe0ff; // Medium light blue
-$primary-300: #99cfff; // Medium blue
-$primary-400: #4daaff; // Medium dark blue
-$primary-500: #1e90ff; // Primary blue
-$primary-600: #1677d6; // Dark blue
-$primary-700: #1256a8; // Darker blue
-$primary-800: #0e3f7a; // Very dark blue
-$primary-900: #0b2b52; // Darkest blue
+// Primary Colors - Navy Blue Palette
+$primary-50: #f0f4f8; // Very light navy
+$primary-100: #d9e2ec; // Light navy
+$primary-200: #bcccdc; // Medium light navy
+$primary-300: #9fb3c8; // Medium navy
+$primary-400: #829ab1; // Medium dark navy
+$primary-500: #486581; // Primary navy
+$primary-600: #334e68; // Dark navy
+$primary-700: #243b53; // Darker navy
+$primary-800: #1a365d; // Very dark navy
+$primary-900: #0f243e; // Darkest navy
 
-// Secondary Colors (Darker variants)
-$secondary-50: #f3f8ff; // Very light blue
-$secondary-100: #e6f0ff; // Light blue
-$secondary-200: #cfe0ff; // Medium light blue
-$secondary-300: #99cfff; // Medium blue
-$secondary-400: #4daaff; // Medium dark blue
-$secondary-500: #1e90ff; // Secondary blue
-$secondary-600: #1677d6; // Dark blue
-$secondary-700: #1256a8; // Darker blue
-$secondary-800: #0e3f7a; // Very dark blue (main sidebar color)
-$secondary-900: #0b2b52; // Darkest blue
+// Secondary Colors - Deep Navy Blue Palette
+$secondary-50: #e8f0f7; // Very light deep navy
+$secondary-100: #c7d6e3; // Light deep navy
+$secondary-200: #a3b8cc; // Medium light deep navy
+$secondary-300: #7d9bb5; // Medium deep navy
+$secondary-400: #5a7a9e; // Medium dark deep navy
+$secondary-500: #2c5282; // Secondary deep navy
+$secondary-600: #2a4a7c; // Dark deep navy
+$secondary-700: #1e3a5f; // Darker deep navy
+$secondary-800: #1a2d4a; // Very dark deep navy (main sidebar color)
+$secondary-900: #0f1f35; // Darkest deep navy
 
 // Accent Colors (Complementary)
 $accent-50: #f3f8ff; // Very light blue
@@ -38,30 +38,35 @@ $accent-800: #0e3f7a; // Very dark blue
 $accent-900: #0b2b52; // Darkest blue
 
 // Background Colors
-$bg-primary: #f3f8ff; // Very light blue background
-$bg-secondary: #e6f0ff; // Light blue background
-$bg-tertiary: #cfe0ff; // Medium light blue background
-$bg-dark: #0b2b52; // Very dark blue background
-$background-light: #f3f8ff;
+$bg-primary: #f0f4f8; // Very light navy background
+$bg-secondary: #e8f0f7; // Light navy background
+$bg-tertiary: #d9e2ec; // Medium light navy background
+$bg-dark: #0f243e; // Very dark navy background
+$background-light: #f0f4f8;
 
 // Text Colors
-$text-primary: #0b2b52; // Darkest blue for primary text
-$text-secondary: #1256a8; // Darker blue for secondary text
-$text-tertiary: #0e3f7a;
-$text-light: #f3f8ff; // Very light blue for light text
+$text-primary: #0f243e; // Darkest navy for primary text
+$text-secondary: #1e3a5f; // Darker navy for secondary text
+$text-tertiary: #243b53;
+$text-light: #f0f4f8; // Very light navy for light text
 $text-white: #ffffff; // Pure white
-$text-muted: #99cfff; // Medium blue for muted text
+$text-muted: #7d9bb5; // Medium navy for muted text
 
 // Border Colors
-$border-light: #e6f0ff; // Light blue borders
-$border-medium: #cfe0ff; // Medium blue borders
-$border-dark: #99cfff; // Dark blue borders
-$border-primary: #1e90ff; // Primary blue borders
-$error-200: #c72522;
-$error-500: #c72522;
-$error-600: #c72522;
-$error-700: #c72522;
-$error-50: #c72522;
+$border-light: #d9e2ec; // Light navy borders
+$border-medium: #bcccdc; // Medium navy borders
+$border-dark: #9fb3c8; // Dark navy borders
+$border-primary: #486581; // Primary navy borders
+$error-50: #fef2f2;
+$error-100: #fee2e2;
+$error-200: #fecaca;
+$error-300: #fca5a5;
+$error-400: #f87171;
+$error-500: #ef4444;
+$error-600: #dc2626;
+$error-700: #b91c1c;
+$error-800: #991b1b;
+$error-900: #7f1d1d;
 
 $success-50: #f3f8ff;
 $success-100: #e6f0ff;
@@ -72,21 +77,21 @@ $success-500: #1e90ff;
 $success-600: #1677d6;
 $success-700: #1256a8;
 // Shadow Colors
-$shadow-light: rgba(11, 43, 82, 0.1); // Light blue shadow
-$shadow-medium: rgba(11, 43, 82, 0.2); // Medium blue shadow
-$shadow-dark: rgba(11, 43, 82, 0.4); // Dark blue shadow
+$shadow-light: rgba(15, 36, 62, 0.1); // Light navy shadow
+$shadow-medium: rgba(15, 36, 62, 0.2); // Medium navy shadow
+$shadow-dark: rgba(15, 36, 62, 0.4); // Dark navy shadow
 
 // Status Colors
-$success: #1e90ff; // Primary blue for success
-$warning-200: #cfe0ff; // Medium light blue for warning
-$warning: #cfe0ff; // Medium light blue for warning
+$success: #486581; // Primary navy for success
+$warning-200: #bcccdc; // Medium light navy for warning
+$warning: #bcccdc; // Medium light navy for warning
 $error: #ef4444; // Red for error
-$info: #99cfff; // Medium blue for info
+$info: #9fb3c8; // Medium navy for info
 $red-600: #c72522;
-$success-200: #cfe0ff;
-$success-100: #e6f0ff;
-$success-300: #99cfff;
-$success-400: #4daaff;
+$success-200: #bcccdc;
+$success-100: #d9e2ec;
+$success-300: #9fb3c8;
+$success-400: #829ab1;
 
 $gray: #64748b;
 $gray-50: #f8fafc;
@@ -106,6 +111,17 @@ $danger-400: #ce4545;
 $danger-500: #ce4545;
 $danger-600: #ce4545;
 $danger-700: #ce4545;
+
+$info-50: #f0f9ff;
+$info-100: #e0f2fe;
+$info-200: #bae6fd;
+$info-300: #7dd3fc;
+$info-400: #38bdf8;
+$info-500: #0ea5e9;
+$info-600: #0284c7;
+$info-700: #0369a1;
+$info-800: #075985;
+$info-900: #0c4a6e;
 
 $warning-50: #f3f8ff;
 $warning-100: #e6f0ff;
@@ -158,7 +174,7 @@ $black: #000000;
 @mixin blue-focus {
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(30, 144, 255, 0.3);
+    box-shadow: 0 0 0 2px rgba(72, 101, 129, 0.3);
   }
 }
 
@@ -233,4 +249,26 @@ $black: #000000;
   --warning: #{$warning};
   --error: #{$error};
   --info: #{$info};
+
+  --error-50: #{$error-50};
+  --error-100: #{$error-100};
+  --error-200: #{$error-200};
+  --error-300: #{$error-300};
+  --error-400: #{$error-400};
+  --error-500: #{$error-500};
+  --error-600: #{$error-600};
+  --error-700: #{$error-700};
+  --error-800: #{$error-800};
+  --error-900: #{$error-900};
+
+  --info-50: #{$info-50};
+  --info-100: #{$info-100};
+  --info-200: #{$info-200};
+  --info-300: #{$info-300};
+  --info-400: #{$info-400};
+  --info-500: #{$info-500};
+  --info-600: #{$info-600};
+  --info-700: #{$info-700};
+  --info-800: #{$info-800};
+  --info-900: #{$info-900};
 }

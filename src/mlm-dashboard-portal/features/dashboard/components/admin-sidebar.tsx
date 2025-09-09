@@ -509,7 +509,7 @@ const AdminSidebar: React.FC<AdminSidebarProps> = ({
                       onClick={() => handleMenuClick(item)}
                     >
                       <span className={styles.menuIcon}>{item.icon}</span>
-                      <span className={styles.menuLabel}>{item.labelKey}</span>
+                      <span className={styles.menuLabel}>{item.labelKey}rtyuytrty</span>
                     </button>
                   </li>
                 ))}

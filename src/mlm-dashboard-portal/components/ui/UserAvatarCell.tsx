@@ -7,8 +7,16 @@ interface UserAvatarCellProps {
   getJoinDate?: (params: any) => string;
 }
 
-const UserAvatarCell: React.FC<UserAvatarCellProps> = ({ value, data, getEmail, getJoinDate }) => {
-  const getInitials = (name: string) => {
+const UserAvatarCell: React.FC<UserAvatarCellProps> = ({
+  value,
+  data,
+  getEmail,
+  getJoinDate,
+}) => {
+  const getInitials = (name: string | undefined | null) => {
+    if (!name || typeof name !== "string") {
+      return "U"; // Default to 'U' for User if name is not available
+    }
     return name
       .split(" ")
       .map((n) => n[0])
@@ -32,7 +40,7 @@ const UserAvatarCell: React.FC<UserAvatarCellProps> = ({ value, data, getEmail, 
       </div>
       <div className="min-w-0 flex-1">
         <div className="text-sm font-semibold text-gray-900 truncate mb-1">
-          {value}
+          {value || "Unknown User"}
         </div>
         <div className="text-sm text-gray-600 truncate mb-1 flex items-center">
           <svg
@@ -43,7 +51,7 @@ const UserAvatarCell: React.FC<UserAvatarCellProps> = ({ value, data, getEmail, 
             <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
             <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
           </svg>
-          {email}
+          {email || "No email"}
         </div>
         <div className="text-xs text-gray-500 flex items-center">
           <svg
@@ -57,7 +65,7 @@ const UserAvatarCell: React.FC<UserAvatarCellProps> = ({ value, data, getEmail, 
               clipRule="evenodd"
             />
           </svg>
-          Joined: {joinDate ? new Date(joinDate).toLocaleDateString() : 'N/A'}
+          Joined: {joinDate ? new Date(joinDate).toLocaleDateString() : "N/A"}
         </div>
       </div>
     </div>

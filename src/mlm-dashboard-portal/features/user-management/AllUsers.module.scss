@@ -1,0 +1,454 @@
+@import "../dashboard/styles/color-palette.scss";
+
+.usersContainer {
+  background: linear-gradient(135deg, $primary-50, $primary-100);
+  min-height: 100vh;
+  padding: 1.5rem;
+}
+
+.headerSection {
+  margin-bottom: 2rem;
+}
+
+.headerCard {
+  background: linear-gradient(135deg, $primary-600, $primary-700);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  color: $text-white;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 15px -3px rgba($primary-500, 0.1),
+    0 4px 6px -2px rgba($primary-500, 0.05);
+
+  .headerIcon {
+    padding: 0.75rem;
+    background: linear-gradient(135deg, $primary-500, $primary-600);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba($primary-500, 0.1);
+    margin-bottom: 1rem;
+    display: inline-block;
+
+    .icon {
+      width: 2rem;
+      height: 2rem;
+      color: $text-white;
+    }
+  }
+
+  .headerTitle {
+    font-size: 1.875rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, $primary-900, $primary-700);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    margin-bottom: 0.5rem;
+  }
+
+  .headerSubtitle {
+    color: $primary-100;
+    margin-top: 0.25rem;
+  }
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  background: $white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba($primary-500, 0.1),
+    0 4px 6px -2px rgba($primary-500, 0.05);
+  border: 1px solid $primary-100;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 20px 25px -5px rgba($primary-500, 0.1),
+      0 10px 10px -5px rgba($primary-500, 0.04);
+    transform: translateY(-0.25rem);
+  }
+
+  .statIcon {
+    padding: 0.75rem;
+    background: linear-gradient(135deg, $primary-500, $primary-600);
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba($primary-500, 0.1);
+    margin-bottom: 1rem;
+    display: inline-block;
+
+    .icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      color: $text-white;
+    }
+  }
+
+  .statContent {
+    .statLabel {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: $primary-600;
+      margin-bottom: 0.5rem;
+    }
+
+    .statValue {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, $primary-600, $primary-800);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+  }
+}
+
+.secondaryStatCard {
+  background: $white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba($primary-500, 0.1),
+    0 2px 4px -1px rgba($primary-500, 0.06);
+  padding: 1.5rem;
+
+  .statIcon {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+
+    .icon {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    &.tealIcon {
+      background: $primary-100;
+
+      .icon {
+        color: $primary-600;
+      }
+    }
+
+    &.yellowIcon {
+      background: $warning-100;
+
+      .icon {
+        color: $warning-600;
+      }
+    }
+
+    &.redIcon {
+      background: $error-100;
+
+      .icon {
+        color: $error-600;
+      }
+    }
+  }
+
+  .statContent {
+    .statLabel {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: $text-muted;
+      margin-bottom: 0.5rem;
+    }
+
+    .statValue {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: $text-primary;
+    }
+  }
+}
+
+.filtersCard {
+  background: $white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba($primary-500, 0.1),
+    0 2px 4px -1px rgba($primary-500, 0.06);
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+
+  .filtersGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .filterInput {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid $border-medium;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-500;
+      box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
+    }
+  }
+
+  .filterSelect {
+    padding: 0.75rem 1rem;
+    border: 1px solid $border-medium;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    background: $white;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-500;
+      box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
+    }
+  }
+
+  .searchButton {
+    padding: 0.75rem 1.5rem;
+    background: $primary-600;
+    color: $text-white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $primary-700;
+    }
+  }
+}
+
+.selectedUsersCard {
+  background: $primary-50;
+  border: 1px solid $primary-200;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+
+  .selectedUsersInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+
+    .selectedCount {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: $primary-900;
+    }
+  }
+
+  .actionButtons {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .actionButton {
+    padding: 0.5rem 0.75rem;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &.activateButton {
+      background: $success-600;
+      color: $text-white;
+
+      &:hover {
+        background: $success-700;
+      }
+    }
+
+    &.deactivateButton {
+      background: $error-600;
+      color: $text-white;
+
+      &:hover {
+        background: $error-700;
+      }
+    }
+
+    &.exportButton {
+      background: $primary-600;
+      color: $text-white;
+
+      &:hover {
+        background: $primary-700;
+      }
+    }
+  }
+}
+
+.errorContainer {
+  text-align: center;
+  padding: 2rem;
+
+  .errorIcon {
+    color: $error-600;
+    margin-bottom: 1rem;
+    font-size: 3rem;
+  }
+
+  .errorTitle {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin-bottom: 0.5rem;
+  }
+
+  .errorMessage {
+    font-size: 0.875rem;
+    color: $text-muted;
+    margin-bottom: 1rem;
+  }
+
+  .retryButton {
+    padding: 0.75rem 1.5rem;
+    background: $primary-600;
+    color: $text-white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $primary-700;
+    }
+  }
+}
+
+.paginationContainer {
+  background: $white;
+  border-top: 1px solid $primary-200;
+  padding: 1.5rem;
+
+  .paginationInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .paginationText {
+      font-size: 0.875rem;
+      color: $primary-700;
+    }
+
+    .perPageSelector {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .perPageLabel {
+        font-size: 0.875rem;
+        color: $primary-700;
+      }
+
+      .perPageSelect {
+        padding: 0.5rem;
+        border: 1px solid $primary-300;
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+        color: $primary-700;
+        background: $white;
+
+        &:focus {
+          outline: none;
+          border-color: $primary-500;
+          box-shadow: 0 0 0 2px rgba($primary-500, 0.1);
+        }
+      }
+    }
+  }
+
+  .paginationButtons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    .paginationButton {
+      padding: 0.5rem;
+      border: 1px solid $primary-300;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      color: $primary-700;
+      background: $white;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover:not(:disabled) {
+        background: $primary-50;
+        border-color: $primary-400;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      &.activePage {
+        background: $primary-600;
+        color: $text-white;
+        border-color: $primary-600;
+        box-shadow: 0 4px 6px -1px rgba($primary-500, 0.1);
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .usersContainer {
+    padding: 1rem;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .filtersCard .filtersGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .paginationContainer {
+    .paginationInfo {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .paginationButtons {
+      justify-content: center;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .headerCard {
+    padding: 1rem;
+
+    .headerTitle {
+      font-size: 1.5rem;
+    }
+  }
+
+  .selectedUsersCard .actionButtons {
+    flex-direction: column;
+  }
+}

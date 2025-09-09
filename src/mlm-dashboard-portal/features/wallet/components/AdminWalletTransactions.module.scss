@@ -1,0 +1,583 @@
+@import "../../dashboard/styles/color-palette.scss";
+
+.transactionsList {
+  padding: 2rem;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: $white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba($primary-500, 0.08);
+  border: 1px solid rgba($primary-200, 0.2);
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $text-primary;
+  }
+
+  .searchInput,
+  .filterSelect,
+  .dateInput {
+    padding: 0.75rem;
+    border: 1px solid $border-light;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-500;
+      box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
+    }
+  }
+}
+
+.filterActions {
+  display: flex;
+  gap: 1rem;
+  align-items: end;
+  grid-column: 1 / -1;
+  justify-content: flex-end;
+}
+
+.clearFiltersButton {
+  padding: 0.75rem 1.5rem;
+  background: $gray-100;
+  color: $text-primary;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $gray-200;
+  }
+}
+
+.exportButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: $primary-500;
+  color: $white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $primary-600;
+    transform: translateY(-1px);
+  }
+
+  i {
+    font-size: 0.875rem;
+  }
+}
+
+.transactionsTable {
+  background: $white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba($primary-500, 0.08);
+  border: 1px solid rgba($primary-200, 0.2);
+  overflow: hidden;
+}
+
+.tableHeader {
+  background: rgba($primary-50, 0.5);
+  border-bottom: 1px solid $border-light;
+
+  .tableRow {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1.5fr 1fr 1.5fr 1fr 1fr 1fr;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    align-items: center;
+  }
+
+  .tableCell {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: $text-primary;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+}
+
+.tableBody {
+  .tableRow {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1.5fr 1fr 1.5fr 1fr 1fr 1fr;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    align-items: center;
+    border-bottom: 1px solid rgba($primary-100, 0.3);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba($primary-50, 0.3);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .tableCell {
+    font-size: 0.875rem;
+    color: $text-primary;
+  }
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  .userAvatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $primary-500, $primary-600);
+    color: $white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  .userDetails {
+    h4 {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: $text-primary;
+      margin: 0 0 0.25rem 0;
+    }
+
+    p {
+      font-size: 0.75rem;
+      color: $text-muted;
+      margin: 0;
+    }
+  }
+}
+
+.walletInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .walletTypeIcon {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.375rem;
+    background: rgba($primary-100, 0.5);
+    color: $primary-600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+  }
+
+  span {
+    font-weight: 500;
+  }
+}
+
+.transactionType {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &.credit {
+    background: rgba($success-100, 0.8);
+    color: $success-700;
+  }
+
+  &.debit {
+    background: rgba($error-100, 0.8);
+    color: $error-700;
+  }
+
+  &.transfer_in {
+    background: rgba($info-100, 0.8);
+    color: $info-700;
+  }
+
+  &.transfer_out {
+    background: rgba($warning-100, 0.8);
+    color: $warning-700;
+  }
+
+  i {
+    font-size: 0.75rem;
+  }
+}
+
+.amount {
+  font-weight: 700;
+  font-size: 1rem;
+
+  &.credit {
+    color: $success-600;
+  }
+
+  &.debit {
+    color: $error-600;
+  }
+
+  &.transfer_in {
+    color: $info-600;
+  }
+
+  &.transfer_out {
+    color: $warning-600;
+  }
+}
+
+.balanceInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  .balanceBefore,
+  .balanceAfter {
+    font-size: 0.75rem;
+    color: $text-muted;
+  }
+
+  .balanceAfter {
+    font-weight: 600;
+    color: $text-primary;
+  }
+}
+
+.referenceId {
+  font-family: "Courier New", monospace;
+  font-size: 0.75rem;
+  color: $text-muted;
+  background: rgba($primary-50, 0.5);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: $text-primary;
+  line-height: 1.4;
+}
+
+.status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &.completed {
+    background: rgba($success-100, 0.8);
+    color: $success-700;
+  }
+
+  &.pending {
+    background: rgba($warning-100, 0.8);
+    color: $warning-700;
+  }
+
+  &.failed {
+    background: rgba($error-100, 0.8);
+    color: $error-700;
+  }
+
+  &.cancelled {
+    background: rgba($gray-100, 0.8);
+    color: $gray-600;
+  }
+}
+
+.transactionDate {
+  font-size: 0.75rem;
+  color: $text-muted;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.actionButton {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.375rem;
+  background: rgba($primary-100, 0.5);
+  color: $primary-600;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $primary-500;
+    color: $white;
+  }
+
+  i {
+    font-size: 0.75rem;
+  }
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  grid-column: 1 / -1;
+
+  .emptyIcon {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background: rgba($primary-100, 0.5);
+    color: $primary-500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    color: $text-muted;
+    margin: 0;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  background: $white;
+  border-top: 1px solid $border-light;
+}
+
+.paginationInfo {
+  font-size: 0.875rem;
+  color: $text-muted;
+}
+
+.paginationControls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.paginationButton {
+  padding: 0.5rem 0.75rem;
+  background: $white;
+  color: $text-primary;
+  border: 1px solid $border-light;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: $primary-50;
+    border-color: $primary-200;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &.active {
+    background: $primary-500;
+    color: $white;
+    border-color: $primary-500;
+  }
+}
+
+.paginationNumbers {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.loadingContainer,
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  grid-column: 1 / -1;
+
+  .spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 3px solid rgba($primary-200, 0.3);
+    border-top: 3px solid $primary-500;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  .errorIcon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    color: $text-muted;
+    margin: 0;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// Responsive Design
+@media (max-width: 1200px) {
+  .tableHeader .tableRow,
+  .tableBody .tableRow {
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .transactionsList {
+    padding: 1rem;
+  }
+
+  .filters {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .filterActions {
+    grid-column: 1;
+    justify-content: stretch;
+  }
+
+  .tableHeader .tableRow,
+  .tableBody .tableRow {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .tableHeader .tableCell {
+    display: none;
+  }
+
+  .tableBody .tableRow {
+    padding: 1rem;
+    border: 1px solid rgba($primary-100, 0.3);
+    border-radius: 0.75rem;
+    margin-bottom: 1rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  .tableBody .tableCell {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &::before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: $text-muted;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .paginationNumbers {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .userInfo {
+    .userAvatar {
+      width: 2rem;
+      height: 2rem;
+      font-size: 0.75rem;
+    }
+
+    .userDetails {
+      h4 {
+        font-size: 0.75rem;
+      }
+
+      p {
+        font-size: 0.625rem;
+      }
+    }
+  }
+
+  .amount {
+    font-size: 0.875rem;
+  }
+
+  .referenceId {
+    font-size: 0.625rem;
+  }
+}
