@@ -1,7 +1,11 @@
-import React, { useState } from "react";
-import {
-  AdminWalletListResponse,
+import React, { useState, useMemo } from "react";
+import type { ColDef } from "ag-grid-community";
+import { FiEye, FiEdit2, FiDollarSign, FiUser } from "react-icons/fi";
+import AgGridTable from "../../../components/ui/AgGridTable";
+import ServerPagination from "../../../components/ui/ServerPagination";
+import type {
   AdminWalletListParams,
+  AdminWallet,
 } from "../../../api-services/admin-wallet-service";
 import {
   useAdminWallets,
@@ -10,27 +14,32 @@ import {
 import styles from "./AdminWalletList.module.scss";
 
 const AdminWalletList: React.FC = () => {
-  const { formatCurrency, getWalletTypeIcon, getWalletTypeColor } =
+  const { formatCurrency, getWalletTypeIcon } =
     useAdminWalletUtils();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(15);
   const [filters, setFilters] = useState<Partial<AdminWalletListParams>>({});
 
   const wallets = useAdminWallets(filters);
 
   const handleSearch = (value: string) => {
     setSearchTerm(value);
+    setCurrentPage(1);
     setFilters({ ...filters, search: value, page: 1 });
   };
 
   const handleTypeFilter = (type: string) => {
     setSelectedType(type);
+    setCurrentPage(1);
     setFilters({ ...filters, type: type || undefined, page: 1 });
   };
 
   const handleStatusFilter = (status: string) => {
     setSelectedStatus(status);
+    setCurrentPage(1);
     setFilters({
       ...filters,
       is_active:
@@ -43,25 +52,156 @@ const AdminWalletList: React.FC = () => {
     setSearchTerm("");
     setSelectedType("");
     setSelectedStatus("");
+    setCurrentPage(1);
     setFilters({});
   };
 
   const handlePageChange = (page: number) => {
+    setCurrentPage(page);
     setFilters({ ...filters, page });
   };
 
-  if (!wallets || wallets.isLoading) {
+  // Column definitions for AgGrid
+  const columnDefs: ColDef[] = useMemo(
+    () => [
+      {
+        headerName: "User",
+        field: "user_name",
+        cellRenderer: (params: any) => {
+          const wallet = params.data as AdminWallet;
     return (
-      <div className={styles.walletList}>
-        <div className={styles.loadingContainer}>
-          <div className={styles.spinner}></div>
-          <p>Loading wallets...</p>
+            <div className={styles.userInfo}>
+              <div className={styles.userAvatar}>
+                <FiUser className={styles.userIcon} />
+              </div>
+              <div className={styles.userDetails}>
+                <h4>{wallet.user_name}</h4>
+                <p>{wallet.user_email}</p>
         </div>
       </div>
     );
-  }
+        },
+        width: 200,
+        pinned: "left",
+      },
+      {
+        headerName: "Wallet Type",
+        field: "display_name",
+        cellRenderer: (params: any) => {
+          const wallet = params.data as AdminWallet;
+          return (
+            <div className={styles.walletType}>
+              <div className={styles.walletTypeIcon}>
+                <FiDollarSign className={styles.walletIcon} />
+              </div>
+              <span>{wallet.display_name}</span>
+            </div>
+          );
+        },
+        width: 150,
+      },
+      {
+        headerName: "Balance",
+        field: "balance",
+        cellRenderer: (params: any) => {
+          const wallet = params.data as AdminWallet;
+          return (
+            <div className={styles.balanceInfo}>
+              <span className={styles.balanceAmount}>
+                {formatCurrency(wallet.balance)}
+              </span>
+              <span className={styles.balanceTotal}>
+                Total: {formatCurrency(wallet.total_balance)}
+              </span>
+            </div>
+          );
+        },
+        width: 150,
+      },
+      {
+        headerName: "Available",
+        field: "available_balance",
+        cellRenderer: (params: any) => {
+          const wallet = params.data as AdminWallet;
+          return (
+            <span className={styles.availableBalance}>
+              {formatCurrency(wallet.available_balance)}
+            </span>
+          );
+        },
+        width: 120,
+      },
+      {
+        headerName: "Pending",
+        field: "pending_balance",
+        cellRenderer: (params: any) => {
+          const wallet = params.data as AdminWallet;
+          return (
+            <span className={styles.pendingBalance}>
+              {formatCurrency(wallet.pending_balance)}
+            </span>
+          );
+        },
+        width: 120,
+      },
+      {
+        headerName: "Withdrawn",
+        field: "withdrawn_balance",
+        cellRenderer: (params: any) => {
+          const wallet = params.data as AdminWallet;
+          return (
+            <span className={styles.withdrawnBalance}>
+              {formatCurrency(wallet.withdrawn_balance)}
+            </span>
+          );
+        },
+        width: 120,
+      },
+      {
+        headerName: "Status",
+        field: "is_active",
+        cellRenderer: (params: any) => {
+          const wallet = params.data as AdminWallet;
+          return (
+            <span
+              className={`${styles.status} ${
+                styles[wallet.is_active ? "active" : "inactive"]
+              }`}
+            >
+              {wallet.is_active ? "Active" : "Inactive"}
+            </span>
+          );
+        },
+        width: 100,
+      },
+      {
+        headerName: "Actions",
+        field: "actions",
+        cellRenderer: () => {
+          return (
+            <div className={styles.actions}>
+              <button className={styles.actionButton} title="View Details">
+                <FiEye className={styles.actionIcon} />
+              </button>
+              <button className={styles.actionButton} title="Edit Wallet">
+                <FiEdit2 className={styles.actionIcon} />
+              </button>
+            </div>
+          );
+        },
+        width: 120,
+        pinned: "right",
+        sortable: false,
+        filter: false,
+      },
+    ],
+    [formatCurrency, getWalletTypeIcon, styles]
+  );
 
-  if (!wallets || wallets.error) {
+  const walletData = wallets?.data?.wallets || [];
+  const pagination = wallets?.data?.pagination;
+
+  if (wallets?.error) {
     return (
       <div className={styles.walletList}>
         <div className={styles.errorContainer}>
@@ -72,9 +212,6 @@ const AdminWalletList: React.FC = () => {
       </div>
     );
   }
-
-  const walletData = wallets?.data?.wallets || [];
-  const pagination = wallets?.data?.pagination;
 
   return (
     <div className={styles.walletList}>
@@ -128,154 +265,31 @@ const AdminWalletList: React.FC = () => {
         </button>
       </div>
 
-      {/* Wallet Table */}
-      <div className={styles.walletTable}>
-        <div className={styles.tableHeader}>
-          <div className={styles.tableRow}>
-            <div className={styles.tableCell}>User</div>
-            <div className={styles.tableCell}>Wallet Type</div>
-            <div className={styles.tableCell}>Balance</div>
-            <div className={styles.tableCell}>Available</div>
-            <div className={styles.tableCell}>Pending</div>
-            <div className={styles.tableCell}>Withdrawn</div>
-            <div className={styles.tableCell}>Status</div>
-            <div className={styles.tableCell}>Actions</div>
-          </div>
-        </div>
-
-        <div className={styles.tableBody}>
-          {walletData.length === 0 ? (
-            <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>
-                <i className="icon-wallet"></i>
-              </div>
-              <h3>No Wallets Found</h3>
-              <p>No wallets match your current filters.</p>
-            </div>
-          ) : (
-            walletData.map((wallet: any) => (
-              <div key={wallet.id} className={styles.tableRow}>
-                <div className={styles.tableCell}>
-                  <div className={styles.userInfo}>
-                    <div className={styles.userAvatar}>
-                      {wallet.user_name.charAt(0).toUpperCase()}
-                    </div>
-                    <div className={styles.userDetails}>
-                      <h4>{wallet.user_name}</h4>
-                      <p>{wallet.user_email}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <div className={styles.walletType}>
-                    <div className={styles.walletTypeIcon}>
-                      <i
-                        className={`icon-${getWalletTypeIcon(wallet.type)}`}
-                      ></i>
-                    </div>
-                    <span>{wallet.display_name}</span>
-                  </div>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <div className={styles.balanceInfo}>
-                    <span className={styles.balanceAmount}>
-                      {formatCurrency(wallet.balance)}
-                    </span>
-                    <span className={styles.balanceTotal}>
-                      Total: {formatCurrency(wallet.total_balance)}
-                    </span>
-                  </div>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <span className={styles.availableBalance}>
-                    {formatCurrency(wallet.available_balance)}
-                  </span>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <span className={styles.pendingBalance}>
-                    {formatCurrency(wallet.pending_balance)}
-                  </span>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <span className={styles.withdrawnBalance}>
-                    {formatCurrency(wallet.withdrawn_balance)}
-                  </span>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <span
-                    className={`${styles.status} ${
-                      styles[wallet.is_active ? "active" : "inactive"]
-                    }`}
-                  >
-                    {wallet.is_active ? "Active" : "Inactive"}
-                  </span>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <div className={styles.actions}>
-                    <button className={styles.actionButton}>
-                      <i className="icon-eye"></i>
-                    </button>
-                    <button className={styles.actionButton}>
-                      <i className="icon-edit"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+      {/* AgGrid Table */}
+      <div className={styles.tableContainer}>
+        <AgGridTable
+          rowData={walletData}
+          columnDefs={columnDefs}
+          loading={wallets?.isLoading || false}
+          enablePagination={false}
+          enableSorting={true}
+          enableFiltering={false}
+          enableSelection={false}
+          height={600}
+          className={styles.agGridTable}
+        />
       </div>
 
-      {/* Pagination */}
+      {/* Server-side Pagination */}
       {pagination && pagination.total > 0 && (
-        <div className={styles.pagination}>
-          <div className={styles.paginationInfo}>
-            Showing {pagination.from} to {pagination.to} of {pagination.total}{" "}
-            wallets
-          </div>
-          <div className={styles.paginationControls}>
-            <button
-              onClick={() => handlePageChange(pagination.current_page - 1)}
-              disabled={pagination.current_page === 1}
-              className={styles.paginationButton}
-            >
-              Previous
-            </button>
-            <div className={styles.paginationNumbers}>
-              {Array.from(
-                { length: Math.min(5, pagination.last_page) },
-                (_, i) => {
-                  const page = i + 1;
-                  return (
-                    <button
-                      key={page}
-                      onClick={() => handlePageChange(page)}
-                      className={`${styles.paginationButton} ${
-                        pagination.current_page === page ? styles.active : ""
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  );
-                }
-              )}
-            </div>
-            <button
-              onClick={() => handlePageChange(pagination.current_page + 1)}
-              disabled={pagination.current_page === pagination.last_page}
-              className={styles.paginationButton}
-            >
-              Next
-            </button>
-          </div>
-        </div>
+        <ServerPagination
+          currentPage={currentPage}
+          totalPages={pagination.last_page}
+          totalItems={pagination.total}
+          itemsPerPage={itemsPerPage}
+          onPageChange={handlePageChange}
+          loading={wallets?.isLoading || false}
+        />
       )}
     </div>
   );

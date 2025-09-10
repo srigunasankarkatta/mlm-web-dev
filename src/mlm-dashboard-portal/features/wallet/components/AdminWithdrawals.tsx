@@ -1,8 +1,12 @@
-import React, { useState } from "react";
-import {
-  AdminWithdrawalsResponse,
+import React, { useState, useMemo } from "react";
+import type { ColDef } from "ag-grid-community";
+import { FiEye, FiEdit2, FiUser, FiDollarSign, FiCreditCard, FiCheckCircle, FiXCircle, FiClock } from "react-icons/fi";
+import AgGridTable from "../../../components/ui/AgGridTable";
+import ServerPagination from "../../../components/ui/ServerPagination";
+import type {
   AdminWithdrawalsParams,
   ProcessWithdrawalRequest,
+  AdminWithdrawal,
 } from "../../../api-services/admin-wallet-service";
 import {
   useAdminWithdrawals,
@@ -20,6 +24,8 @@ const AdminWithdrawals: React.FC = () => {
   const [selectedMethod, setSelectedMethod] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(15);
   const [filters, setFilters] = useState<Partial<AdminWithdrawalsParams>>({});
 
   const withdrawals = useAdminWithdrawals(filters);
@@ -32,22 +38,26 @@ const AdminWithdrawals: React.FC = () => {
 
   const handleSearch = (value: string) => {
     setSearchTerm(value);
+    setCurrentPage(1);
     setFilters({ ...filters, search: value, page: 1 });
   };
 
   const handleStatusFilter = (status: string) => {
     setSelectedStatus(status);
+    setCurrentPage(1);
     setFilters({ ...filters, status: status || undefined, page: 1 });
   };
 
   const handleMethodFilter = (method: string) => {
     setSelectedMethod(method);
+    setCurrentPage(1);
     setFilters({ ...filters, method: method || undefined, page: 1 });
   };
 
   const handleDateFilter = (from: string, to: string) => {
     setDateFrom(from);
     setDateTo(to);
+    setCurrentPage(1);
     setFilters({
       ...filters,
       from_date: from || undefined,
@@ -62,16 +72,13 @@ const AdminWithdrawals: React.FC = () => {
     setSelectedMethod("");
     setDateFrom("");
     setDateTo("");
+    setCurrentPage(1);
     setFilters({});
   };
 
   const handlePageChange = (page: number) => {
+    setCurrentPage(page);
     setFilters({ ...filters, page });
-  };
-
-  const handleExport = () => {
-    // TODO: Implement export functionality
-    console.log("Export withdrawals");
   };
 
   const handleProcessWithdrawal = (withdrawal: any) => {
@@ -81,6 +88,185 @@ const AdminWithdrawals: React.FC = () => {
       admin_notes: "",
     });
     setShowProcessModal(true);
+  };
+
+  // Column definitions for AgGrid
+  const columnDefs: ColDef[] = useMemo(
+    () => [
+      {
+        headerName: "User",
+        field: "user_name",
+        cellRenderer: (params: any) => {
+          const withdrawal = params.data as AdminWithdrawal;
+          return (
+            <div className={styles.userInfo}>
+              <div className={styles.userAvatar}>
+                <FiUser className={styles.userIcon} />
+              </div>
+              <div className={styles.userDetails}>
+                <h4>{withdrawal.user_name}</h4>
+                <p>{withdrawal.user_email}</p>
+              </div>
+            </div>
+          );
+        },
+        width: 200,
+        pinned: "left",
+      },
+      {
+        headerName: "Withdrawal ID",
+        field: "withdrawal_id",
+        cellRenderer: (params: any) => {
+          const withdrawal = params.data as AdminWithdrawal;
+          return (
+            <span className={styles.withdrawalId}>
+              {withdrawal.withdrawal_id}
+            </span>
+          );
+        },
+        width: 150,
+      },
+      {
+        headerName: "Amount",
+        field: "amount",
+        cellRenderer: (params: any) => {
+          const withdrawal = params.data as AdminWithdrawal;
+          return (
+            <div className={styles.amountInfo}>
+              <span className={styles.amount}>
+                {formatCurrency(withdrawal.amount)}
+              </span>
+              <span className={styles.fee}>
+                Fee: {formatCurrency(withdrawal.fee)}
+              </span>
+              <span className={styles.netAmount}>
+                Net: {formatCurrency(withdrawal.net_amount)}
+              </span>
+            </div>
+          );
+        },
+        width: 180,
+      },
+      {
+        headerName: "Method",
+        field: "method_display_name",
+        cellRenderer: (params: any) => {
+          const withdrawal = params.data as AdminWithdrawal;
+          return (
+            <div className={styles.methodInfo}>
+              <div className={styles.methodIcon}>
+                <FiCreditCard className={styles.methodIconSvg} />
+              </div>
+              <span className={styles.method}>
+                {withdrawal.method_display_name}
+              </span>
+            </div>
+          );
+        },
+        width: 120,
+      },
+      {
+        headerName: "Payment Details",
+        field: "payment_details",
+        cellRenderer: (params: any) => {
+          const withdrawal = params.data as AdminWithdrawal;
+          return (
+            <div className={styles.paymentDetails}>
+              {withdrawal.payment_details.bank_name && (
+                <span>{withdrawal.payment_details.bank_name}</span>
+              )}
+              {withdrawal.payment_details.account_number && (
+                <span>
+                  ****
+                  {withdrawal.payment_details.account_number.slice(-4)}
+                </span>
+              )}
+              {withdrawal.payment_details.upi_id && (
+                <span>{withdrawal.payment_details.upi_id}</span>
+              )}
+            </div>
+          );
+        },
+        width: 200,
+      },
+      {
+        headerName: "Status",
+        field: "status",
+        cellRenderer: (params: any) => {
+          const withdrawal = params.data as AdminWithdrawal;
+          const getStatusIcon = (status: string) => {
+            switch (status) {
+              case 'approved':
+              case 'completed':
+                return <FiCheckCircle className={styles.statusIcon} />;
+              case 'rejected':
+              case 'failed':
+                return <FiXCircle className={styles.statusIcon} />;
+              case 'pending':
+              case 'processing':
+                return <FiClock className={styles.statusIcon} />;
+              default:
+                return <FiClock className={styles.statusIcon} />;
+            }
+          };
+          
+          return (
+            <span
+              className={`${styles.status} ${styles[withdrawal.status]}`}
+            >
+              {getStatusIcon(withdrawal.status)}
+              {withdrawal.status_display_name}
+            </span>
+          );
+        },
+        width: 120,
+      },
+      {
+        headerName: "Date",
+        field: "created_at",
+        cellRenderer: (params: any) => {
+          const withdrawal = params.data as AdminWithdrawal;
+          return (
+            <span className={styles.withdrawalDate}>
+              {new Date(withdrawal.created_at).toLocaleString()}
+            </span>
+          );
+        },
+        width: 150,
+      },
+      {
+        headerName: "Actions",
+        field: "actions",
+        cellRenderer: (params: any) => {
+          const withdrawal = params.data as AdminWithdrawal;
+          return (
+            <div className={styles.actions}>
+              <button
+                onClick={() => handleProcessWithdrawal(withdrawal)}
+                className={styles.actionButton}
+                disabled={withdrawal.status !== "pending"}
+                title="Process Withdrawal"
+              >
+                <FiEdit2 className={styles.actionIcon} />
+              </button>
+              <button className={styles.actionButton} title="View Details">
+                <FiEye className={styles.actionIcon} />
+              </button>
+            </div>
+          );
+        },
+        width: 120,
+        pinned: "right",
+        sortable: false,
+        filter: false,
+      },
+    ],
+    [formatCurrency, getStatusIcon, styles, handleProcessWithdrawal]
+  );
+
+  const handleExport = () => {
+    // TODO: Implement export functionality
+    console.log("Export withdrawals");
   };
 
   const handleProcessSubmit = async () => {
@@ -208,170 +394,31 @@ const AdminWithdrawals: React.FC = () => {
         </div>
       </div>
 
-      {/* Withdrawals Table */}
-      <div className={styles.withdrawalsTable}>
-        <div className={styles.tableHeader}>
-          <div className={styles.tableRow}>
-            <div className={styles.tableCell}>User</div>
-            <div className={styles.tableCell}>Withdrawal ID</div>
-            <div className={styles.tableCell}>Amount</div>
-            <div className={styles.tableCell}>Method</div>
-            <div className={styles.tableCell}>Payment Details</div>
-            <div className={styles.tableCell}>Status</div>
-            <div className={styles.tableCell}>Date</div>
-            <div className={styles.tableCell}>Actions</div>
-          </div>
-        </div>
-
-        <div className={styles.tableBody}>
-          {withdrawalData.length === 0 ? (
-            <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>
-                <i className="icon-arrow-up-right"></i>
-              </div>
-              <h3>No Withdrawals Found</h3>
-              <p>No withdrawals match your current filters.</p>
-            </div>
-          ) : (
-            withdrawalData.map((withdrawal: any) => (
-              <div key={withdrawal.id} className={styles.tableRow}>
-                <div className={styles.tableCell}>
-                  <div className={styles.userInfo}>
-                    <div className={styles.userAvatar}>
-                      {withdrawal.user_name.charAt(0).toUpperCase()}
-                    </div>
-                    <div className={styles.userDetails}>
-                      <h4>{withdrawal.user_name}</h4>
-                      <p>{withdrawal.user_email}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <span className={styles.withdrawalId}>
-                    {withdrawal.withdrawal_id}
-                  </span>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <div className={styles.amountInfo}>
-                    <span className={styles.amount}>
-                      {formatCurrency(withdrawal.amount)}
-                    </span>
-                    <span className={styles.fee}>
-                      Fee: {formatCurrency(withdrawal.fee)}
-                    </span>
-                    <span className={styles.netAmount}>
-                      Net: {formatCurrency(withdrawal.net_amount)}
-                    </span>
-                  </div>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <div className={styles.methodInfo}>
-                    <span className={styles.method}>
-                      {withdrawal.method_display_name}
-                    </span>
-                  </div>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <div className={styles.paymentDetails}>
-                    {withdrawal.payment_details.bank_name && (
-                      <span>{withdrawal.payment_details.bank_name}</span>
-                    )}
-                    {withdrawal.payment_details.account_number && (
-                      <span>
-                        ****
-                        {withdrawal.payment_details.account_number.slice(-4)}
-                      </span>
-                    )}
-                    {withdrawal.payment_details.upi_id && (
-                      <span>{withdrawal.payment_details.upi_id}</span>
-                    )}
-                  </div>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <span
-                    className={`${styles.status} ${styles[withdrawal.status]}`}
-                  >
-                    <i
-                      className={`icon-${getStatusIcon(withdrawal.status)}`}
-                    ></i>
-                    {withdrawal.status_display_name}
-                  </span>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <span className={styles.withdrawalDate}>
-                    {new Date(withdrawal.created_at).toLocaleString()}
-                  </span>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <div className={styles.actions}>
-                    <button
-                      onClick={() => handleProcessWithdrawal(withdrawal)}
-                      className={styles.actionButton}
-                      disabled={withdrawal.status !== "pending"}
-                    >
-                      <i className="icon-edit"></i>
-                    </button>
-                    <button className={styles.actionButton}>
-                      <i className="icon-eye"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+      {/* AgGrid Table */}
+      <div className={styles.tableContainer}>
+        <AgGridTable
+          rowData={withdrawalData}
+          columnDefs={columnDefs}
+          loading={withdrawals?.isLoading || false}
+          enablePagination={false}
+          enableSorting={true}
+          enableFiltering={false}
+          enableSelection={false}
+          height={600}
+          className={styles.agGridTable}
+        />
       </div>
 
-      {/* Pagination */}
+      {/* Server-side Pagination */}
       {pagination && pagination.total > 0 && (
-        <div className={styles.pagination}>
-          <div className={styles.paginationInfo}>
-            Showing {pagination.from} to {pagination.to} of {pagination.total}{" "}
-            withdrawals
-          </div>
-          <div className={styles.paginationControls}>
-            <button
-              onClick={() => handlePageChange(pagination.current_page - 1)}
-              disabled={pagination.current_page === 1}
-              className={styles.paginationButton}
-            >
-              Previous
-            </button>
-            <div className={styles.paginationNumbers}>
-              {Array.from(
-                { length: Math.min(5, pagination.last_page) },
-                (_, i) => {
-                  const page = i + 1;
-                  return (
-                    <button
-                      key={page}
-                      onClick={() => handlePageChange(page)}
-                      className={`${styles.paginationButton} ${
-                        pagination.current_page === page ? styles.active : ""
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  );
-                }
-              )}
-            </div>
-            <button
-              onClick={() => handlePageChange(pagination.current_page + 1)}
-              disabled={pagination.current_page === pagination.last_page}
-              className={styles.paginationButton}
-            >
-              Next
-            </button>
-          </div>
-        </div>
+        <ServerPagination
+          currentPage={currentPage}
+          totalPages={pagination.last_page}
+          totalItems={pagination.total}
+          itemsPerPage={itemsPerPage}
+          onPageChange={handlePageChange}
+          loading={withdrawals?.isLoading || false}
+        />
       )}
 
       {/* Process Withdrawal Modal */}

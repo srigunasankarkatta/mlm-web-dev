@@ -1,7 +1,11 @@
-import React, { useState } from "react";
-import {
-  AdminWalletTransactionsResponse,
+import React, { useState, useMemo } from "react";
+import type { ColDef } from "ag-grid-community";
+import { FiEye, FiEdit2, FiUser, FiDollarSign, FiCreditCard, FiArrowUp, FiArrowDown, FiRefreshCw } from "react-icons/fi";
+import AgGridTable from "../../../components/ui/AgGridTable";
+import ServerPagination from "../../../components/ui/ServerPagination";
+import type {
   AdminWalletTransactionsParams,
+  AdminWalletTransaction,
 } from "../../../api-services/admin-wallet-service";
 import {
   useAdminWalletTransactions,
@@ -22,6 +26,8 @@ const AdminWalletTransactions: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(15);
   const [filters, setFilters] = useState<
     Partial<AdminWalletTransactionsParams>
   >({});
@@ -30,27 +36,32 @@ const AdminWalletTransactions: React.FC = () => {
 
   const handleSearch = (value: string) => {
     setSearchTerm(value);
+    setCurrentPage(1);
     setFilters({ ...filters, search: value, page: 1 });
   };
 
   const handleTypeFilter = (type: string) => {
     setSelectedType(type);
+    setCurrentPage(1);
     setFilters({ ...filters, type: type || undefined, page: 1 });
   };
 
   const handleCategoryFilter = (category: string) => {
     setSelectedCategory(category);
+    setCurrentPage(1);
     setFilters({ ...filters, category: category || undefined, page: 1 });
   };
 
   const handleStatusFilter = (status: string) => {
     setSelectedStatus(status);
+    setCurrentPage(1);
     setFilters({ ...filters, status: status || undefined, page: 1 });
   };
 
   const handleDateFilter = (from: string, to: string) => {
     setDateFrom(from);
     setDateTo(to);
+    setCurrentPage(1);
     setFilters({
       ...filters,
       from_date: from || undefined,
@@ -66,12 +77,194 @@ const AdminWalletTransactions: React.FC = () => {
     setSelectedStatus("");
     setDateFrom("");
     setDateTo("");
+    setCurrentPage(1);
     setFilters({});
   };
 
   const handlePageChange = (page: number) => {
+    setCurrentPage(page);
     setFilters({ ...filters, page });
   };
+
+  // Column definitions for AgGrid
+  const columnDefs: ColDef[] = useMemo(
+    () => [
+      {
+        headerName: "User",
+        field: "user_name",
+        cellRenderer: (params: any) => {
+          const transaction = params.data as AdminWalletTransaction;
+          return (
+            <div className={styles.userInfo}>
+              <div className={styles.userAvatar}>
+                <FiUser className={styles.userIcon} />
+              </div>
+              <div className={styles.userDetails}>
+                <h4>{transaction.user_name}</h4>
+                <p>{transaction.user_email}</p>
+              </div>
+            </div>
+          );
+        },
+        width: 200,
+        pinned: "left",
+      },
+      {
+        headerName: "Wallet",
+        field: "wallet_display_name",
+        cellRenderer: (params: any) => {
+          const transaction = params.data as AdminWalletTransaction;
+          return (
+            <div className={styles.walletInfo}>
+              <div className={styles.walletIcon}>
+                <FiDollarSign className={styles.walletIconSvg} />
+              </div>
+              <span>{transaction.wallet_display_name}</span>
+            </div>
+          );
+        },
+        width: 150,
+      },
+      {
+        headerName: "Type",
+        field: "type",
+        cellRenderer: (params: any) => {
+          const transaction = params.data as AdminWalletTransaction;
+          const getTypeIcon = (type: string) => {
+            switch (type) {
+              case 'credit':
+              case 'transfer_in':
+                return <FiArrowUp className={styles.typeIconSvg} />;
+              case 'debit':
+              case 'transfer_out':
+                return <FiArrowDown className={styles.typeIconSvg} />;
+              default:
+                return <FiRefreshCw className={styles.typeIconSvg} />;
+            }
+          };
+          
+          return (
+            <div className={styles.transactionType}>
+              <div className={styles.typeIcon}>
+                {getTypeIcon(transaction.type)}
+              </div>
+              <span className={styles.typeLabel}>
+                {transaction.type.replace('_', ' ').toUpperCase()}
+              </span>
+            </div>
+          );
+        },
+        width: 120,
+      },
+      {
+        headerName: "Amount",
+        field: "amount",
+        cellRenderer: (params: any) => {
+          const transaction = params.data as AdminWalletTransaction;
+          const isCredit = transaction.type === 'credit' || transaction.type === 'transfer_in';
+          return (
+            <div className={styles.amountInfo}>
+              <span className={`${styles.amount} ${isCredit ? styles.credit : styles.debit}`}>
+                {isCredit ? '+' : '-'}{formatCurrency(transaction.amount)}
+              </span>
+            </div>
+          );
+        },
+        width: 120,
+      },
+      {
+        headerName: "Balance",
+        field: "balance_after",
+        cellRenderer: (params: any) => {
+          const transaction = params.data as AdminWalletTransaction;
+          return (
+            <div className={styles.balanceInfo}>
+              <span className={styles.balanceAfter}>
+                {formatCurrency(transaction.balance_after)}
+              </span>
+              <span className={styles.balanceBefore}>
+                Before: {formatCurrency(transaction.balance_before)}
+              </span>
+            </div>
+          );
+        },
+        width: 150,
+      },
+      {
+        headerName: "Reference",
+        field: "reference_id",
+        cellRenderer: (params: any) => {
+          const transaction = params.data as AdminWalletTransaction;
+          return (
+            <span className={styles.referenceId}>
+              {transaction.reference_id}
+            </span>
+          );
+        },
+        width: 150,
+      },
+      {
+        headerName: "Description",
+        field: "description",
+        cellRenderer: (params: any) => {
+          const transaction = params.data as AdminWalletTransaction;
+          return (
+            <span className={styles.description}>
+              {transaction.description}
+            </span>
+          );
+        },
+        width: 200,
+      },
+      {
+        headerName: "Status",
+        field: "status",
+        cellRenderer: (params: any) => {
+          const transaction = params.data as AdminWalletTransaction;
+          return (
+            <span className={`${styles.status} ${styles[transaction.status]}`}>
+              {transaction.status}
+            </span>
+          );
+        },
+        width: 100,
+      },
+      {
+        headerName: "Date",
+        field: "created_at",
+        cellRenderer: (params: any) => {
+          const transaction = params.data as AdminWalletTransaction;
+          return (
+            <span className={styles.transactionDate}>
+              {new Date(transaction.created_at).toLocaleString()}
+            </span>
+          );
+        },
+        width: 150,
+      },
+      {
+        headerName: "Actions",
+        field: "actions",
+        cellRenderer: () => {
+          return (
+            <div className={styles.actions}>
+              <button className={styles.actionButton} title="View Details">
+                <FiEye className={styles.actionIcon} />
+              </button>
+              <button className={styles.actionButton} title="Edit Transaction">
+                <FiEdit2 className={styles.actionIcon} />
+              </button>
+            </div>
+          );
+        },
+        width: 120,
+        pinned: "right",
+        sortable: false,
+        filter: false,
+      },
+    ],
+    [formatCurrency, getTransactionTypeIcon, getWalletTypeIcon, styles]
+  );
 
   const handleExport = () => {
     // TODO: Implement export functionality
@@ -211,180 +404,31 @@ const AdminWalletTransactions: React.FC = () => {
         </div>
       </div>
 
-      {/* Transactions Table */}
-      <div className={styles.transactionsTable}>
-        <div className={styles.tableHeader}>
-          <div className={styles.tableRow}>
-            <div className={styles.tableCell}>User</div>
-            <div className={styles.tableCell}>Wallet</div>
-            <div className={styles.tableCell}>Type</div>
-            <div className={styles.tableCell}>Amount</div>
-            <div className={styles.tableCell}>Balance</div>
-            <div className={styles.tableCell}>Reference</div>
-            <div className={styles.tableCell}>Description</div>
-            <div className={styles.tableCell}>Status</div>
-            <div className={styles.tableCell}>Date</div>
-            <div className={styles.tableCell}>Actions</div>
-          </div>
-        </div>
-
-        <div className={styles.tableBody}>
-          {transactionData.length === 0 ? (
-            <div className={styles.emptyState}>
-              <div className={styles.emptyIcon}>
-                <i className="icon-credit-card"></i>
-              </div>
-              <h3>No Transactions Found</h3>
-              <p>No transactions match your current filters.</p>
-            </div>
-          ) : (
-            transactionData.map((transaction: any) => (
-              <div key={transaction.id} className={styles.tableRow}>
-                <div className={styles.tableCell}>
-                  <div className={styles.userInfo}>
-                    <div className={styles.userAvatar}>
-                      {transaction.user_name.charAt(0).toUpperCase()}
-                    </div>
-                    <div className={styles.userDetails}>
-                      <h4>{transaction.user_name}</h4>
-                      <p>{transaction.user_email}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <div className={styles.walletInfo}>
-                    <div className={styles.walletTypeIcon}>
-                      <i
-                        className={`icon-${getWalletTypeIcon(
-                          transaction.wallet_type
-                        )}`}
-                      ></i>
-                    </div>
-                    <span>{transaction.wallet_display_name}</span>
-                  </div>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <div
-                    className={`${styles.transactionType} ${
-                      styles[transaction.type]
-                    }`}
-                  >
-                    <i
-                      className={`icon-${getTransactionTypeIcon(
-                        transaction.type
-                      )}`}
-                    ></i>
-                    <span>{transaction.type}</span>
-                  </div>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <span
-                    className={`${styles.amount} ${styles[transaction.type]}`}
-                  >
-                    {transaction.type === "credit" ? "+" : "-"}
-                    {formatCurrency(transaction.amount)}
-                  </span>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <div className={styles.balanceInfo}>
-                    <span className={styles.balanceBefore}>
-                      Before: {formatCurrency(transaction.balance_before)}
-                    </span>
-                    <span className={styles.balanceAfter}>
-                      After: {formatCurrency(transaction.balance_after)}
-                    </span>
-                  </div>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <span className={styles.referenceId}>
-                    {transaction.reference_id}
-                  </span>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <span className={styles.description}>
-                    {transaction.description}
-                  </span>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <span
-                    className={`${styles.status} ${styles[transaction.status]}`}
-                  >
-                    {transaction.status}
-                  </span>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <span className={styles.transactionDate}>
-                    {new Date(transaction.created_at).toLocaleString()}
-                  </span>
-                </div>
-
-                <div className={styles.tableCell}>
-                  <div className={styles.actions}>
-                    <button className={styles.actionButton}>
-                      <i className="icon-eye"></i>
-                    </button>
-                    <button className={styles.actionButton}>
-                      <i className="icon-edit"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
+      {/* AgGrid Table */}
+      <div className={styles.tableContainer}>
+        <AgGridTable
+          rowData={transactionData}
+          columnDefs={columnDefs}
+          loading={transactions?.isLoading || false}
+          enablePagination={false}
+          enableSorting={true}
+          enableFiltering={false}
+          enableSelection={false}
+          height={600}
+          className={styles.agGridTable}
+        />
       </div>
 
-      {/* Pagination */}
+      {/* Server-side Pagination */}
       {pagination && pagination.total > 0 && (
-        <div className={styles.pagination}>
-          <div className={styles.paginationInfo}>
-            Showing {pagination.from} to {pagination.to} of {pagination.total}{" "}
-            transactions
-          </div>
-          <div className={styles.paginationControls}>
-            <button
-              onClick={() => handlePageChange(pagination.current_page - 1)}
-              disabled={pagination.current_page === 1}
-              className={styles.paginationButton}
-            >
-              Previous
-            </button>
-            <div className={styles.paginationNumbers}>
-              {Array.from(
-                { length: Math.min(5, pagination.last_page) },
-                (_, i) => {
-                  const page = i + 1;
-                  return (
-                    <button
-                      key={page}
-                      onClick={() => handlePageChange(page)}
-                      className={`${styles.paginationButton} ${
-                        pagination.current_page === page ? styles.active : ""
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  );
-                }
-              )}
-            </div>
-            <button
-              onClick={() => handlePageChange(pagination.current_page + 1)}
-              disabled={pagination.current_page === pagination.last_page}
-              className={styles.paginationButton}
-            >
-              Next
-            </button>
-          </div>
-        </div>
+        <ServerPagination
+          currentPage={currentPage}
+          totalPages={pagination.last_page}
+          totalItems={pagination.total}
+          itemsPerPage={itemsPerPage}
+          onPageChange={handlePageChange}
+          loading={transactions?.isLoading || false}
+        />
       )}
     </div>
   );
