@@ -12,8 +12,9 @@ import {
   Calculator,
   Award,
 } from "lucide-react";
-import type { MLMPlan } from "../types";
+import type { MLMPlan, IncomeType } from "../types";
 import { MLM_PLANS, TESTIMONIALS, FAQ_PREVIEW } from "../data/mockData";
+import { usePackages } from "../queries/packages";
 import AuthModal from "../components/AuthModal";
 import MLMTree from "../components/MLMTree";
 import CustomerLayout from "../components/CustomerLayout";
@@ -27,6 +28,45 @@ const HomePage: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoSlide, setIsAutoSlide] = useState(true);
   const [isDesktop, setIsDesktop] = useState(false);
+
+  // Fetch packages from API
+  const {
+    data: packagesData,
+    error: packagesError,
+    isLoading: packagesLoading,
+  } = usePackages({ perPage: 100 }); // Get all packages
+
+  // Generate unlocks array based on package data
+  const generateUnlocksFromPackage = (apiPackage: any): IncomeType[] => {
+    const unlocks: IncomeType[] = [];
+
+    if (apiPackage.directCommission > 0) unlocks.push("Direct");
+    if (apiPackage.levelCommissions && apiPackage.levelCommissions.length > 0)
+      unlocks.push("Level");
+    if (apiPackage.clubCommission > 0) unlocks.push("Club");
+    if (apiPackage.autoPoolCommission > 0) unlocks.push("AutoPool");
+
+    return unlocks;
+  };
+
+  // Transform API packages to MLMPlan format for compatibility
+  const transformApiPackageToMLMPlan = (apiPackage: any): MLMPlan => {
+    return {
+      id: apiPackage.id,
+      name: apiPackage.name,
+      price: apiPackage.price,
+      level: apiPackage.rank || 1,
+      benefits: apiPackage.features || [],
+      unlocks: generateUnlocksFromPackage(apiPackage),
+      isRequired: apiPackage.isRequired || false,
+      description: apiPackage.description || "",
+      features: apiPackage.features || [],
+    };
+  };
+
+  // Get packages data - use API data if available, fallback to mock data
+  const packages =
+    packagesData?.data?.map(transformApiPackageToMLMPlan) || MLM_PLANS;
 
   const handlePlanSelect = (plan: MLMPlan) => {
     setSelectedPlan(plan);
@@ -55,11 +95,11 @@ const HomePage: React.FC = () => {
         // On desktop, move by 3 cards at a time
         setCurrentSlide((prev) => {
           const nextSlide = prev + 3;
-          return nextSlide >= MLM_PLANS.length ? 0 : nextSlide;
+          return nextSlide >= packages.length ? 0 : nextSlide;
         });
       } else {
         // On mobile, move by 1 card at a time
-        setCurrentSlide((prev) => (prev + 1) % MLM_PLANS.length);
+        setCurrentSlide((prev) => (prev + 1) % packages.length);
       }
     }, 3000); // Auto-slide every 3 seconds
 
@@ -76,12 +116,10 @@ const HomePage: React.FC = () => {
     if (isDesktop) {
       setCurrentSlide((prev) => {
         const nextSlide = prev - 3;
-        return nextSlide < 0 ? Math.max(0, MLM_PLANS.length - 3) : nextSlide;
+        return nextSlide < 0 ? Math.max(0, packages.length - 3) : nextSlide;
       });
     } else {
-      setCurrentSlide(
-        (prev) => (prev - 1 + MLM_PLANS.length) % MLM_PLANS.length
-      );
+      setCurrentSlide((prev) => (prev - 1 + packages.length) % packages.length);
     }
     setIsAutoSlide(false);
   };
@@ -90,10 +128,10 @@ const HomePage: React.FC = () => {
     if (isDesktop) {
       setCurrentSlide((prev) => {
         const nextSlide = prev + 3;
-        return nextSlide >= MLM_PLANS.length ? 0 : nextSlide;
+        return nextSlide >= packages.length ? 0 : nextSlide;
       });
     } else {
-      setCurrentSlide((prev) => (prev + 1) % MLM_PLANS.length);
+      setCurrentSlide((prev) => (prev + 1) % packages.length);
     }
     setIsAutoSlide(false);
   };
@@ -148,7 +186,7 @@ const HomePage: React.FC = () => {
 
                     <div className={styles.heroButtons}>
                       <button
-                        onClick={() => handlePlanSelect(MLM_PLANS[0])}
+                        onClick={() => handlePlanSelect(packages[0])}
                         className={styles.primaryButton}
                       >
                         Get Started — Buy Package
@@ -253,120 +291,131 @@ const HomePage: React.FC = () => {
             </p>
           </div>
 
-          <div className={styles.packagesSlider}>
-            <div className={styles.sliderContainer}>
-              <button
-                className={styles.sliderButton}
-                onClick={goToPrevious}
-                aria-label="Previous package"
-              >
-                <ChevronLeft className={styles.sliderIcon} />
-              </button>
-
-              <div className={styles.sliderTrack}>
-                <div
-                  className={styles.sliderWrapper}
-                  style={{
-                    transform: `translateX(-${
-                      currentSlide * (isDesktop ? 33.333 : 100)
-                    }%)`,
-                  }}
+          {packagesLoading ? (
+            <div className={styles.loadingContainer}>
+              <div className={styles.spinner}></div>
+              <p>Loading packages...</p>
+            </div>
+          ) : packagesError ? (
+            <div className={styles.errorContainer}>
+              <p>Error loading packages. Please try again later.</p>
+            </div>
+          ) : (
+            <div className={styles.packagesSlider}>
+              <div className={styles.sliderContainer}>
+                <button
+                  className={styles.sliderButton}
+                  onClick={goToPrevious}
+                  aria-label="Previous package"
                 >
-                  {MLM_PLANS.map((plan) => (
-                    <div key={plan.id} className={styles.sliderSlide}>
-                      <div className={styles.packageCard}>
-                        <div className={styles.packageHeader}>
-                          <h3 className={styles.packageName}>{plan.name}</h3>
-                          <div className={styles.packagePrice}>
-                            ${plan.price}
-                          </div>
-                        </div>
+                  <ChevronLeft className={styles.sliderIcon} />
+                </button>
 
-                        <div className={styles.packageFeatures}>
-                          <div className={styles.featureItem}>
-                            <CheckCircle className={styles.featureIcon} />
-                            <span>Direct Income</span>
+                <div className={styles.sliderTrack}>
+                  <div
+                    className={styles.sliderWrapper}
+                    style={{
+                      transform: `translateX(-${
+                        currentSlide * (isDesktop ? 33.333 : 100)
+                      }%)`,
+                    }}
+                  >
+                    {packages.map((plan) => (
+                      <div key={plan.id} className={styles.sliderSlide}>
+                        <div className={styles.packageCard}>
+                          <div className={styles.packageHeader}>
+                            <h3 className={styles.packageName}>{plan.name}</h3>
+                            <div className={styles.packagePrice}>
+                              ${plan.price}
+                            </div>
                           </div>
-                          {plan.level && (
+
+                          <div className={styles.packageFeatures}>
                             <div className={styles.featureItem}>
                               <CheckCircle className={styles.featureIcon} />
-                              <span>Level {plan.level} Income</span>
+                              <span>Direct Income</span>
                             </div>
-                          )}
-                          <div className={styles.featureItem}>
-                            <CheckCircle className={styles.featureIcon} />
-                            <span>Club Bonus</span>
+                            {plan.level && (
+                              <div className={styles.featureItem}>
+                                <CheckCircle className={styles.featureIcon} />
+                                <span>Level {plan.level} Income</span>
+                              </div>
+                            )}
+                            <div className={styles.featureItem}>
+                              <CheckCircle className={styles.featureIcon} />
+                              <span>Club Bonus</span>
+                            </div>
+                            <div className={styles.featureItem}>
+                              <CheckCircle className={styles.featureIcon} />
+                              <span>Auto Pool</span>
+                            </div>
                           </div>
-                          <div className={styles.featureItem}>
-                            <CheckCircle className={styles.featureIcon} />
-                            <span>Auto Pool</span>
-                          </div>
-                        </div>
 
-                        <button
-                          onClick={() => handlePlanSelect(plan)}
-                          className={styles.packageButton}
-                        >
-                          Buy Now
-                        </button>
+                          <button
+                            onClick={() => handlePlanSelect(plan)}
+                            className={styles.packageButton}
+                          >
+                            Buy Now
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
+
+                <button
+                  className={styles.sliderButton}
+                  onClick={goToNext}
+                  aria-label="Next package"
+                >
+                  <ChevronRight className={styles.sliderIcon} />
+                </button>
               </div>
 
-              <button
-                className={styles.sliderButton}
-                onClick={goToNext}
-                aria-label="Next package"
-              >
-                <ChevronRight className={styles.sliderIcon} />
-              </button>
-            </div>
-
-            {/* Slider indicators */}
-            <div className={styles.sliderIndicators}>
-              {isDesktop
-                ? // Desktop: show indicators for groups of 3
-                  Array.from({ length: Math.ceil(MLM_PLANS.length / 3) }).map(
-                    (_, index) => (
+              {/* Slider indicators */}
+              <div className={styles.sliderIndicators}>
+                {isDesktop
+                  ? // Desktop: show indicators for groups of 3
+                    Array.from({ length: Math.ceil(packages.length / 3) }).map(
+                      (_, index) => (
+                        <button
+                          key={index}
+                          className={`${styles.indicator} ${
+                            Math.floor(currentSlide / 3) === index
+                              ? styles.activeIndicator
+                              : ""
+                          }`}
+                          onClick={() => goToSlide(index * 3)}
+                          aria-label={`Go to slide group ${index + 1}`}
+                        />
+                      )
+                    )
+                  : // Mobile: show indicators for each card
+                    packages.map((_, index) => (
                       <button
                         key={index}
                         className={`${styles.indicator} ${
-                          Math.floor(currentSlide / 3) === index
-                            ? styles.activeIndicator
-                            : ""
+                          index === currentSlide ? styles.activeIndicator : ""
                         }`}
-                        onClick={() => goToSlide(index * 3)}
-                        aria-label={`Go to slide group ${index + 1}`}
+                        onClick={() => goToSlide(index)}
+                        aria-label={`Go to slide ${index + 1}`}
                       />
-                    )
-                  )
-                : // Mobile: show indicators for each card
-                  MLM_PLANS.map((_, index) => (
-                    <button
-                      key={index}
-                      className={`${styles.indicator} ${
-                        index === currentSlide ? styles.activeIndicator : ""
-                      }`}
-                      onClick={() => goToSlide(index)}
-                      aria-label={`Go to slide ${index + 1}`}
-                    />
-                  ))}
-            </div>
+                    ))}
+              </div>
 
-            {/* Auto-slide toggle */}
-            <div className={styles.autoSlideToggle}>
-              <button
-                className={`${styles.toggleButton} ${
-                  isAutoSlide ? styles.activeToggle : ""
-                }`}
-                onClick={() => setIsAutoSlide(!isAutoSlide)}
-              >
-                {isAutoSlide ? "Pause" : "Play"} Auto-slide
-              </button>
+              {/* Auto-slide toggle */}
+              <div className={styles.autoSlideToggle}>
+                <button
+                  className={`${styles.toggleButton} ${
+                    isAutoSlide ? styles.activeToggle : ""
+                  }`}
+                  onClick={() => setIsAutoSlide(!isAutoSlide)}
+                >
+                  {isAutoSlide ? "Pause" : "Play"} Auto-slide
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </section>
 
         {/* Income Examples Section */}
@@ -567,7 +616,7 @@ const HomePage: React.FC = () => {
             </p>
             <div className={styles.ctaButtons}>
               <button
-                onClick={() => handlePlanSelect(MLM_PLANS[0])}
+                onClick={() => handlePlanSelect(packages[0])}
                 className={styles.ctaButton}
               >
                 Buy Package — $20
