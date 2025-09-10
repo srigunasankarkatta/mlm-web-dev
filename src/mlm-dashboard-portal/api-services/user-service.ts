@@ -50,7 +50,16 @@ export interface CreateUserRequest {
     email: string;
     password: string;
     sponsor_id?: number;
-    package_id: number;
+    package_id?: number;
+    roles: string[];
+}
+
+export interface EditUserRequest {
+    name: string;
+    email: string;
+    password?: string;
+    sponsor_id?: number;
+    package_id?: number;
     roles: string[];
 }
 
@@ -58,6 +67,15 @@ export interface UpdateUserRequest {
     name?: string;
     package_id?: number;
     roles?: string[];
+}
+
+export interface FullUpdateUserRequest {
+    name: string;
+    email: string;
+    password?: string;
+    sponsor_id?: number;
+    package_id?: number;
+    roles: string[];
 }
 
 export interface CreateUserResponse {
@@ -120,6 +138,14 @@ class UserService {
      */
     async updateUser(id: number, userData: UpdateUserRequest): Promise<UpdateUserResponse> {
         const response = await defaultApiService.put<UpdateUserResponse>(`${this.baseUrl}/${id}`, userData);
+        return response;
+    }
+
+    /**
+     * Full update user (with all fields)
+     */
+    async fullUpdateUser(id: number, userData: FullUpdateUserRequest): Promise<CreateUserResponse> {
+        const response = await defaultApiService.put<CreateUserResponse>(`${this.baseUrl}/${id}`, userData);
         return response;
     }
 

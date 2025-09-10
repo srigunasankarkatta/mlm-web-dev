@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { userService, type User, type UsersListParams, type CreateUserRequest, type UpdateUserRequest } from '../api-services/user-service';
+import { userService, type User, type UsersListParams, type CreateUserRequest, type UpdateUserRequest, type FullUpdateUserRequest } from '../api-services/user-service';
 
 // Query keys
 export const userKeys = {
@@ -81,6 +81,23 @@ export const useUpdateUser = () => {
       queryClient.setQueryData(userKeys.detail(id), data.data);
       // Invalidate users list
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+    },
+  });
+};
+
+// Full update user mutation (with all fields)
+export const useFullUpdateUser = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, userData }: { id: number; userData: FullUpdateUserRequest }) =>
+      userService.fullUpdateUser(id, userData),
+    onSuccess: (data, { id }) => {
+      // Update user in cache
+      queryClient.setQueryData(userKeys.detail(id), data.data);
+      // Invalidate users list
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: userKeys.stats() });
     },
   });
 };

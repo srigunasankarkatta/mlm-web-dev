@@ -1,13 +1,31 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ColDef } from "ag-grid-community";
-import { FiEye, FiEdit2, FiTrash2, FiMail, FiUsers, FiDollarSign, FiXCircle } from "react-icons/fi";
+import {
+  FiEye,
+  FiEdit2,
+  FiTrash2,
+  FiMail,
+  FiUsers,
+  FiPlus,
+} from "react-icons/fi";
 import AgGridTable from "../../components/ui/AgGridTable";
 import ServerPagination from "../../components/ui/ServerPagination";
 import UserAvatarCell from "../../components/ui/UserAvatarCell";
 import StatusBadgeCell from "../../components/ui/StatusBadgeCell";
-import { useUsers, useDeleteUser, useUserStats } from "../../queries/users";
-import type { User } from "../../api-services/user-service";
+import DeleteConfirmationModal from "../../components/ui/DeleteConfirmationModal";
+import {
+  useUsers,
+  useDeleteUser,
+  useCreateUser,
+  useFullUpdateUser,
+} from "../../queries/users";
+import type {
+  CreateUserRequest,
+  EditUserRequest,
+  FullUpdateUserRequest,
+} from "../../api-services/user-service";
+import UserModal from "./CreateUserModal";
 import styles from "./AllUsers.module.scss";
 
 // Import ag-grid styles directly to ensure they're loaded
@@ -16,14 +34,16 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 
 const AllUsers: React.FC = () => {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
-  const [packageFilter, setPackageFilter] = useState("all");
-
   const [currentPage, setCurrentPage] = useState(1);
-  const [perPage, setPerPage] = useState(15);
-  const [itemsPerPage] = useState(15);
-  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const [perPage] = useState(15);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<{
+    id: number;
+    name: string;
+  } | null>(null);
+  const [userToEdit, setUserToEdit] = useState<any>(null);
 
   // API queries
   const {
@@ -31,25 +51,21 @@ const AllUsers: React.FC = () => {
     isLoading,
     error,
   } = useUsers({
-    search: searchTerm || undefined,
-    package_id: packageFilter !== "all" ? parseInt(packageFilter) : undefined,
-    role: statusFilter !== "all" ? statusFilter : undefined,
     per_page: perPage,
     page: currentPage,
   });
-
-  const { data: userStats } = useUserStats();
   const deleteUserMutation = useDeleteUser();
+  const createUserMutation = useCreateUser();
+  const updateUserMutation = useFullUpdateUser();
 
   // Extract users and pagination from response
   const users = usersResponse?.users || [];
   const pagination = usersResponse?.pagination;
-  console.log("users", users);
-  console.log("usersResponse", usersResponse);
+
   // API handles filtering, so we can use users directly
   const filteredUsers = users;
 
-  // Event handlers - Define these BEFORE columnDefs
+  // Handlers
   const handleViewUser = useCallback(
     (userId: number) => {
       navigate(`/admin/users/${userId}`);
@@ -57,52 +73,61 @@ const AllUsers: React.FC = () => {
     [navigate]
   );
 
-  const handleEditUser = useCallback(
-    (userId: number) => {
-      navigate(`/admin/users/${userId}/edit`);
-    },
-    [navigate]
-  );
+  const handleDeleteUser = useCallback((userId: number, userName: string) => {
+    setUserToDelete({ id: userId, name: userName });
+    setIsDeleteModalOpen(true);
+  }, []);
 
-  const handleDeleteUser = useCallback(
-    async (userId: number) => {
-      if (window.confirm("Are you sure you want to delete this user?")) {
-        try {
-          await deleteUserMutation.mutateAsync(userId);
-          // The query will automatically refetch due to invalidation
-        } catch (error) {
-          console.error("Failed to delete user:", error);
-        }
+  const handleConfirmDelete = useCallback(async () => {
+    if (userToDelete) {
+      try {
+        await deleteUserMutation.mutateAsync(userToDelete.id);
+        setIsDeleteModalOpen(false);
+        setUserToDelete(null);
+      } catch (error) {
+        console.error("Failed to delete user:", error);
+      }
+    }
+  }, [deleteUserMutation, userToDelete]);
+
+  const handleCancelDelete = useCallback(() => {
+    setIsDeleteModalOpen(false);
+    setUserToDelete(null);
+  }, []);
+
+  // Create user handler
+  const handleCreateUser = useCallback(
+    async (userData: CreateUserRequest | EditUserRequest) => {
+      try {
+        await createUserMutation.mutateAsync(userData as CreateUserRequest);
+        setIsCreateModalOpen(false);
+        // The mutation will automatically refresh the users list
+      } catch (error) {
+        console.error("Failed to create user:", error);
       }
     },
-    [deleteUserMutation]
+    [createUserMutation]
   );
 
-  // Handle bulk actions
-  const handleBulkActivate = useCallback(() => {
-    console.log("Activating users:", selectedUsers);
-    // Implement bulk activation logic
-  }, [selectedUsers]);
+  // Edit user handler
+  const handleEditUser = useCallback(
+    async (userData: CreateUserRequest | EditUserRequest) => {
+      if (!userToEdit) return;
 
-  const handleBulkDeactivate = useCallback(() => {
-    console.log("Deactivating users:", selectedUsers);
-    // Implement bulk deactivation logic
-  }, [selectedUsers]);
-
-  const handleBulkExport = useCallback(() => {
-    console.log("Exporting users:", selectedUsers);
-    // Implement bulk export logic
-  }, [selectedUsers]);
-
-  // Clear selection
-  const clearSelection = useCallback(() => {
-    setSelectedUsers([]);
-  }, []);
-
-  // Pagination handlers
-  const handlePageChange = useCallback((page: number) => {
-    setCurrentPage(page);
-  }, []);
+      try {
+        await updateUserMutation.mutateAsync({
+          id: userToEdit.id,
+          userData: userData as FullUpdateUserRequest,
+        });
+        setIsEditModalOpen(false);
+        setUserToEdit(null);
+        // The mutation will automatically refresh the users list
+      } catch (error) {
+        console.error("Failed to update user:", error);
+      }
+    },
+    [userToEdit, updateUserMutation]
+  );
 
   // Column definitions for the data grid
   const columnDefs: ColDef[] = useMemo(
@@ -155,20 +180,17 @@ const AllUsers: React.FC = () => {
         headerName: "Sponsor",
         width: 150,
         cellRenderer: (params: any) => {
-          const sponsor = params.data.sponsor;
+          const sponsor = params.value;
           if (!sponsor) {
-            return (
-              <div className="flex items-center space-x-2">
-                <FiXCircle className="w-4 h-4 text-gray-400" />
-                <span className="text-gray-400">No sponsor</span>
-              </div>
-            );
+            return <span className="text-gray-400">No sponsor</span>;
           }
           return (
             <div className="flex items-center space-x-2">
               <FiUsers className="w-4 h-4 text-gray-400" />
               <div className="flex flex-col">
-                <span className="font-medium text-gray-900">{sponsor.name}</span>
+                <span className="font-medium text-gray-900">
+                  {sponsor.name}
+                </span>
                 <span className="text-sm text-gray-500">{sponsor.email}</span>
               </div>
             </div>
@@ -180,21 +202,14 @@ const AllUsers: React.FC = () => {
         headerName: "Package",
         width: 120,
         cellRenderer: (params: any) => {
-          const pkg = params.data.package;
+          const pkg = params.value;
           if (!pkg) {
-            return (
-              <div className="flex items-center space-x-2">
-                <FiXCircle className="w-4 h-4 text-gray-400" />
-                <span className="text-gray-400">No package</span>
-              </div>
-            );
+            return <span className="text-gray-400">No package</span>;
           }
           return (
-            <div className="flex items-center space-x-2">
-              <FiDollarSign className="w-4 h-4 text-gray-400" />
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                {pkg.name}
-              </span>
+            <div className="flex flex-col">
+              <span className="font-medium text-gray-900">{pkg.name}</span>
+              <span className="text-sm text-gray-500">${pkg.price}</span>
             </div>
           );
         },
@@ -211,7 +226,11 @@ const AllUsers: React.FC = () => {
         width: 120,
         cellRenderer: (params: any) => {
           const date = new Date(params.value);
-          return date.toLocaleDateString();
+          return (
+            <span className="text-sm text-gray-600">
+              {date.toLocaleDateString()}
+            </span>
+          );
         },
       },
       {
@@ -221,7 +240,7 @@ const AllUsers: React.FC = () => {
         cellRenderer: (params: any) => {
           const user = params.data;
           return (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1">
               <button
                 onClick={() => handleViewUser(user.id)}
                 className="group p-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-all duration-200 hover:scale-110 hover:shadow-md"
@@ -230,14 +249,17 @@ const AllUsers: React.FC = () => {
                 <FiEye className="w-4 h-4" />
               </button>
               <button
-                onClick={() => handleEditUser(user.id)}
+                onClick={() => {
+                  setUserToEdit(user);
+                  setIsEditModalOpen(true);
+                }}
                 className="group p-2 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 hover:text-green-700 transition-all duration-200 hover:scale-110 hover:shadow-md"
                 title="Edit User"
               >
                 <FiEdit2 className="w-4 h-4" />
               </button>
               <button
-                onClick={() => handleDeleteUser(user.id)}
+                onClick={() => handleDeleteUser(user.id, user.name)}
                 className="group p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 transition-all duration-200 hover:scale-110 hover:shadow-md"
                 title="Delete User"
               >
@@ -249,216 +271,33 @@ const AllUsers: React.FC = () => {
         sortable: false,
         filter: false,
         resizable: false,
-        pinned: "right",
       },
     ],
-    [handleViewUser, handleEditUser, handleDeleteUser]
+    [handleViewUser, handleDeleteUser]
   );
 
-  return (
-    <div className={styles.usersContainer}>
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className={styles.headerSection}>
-          <div className={styles.headerCard}>
-            <div className={styles.headerIcon}>
-              <svg
-                className={styles.icon}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
-                />
-              </svg>
-            </div>
-            <h1 className={styles.headerTitle}>All Users</h1>
-            <p className={styles.headerSubtitle}>
-              Manage and monitor all users in your MLM network.
-            </p>
+  // Pagination handlers
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className={styles.usersContainer}>
+        <div className="max-w-7xl mx-auto">
+          <div className={styles.loadingContainer}>
+            <div className={styles.spinner}></div>
+            <p>Loading users...</p>
           </div>
         </div>
+      </div>
+    );
+  }
 
-        {/* Stats Cards */}
-        <div className={styles.statsGrid}>
-          <div className={styles.statCard}>
-            <div className={styles.statIcon}>
-              <svg
-                className={styles.icon}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
-                />
-              </svg>
-            </div>
-            <div className={styles.statContent}>
-              <p className={styles.statLabel}>Total Users</p>
-              <p className={styles.statValue}>{userStats?.total_users || 0}</p>
-            </div>
-          </div>
-
-          <div className={styles.secondaryStatCard}>
-            <div className={`${styles.statIcon} ${styles.tealIcon}`}>
-              <svg
-                className={styles.icon}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </div>
-            <div className={styles.statContent}>
-              <p className={styles.statLabel}>Active Users</p>
-              <p className={styles.statValue}>
-                {userStats?.customer_users || 0}
-              </p>
-            </div>
-          </div>
-
-          <div className={styles.secondaryStatCard}>
-            <div className={`${styles.statIcon} ${styles.yellowIcon}`}>
-              <svg
-                className={styles.icon}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </div>
-            <div className={styles.statContent}>
-              <p className={styles.statLabel}>Pending Users</p>
-              <p className={styles.statValue}>
-                {userStats?.users_without_packages || 0}
-              </p>
-            </div>
-          </div>
-
-          <div className={styles.secondaryStatCard}>
-            <div className={`${styles.statIcon} ${styles.redIcon}`}>
-              <svg
-                className={styles.icon}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </div>
-            <div className={styles.statContent}>
-              <p className={styles.statLabel}>Inactive Users</p>
-              <p className={styles.statValue}>{userStats?.admin_users || 0}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Filters */}
-        <div className={styles.filtersCard}>
-          <div className={styles.filtersGrid}>
-            <input
-              type="text"
-              placeholder="Search users..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className={styles.filterInput}
-            />
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className={styles.filterSelect}
-            >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="pending">Pending</option>
-            </select>
-            <select
-              value={packageFilter}
-              onChange={(e) => setPackageFilter(e.target.value)}
-              className={styles.filterSelect}
-            >
-              <option value="all">All Packages</option>
-              <option value="1">Starter</option>
-              <option value="2">Premium</option>
-              <option value="3">Elite</option>
-            </select>
-            <button
-              onClick={() => {
-                // Trigger refetch with current filters
-                setCurrentPage(1);
-              }}
-              className={styles.searchButton}
-            >
-              Search
-            </button>
-          </div>
-        </div>
-
-        {/* Selected Users Actions */}
-        {selectedUsers.length > 0 && (
-          <div className={styles.selectedUsersCard}>
-            <div className={styles.selectedUsersInfo}>
-              <span className={styles.selectedCount}>
-                {selectedUsers.length} user(s) selected
-              </span>
-              <button
-                onClick={clearSelection}
-                className="text-sm text-gray-500 hover:text-gray-700"
-              >
-                Clear Selection
-              </button>
-            </div>
-            <div className={styles.actionButtons}>
-              <button
-                onClick={handleBulkActivate}
-                className={`${styles.actionButton} ${styles.activateButton}`}
-              >
-                Activate Selected
-              </button>
-              <button
-                onClick={handleBulkDeactivate}
-                className={`${styles.actionButton} ${styles.deactivateButton}`}
-              >
-                Deactivate Selected
-              </button>
-              <button
-                onClick={handleBulkExport}
-                className={`${styles.actionButton} ${styles.exportButton}`}
-              >
-                Export Selected
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && (
+  if (error) {
+    return (
+      <div className={styles.usersContainer}>
+        <div className="max-w-7xl mx-auto">
           <div className={styles.errorContainer}>
             <div className={styles.errorIcon}>⚠️</div>
             <p className={styles.errorTitle}>Error loading users</p>
@@ -467,50 +306,112 @@ const AllUsers: React.FC = () => {
               onClick={() => window.location.reload()}
               className={styles.retryButton}
             >
-              Retry
+              Try Again
             </button>
           </div>
-        )}
+        </div>
+      </div>
+    );
+  }
 
-        {/* Loading State */}
-        {isLoading && (
-          <div className="text-center py-8">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <p className="mt-2 text-gray-600">Loading users...</p>
-          </div>
-        )}
-
-        {/* Data Grid */}
-        {!isLoading && !error && (
-          <div className="bg-white rounded-lg shadow">
-            <div className={styles.tableContainer}>
-              <AgGridTable
-                rowData={filteredUsers}
-                columnDefs={columnDefs}
-                enablePagination={false}
-                enableSorting={true}
-                enableFiltering={false}
-                enableSelection={false}
-                height={600}
-                className={styles.agGridTable}
-              />
+  return (
+    <div className={styles.usersContainer}>
+      <div className="max-w-7xl mx-auto">
+        {/* Header with Add User Button */}
+        <div className={styles.headerSection}>
+          <div className={styles.headerCard}>
+            <div className={styles.headerContent}>
+              <div>
+                <h1 className={styles.headerTitle}>All Users</h1>
+                <p className={styles.headerSubtitle}>
+                  Manage and monitor all users in your MLM network.
+                </p>
+              </div>
+              <button
+                onClick={() => setIsCreateModalOpen(true)}
+                className={styles.createButton}
+                disabled={createUserMutation.isPending}
+              >
+                <FiPlus className="w-4 h-4" />
+                Add User
+              </button>
             </div>
-            
-            {/* Server-side Pagination */}
-            {pagination && pagination.total > 0 && (
-              <ServerPagination
-                currentPage={currentPage}
-                totalPages={pagination.last_page}
-                totalItems={pagination.total}
-                itemsPerPage={itemsPerPage}
-                onPageChange={handlePageChange}
-                loading={isLoading}
-              />
-            )}
           </div>
-        )}
+        </div>
 
-       
+        {/* Users Table */}
+        <div className="bg-white rounded-lg shadow">
+          <div className={styles.tableContainer}>
+            <AgGridTable
+              rowData={filteredUsers}
+              columnDefs={columnDefs}
+              enablePagination={false}
+              enableSorting={true}
+              enableFiltering={false}
+              enableSelection={false}
+              height={600}
+              className={styles.agGridTable}
+            />
+          </div>
+
+          {/* Server-side Pagination */}
+          {pagination && pagination.total > 0 && (
+            <ServerPagination
+              currentPage={currentPage}
+              totalPages={pagination.last_page}
+              totalItems={pagination.total}
+              itemsPerPage={pagination.per_page}
+              onPageChange={handlePageChange}
+              loading={isLoading}
+            />
+          )}
+        </div>
+
+        {/* Create User Modal */}
+        <UserModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          onSubmit={handleCreateUser}
+          isLoading={createUserMutation.isPending}
+        />
+
+        {/* Edit User Modal */}
+        <UserModal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setUserToEdit(null);
+          }}
+          onSubmit={handleEditUser}
+          isLoading={updateUserMutation.isPending}
+          mode="edit"
+          initialData={
+            userToEdit
+              ? {
+                  name: userToEdit.name,
+                  email: userToEdit.email,
+                  password: "", // Empty for edit mode
+                  sponsor_id: userToEdit.sponsor?.id,
+                  package_id: userToEdit.package?.id,
+                  roles: userToEdit.roles,
+                }
+              : undefined
+          }
+          title="Edit User"
+        />
+
+        {/* Delete Confirmation Modal */}
+        <DeleteConfirmationModal
+          isOpen={isDeleteModalOpen}
+          onClose={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+          title="Delete User"
+          message="Are you sure you want to delete this user?"
+          itemName={userToDelete?.name}
+          isLoading={deleteUserMutation.isPending}
+          confirmText="Delete User"
+          cancelText="Cancel"
+        />
       </div>
     </div>
   );

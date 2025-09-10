@@ -1,0 +1,249 @@
+@use "../dashboard/styles/color-palette" as *;
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modalContent {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1.5rem 0 1.5rem;
+  border-bottom: 1px solid $gray-200;
+  margin-bottom: 1.5rem;
+}
+
+.modalTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: $gray-900;
+  margin: 0;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 6px;
+  border: none;
+  background: $gray-100;
+  color: $gray-500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: $gray-200;
+    color: $gray-700;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.form {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @media (min-width: 640px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: $gray-700;
+}
+
+.input,
+.select {
+  padding: 0.75rem;
+  border: 1px solid $gray-300;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  background: white;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-500;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  &:disabled {
+    background: $gray-50;
+    color: $gray-500;
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: $gray-400;
+  }
+}
+
+.inputError {
+  border-color: $error-500;
+
+  &:focus {
+    border-color: $error-500;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+}
+
+.errorText {
+  font-size: 0.75rem;
+  color: $error-600;
+  margin-top: 0.25rem;
+}
+
+.helpText {
+  color: $gray-500;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  display: block;
+  font-style: italic;
+}
+
+.rolesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid $gray-300;
+  border-radius: 6px;
+  background: $gray-50;
+}
+
+.roleOption {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: $gray-700;
+
+  input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    accent-color: $primary-500;
+  }
+
+  &:hover {
+    color: $gray-900;
+  }
+}
+
+.modalActions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid $gray-200;
+}
+
+.cancelButton {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid $gray-300;
+  border-radius: 6px;
+  background: white;
+  color: $gray-700;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: $gray-50;
+    border-color: $gray-400;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.submitButton {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  background: $primary-600;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: $primary-700;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 640px) {
+  .modalContent {
+    margin: 0.5rem;
+    max-height: calc(100vh - 1rem);
+  }
+
+  .modalHeader {
+    padding: 1rem 1rem 0 1rem;
+  }
+
+  .form {
+    padding: 0 1rem 1rem 1rem;
+  }
+
+  .modalActions {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+    }
+  }
+}
