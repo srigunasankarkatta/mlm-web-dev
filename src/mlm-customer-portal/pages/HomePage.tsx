@@ -15,6 +15,7 @@ import {
 import type { MLMPlan, IncomeType } from "../types";
 import { MLM_PLANS, TESTIMONIALS, FAQ_PREVIEW } from "../data/mockData";
 import { usePackages } from "../queries/packages";
+import { useTopEarners } from "../hooks/useTopEarners";
 import AuthModal from "../components/AuthModal";
 import MLMTree from "../components/MLMTree";
 import CustomerLayout from "../components/CustomerLayout";
@@ -35,6 +36,13 @@ const HomePage: React.FC = () => {
     error: packagesError,
     isLoading: packagesLoading,
   } = usePackages({ perPage: 100 }); // Get all packages
+
+  // Top earners data
+  const { data: topEarnersData, isLoading: topEarnersLoading } = useTopEarners({
+    limit: 5,
+    period: "monthly",
+  });
+  const topEarners = topEarnersData?.data?.top_earners || [];
 
   // Generate unlocks array based on package data
   const generateUnlocksFromPackage = (apiPackage: any): IncomeType[] => {
@@ -511,28 +519,44 @@ const HomePage: React.FC = () => {
         <section className={styles.leaderboardSection}>
           <div className={styles.sectionHeader}>
             <h2 className={styles.sectionTitle}>Top Earners</h2>
-            <p className={styles.sectionSubtitle}>Updated in real-time</p>
+            <p className={styles.sectionSubtitle}>
+              {topEarnersLoading ? "Loading..." : "Updated in real-time"}
+            </p>
           </div>
 
-          <div className={styles.leaderboardGrid}>
-            {[1, 2, 3, 4, 5].map((rank) => (
-              <div key={rank} className={styles.leaderboardItem}>
-                <div className={styles.leaderboardRank}>#{rank}</div>
-                <div className={styles.leaderboardAvatar}>
-                  <Users className={styles.leaderboardAvatarIcon} />
-                </div>
-                <div className={styles.leaderboardInfo}>
-                  <div className={styles.leaderboardName}>User {rank}</div>
-                  <div className={styles.leaderboardPackage}>
-                    Package-{rank}
+          {topEarnersLoading ? (
+            <div className={styles.leaderboardLoading}>
+              <div className={styles.loadingSpinner}></div>
+              <p>Loading top earners...</p>
+            </div>
+          ) : topEarners.length > 0 ? (
+            <div className={styles.leaderboardGrid}>
+              {topEarners.map((earner) => (
+                <div key={earner.id} className={styles.leaderboardItem}>
+                  <div className={styles.leaderboardRank}>#{earner.rank}</div>
+                  <div className={styles.leaderboardAvatar}>
+                    <Users className={styles.leaderboardAvatarIcon} />
+                  </div>
+                  <div className={styles.leaderboardInfo}>
+                    <div className={styles.leaderboardName}>{earner.name}</div>
+                    <div className={styles.leaderboardPackage}>
+                      {earner.package.name} (Level {earner.package.level})
+                    </div>
+                    <div className={styles.leaderboardDirects}>
+                      {earner.directs_count} directs
+                    </div>
+                  </div>
+                  <div className={styles.leaderboardEarnings}>
+                    ₹{earner.total_earnings}
                   </div>
                 </div>
-                <div className={styles.leaderboardEarnings}>
-                  ${(1000 - rank * 100).toLocaleString()}
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className={styles.leaderboardEmpty}>
+              <p>No top earners data available</p>
+            </div>
+          )}
 
           <div className={styles.leaderboardCta}>
             <button className={styles.leaderboardButton}>

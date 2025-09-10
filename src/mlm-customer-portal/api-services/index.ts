@@ -5,6 +5,7 @@ export { PaymentService } from './payment-service';
 export { default as ProfileService } from './profile-service';
 export { default as transactionsService } from './transactions-service';
 export { default as WalletService } from './wallet-service';
+export { default as TopEarnersService } from './top-earners-service';
 export { defaultApiService, generalApiService, createCustomApiService } from './api-service-factory';
 export { API_CONFIG, getBaseURL, getCustomerBaseURL, buildApiUrl, buildCustomerApiUrl } from './api-config';
 
@@ -67,3 +68,10 @@ export type {
   TransactionQueryParams,
   WithdrawalQueryParams,
 } from './wallet-service';
+
+export type {
+  TopEarner,
+  TopEarnerPackage,
+  TopEarnersResponse,
+  TopEarnersParams,
+} from './top-earners-service';
