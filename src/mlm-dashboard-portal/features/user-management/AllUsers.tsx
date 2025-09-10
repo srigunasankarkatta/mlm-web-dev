@@ -12,7 +12,6 @@ import {
 import AgGridTable from "../../components/ui/AgGridTable";
 import ServerPagination from "../../components/ui/ServerPagination";
 import UserAvatarCell from "../../components/ui/UserAvatarCell";
-import StatusBadgeCell from "../../components/ui/StatusBadgeCell";
 import DeleteConfirmationModal from "../../components/ui/DeleteConfirmationModal";
 import {
   useUsers,
@@ -134,8 +133,9 @@ const AllUsers: React.FC = () => {
     () => [
       {
         field: "name",
-        headerName: "",
-        width: 200,
+        headerName: "User",
+        width: 250,
+        minWidth: 200,
         cellRenderer: (params: any) => {
           return <UserAvatarCell value={params.data.name} data={params.data} />;
         },
@@ -165,7 +165,8 @@ const AllUsers: React.FC = () => {
       {
         field: "referral_code",
         headerName: "Referral Code",
-        width: 120,
+        width: 150,
+        minWidth: 120,
         cellRenderer: (params: any) => {
           const code = params.value;
           return (
@@ -178,7 +179,8 @@ const AllUsers: React.FC = () => {
       {
         field: "sponsor",
         headerName: "Sponsor",
-        width: 150,
+        width: 200,
+        minWidth: 150,
         cellRenderer: (params: any) => {
           const sponsor = params.value;
           if (!sponsor) {
@@ -191,7 +193,7 @@ const AllUsers: React.FC = () => {
                 <span className="font-medium text-gray-900">
                   {sponsor.name}
                 </span>
-                <span className="text-sm text-gray-500">{sponsor.email}</span>
+                <span className="text-sm text-gray-500">ID: {sponsor.id}</span>
               </div>
             </div>
           );
@@ -200,7 +202,8 @@ const AllUsers: React.FC = () => {
       {
         field: "package",
         headerName: "Package",
-        width: 120,
+        width: 160,
+        minWidth: 120,
         cellRenderer: (params: any) => {
           const pkg = params.value;
           if (!pkg) {
@@ -215,15 +218,53 @@ const AllUsers: React.FC = () => {
         },
       },
       {
-        field: "status",
-        headerName: "Status",
+        field: "roles",
+        headerName: "Role",
+        width: 120,
+        minWidth: 100,
+        cellRenderer: (params: any) => {
+          const roles = params.value;
+          if (!roles || roles.length === 0) {
+            return <span className="text-gray-400">No role</span>;
+          }
+          return (
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+              {roles[0]}
+            </span>
+          );
+        },
+      },
+      {
+        field: "directs_count",
+        headerName: "Directs",
         width: 100,
-        cellRenderer: StatusBadgeCell,
+        minWidth: 80,
+        cellRenderer: (params: any) => {
+          const count = params.value || 0;
+          return (
+            <span className="text-sm font-medium text-gray-900">{count}</span>
+          );
+        },
+      },
+      {
+        field: "total_income",
+        headerName: "Income",
+        width: 120,
+        minWidth: 100,
+        cellRenderer: (params: any) => {
+          const income = params.value || "0.00";
+          return (
+            <span className="text-sm font-medium text-green-600">
+              ${income}
+            </span>
+          );
+        },
       },
       {
         field: "created_at",
         headerName: "Joined",
-        width: 120,
+        width: 140,
+        minWidth: 120,
         cellRenderer: (params: any) => {
           const date = new Date(params.value);
           return (
@@ -236,34 +277,33 @@ const AllUsers: React.FC = () => {
       {
         field: "actions",
         headerName: "Actions",
-        width: 150,
+        width: 180,
+        minWidth: 160,
+        pinned: "right",
         cellRenderer: (params: any) => {
           const user = params.data;
           return (
-            <div className="flex items-center space-x-1">
+            <div className="action-buttons-container">
               <button
                 onClick={() => handleViewUser(user.id)}
-                className="group p-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-all duration-200 hover:scale-110 hover:shadow-md"
                 title="View Details"
               >
-                <FiEye className="w-4 h-4" />
+                <FiEye className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => {
                   setUserToEdit(user);
                   setIsEditModalOpen(true);
                 }}
-                className="group p-2 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 hover:text-green-700 transition-all duration-200 hover:scale-110 hover:shadow-md"
                 title="Edit User"
               >
-                <FiEdit2 className="w-4 h-4" />
+                <FiEdit2 className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={() => handleDeleteUser(user.id, user.name)}
-                className="group p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 transition-all duration-200 hover:scale-110 hover:shadow-md"
                 title="Delete User"
               >
-                <FiTrash2 className="w-4 h-4" />
+                <FiTrash2 className="w-3.5 h-3.5" />
               </button>
             </div>
           );
@@ -271,6 +311,8 @@ const AllUsers: React.FC = () => {
         sortable: false,
         filter: false,
         resizable: false,
+        lockPosition: "right",
+        cellClass: "action-cell",
       },
     ],
     [handleViewUser, handleDeleteUser]
@@ -349,8 +391,15 @@ const AllUsers: React.FC = () => {
               enableSorting={true}
               enableFiltering={false}
               enableSelection={false}
-              height={600}
+              autoSizeRows={true}
+              height={400}
               className={styles.agGridTable}
+              gridOptions={{
+                suppressHorizontalScroll: false,
+                alwaysShowHorizontalScroll: true,
+                suppressColumnVirtualisation: false,
+                suppressRowVirtualisation: false,
+              }}
             />
           </div>
 

@@ -1,4 +1,10 @@
-import React, { useMemo, useCallback, useRef } from "react";
+import React, {
+  useMemo,
+  useCallback,
+  useRef,
+  useEffect,
+  useState,
+} from "react";
 import { AgGridReact } from "ag-grid-react";
 import {
   ColDef,
@@ -40,6 +46,7 @@ export interface AgGridTableProps {
   className?: string;
   height?: string | number;
   width?: string | number;
+  autoSizeRows?: boolean;
 
   // Features
   enablePagination?: boolean;
@@ -76,6 +83,7 @@ const AgGridTable: React.FC<AgGridTableProps> = ({
   className = "",
   height = 500,
   width = "100%",
+  autoSizeRows = false,
   enablePagination = false,
   enableSorting = true,
   enableFiltering = false,
@@ -91,6 +99,31 @@ const AgGridTable: React.FC<AgGridTableProps> = ({
   customComponents = {},
 }) => {
   const gridRef = useRef<AgGridReact>(null);
+
+  // State for dynamic height
+  const [dynamicHeight, setDynamicHeight] = useState(height);
+
+  // Calculate dynamic height based on content
+  const calculateDynamicHeight = useCallback(() => {
+    if (!autoSizeRows) return height;
+
+    const headerHeight = 56; // Header height from grid options
+    const rowHeight = 64; // Row height from grid options
+    const rowCount = rowData.length;
+    const minHeight = 200; // Minimum height
+    const maxHeight = 600; // Maximum height
+
+    const calculatedHeight = headerHeight + rowCount * rowHeight;
+    return Math.min(Math.max(calculatedHeight, minHeight), maxHeight);
+  }, [autoSizeRows, height, rowData.length]);
+
+  // Update height when data changes
+  useEffect(() => {
+    if (autoSizeRows) {
+      const newHeight = calculateDynamicHeight();
+      setDynamicHeight(newHeight);
+    }
+  }, [autoSizeRows, calculateDynamicHeight]);
 
   // Default grid options
   const defaultGridOptions: GridOptions = useMemo(
@@ -242,7 +275,10 @@ const AgGridTable: React.FC<AgGridTableProps> = ({
     <div
       className={`${styles.agGridContainer} ag-theme-alpine ${className}`}
       style={{
-        height: typeof height === "number" ? `${height}px` : height,
+        height:
+          typeof dynamicHeight === "number"
+            ? `${dynamicHeight}px`
+            : dynamicHeight,
         width: typeof width === "number" ? `${width}px` : width,
       }}
     >

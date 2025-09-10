@@ -578,13 +578,309 @@
 
 // Table container styles
 .tableContainer {
-  background: $white;
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
   border-radius: 1rem;
-  box-shadow: 0 4px 20px rgba($primary-500, 0.08);
-  border: 1px solid rgba($primary-200, 0.2);
+  box-shadow: 0 10px 25px rgba(30, 58, 138, 0.1),
+    0 4px 6px rgba(30, 58, 138, 0.05);
+  border: 1px solid rgba(30, 58, 138, 0.1);
   overflow: hidden;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(30, 58, 138, 0.02),
+      rgba(30, 58, 138, 0.01)
+    );
+    pointer-events: none;
+  }
 }
 
 .agGridTable {
-  height: 600px;
+  // Height will be dynamically calculated by the component
+  width: 100%;
+  min-width: 100%;
+
+  // Overall table styling
+  :global(.ag-root-wrapper) {
+    border-radius: 0.75rem;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  // Enable horizontal scrolling
+  :global(.ag-body-viewport) {
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+  }
+
+  // Ensure proper scrolling behavior
+  :global(.ag-body-horizontal-scroll) {
+    display: block !important;
+  }
+
+  // Style the horizontal scrollbar
+  :global(.ag-body-horizontal-scroll-viewport) {
+    overflow-x: auto !important;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(30, 58, 138, 0.3) rgba(30, 58, 138, 0.1);
+
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(30, 58, 138, 0.1);
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(30, 58, 138, 0.3);
+      border-radius: 4px;
+
+      &:hover {
+        background: rgba(30, 58, 138, 0.5);
+      }
+    }
+  }
+
+  // Header styling
+  :global(.ag-header) {
+    background: linear-gradient(135deg, #1e3a8a, #1e40af) !important;
+    color: white !important;
+    border-bottom: 3px solid #1e40af !important;
+    box-shadow: 0 2px 10px rgba(30, 58, 138, 0.3);
+  }
+
+  :global(.ag-header-cell) {
+    background: transparent !important;
+    color: white !important;
+    font-weight: 700 !important;
+    font-size: 0.875rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+    padding: 1rem 0.75rem !important;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+      );
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+  }
+
+  // Row styling
+  :global(.ag-row) {
+    border-bottom: 1px solid rgba(30, 58, 138, 0.05) !important;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: linear-gradient(
+        135deg,
+        rgba(30, 58, 138, 0.02),
+        rgba(30, 58, 138, 0.05)
+      ) !important;
+    }
+
+    &:nth-child(even) {
+      background: rgba(30, 58, 138, 0.01) !important;
+    }
+  }
+
+  // Cell styling
+  :global(.ag-cell) {
+    border-right: 1px solid rgba(30, 58, 138, 0.05) !important;
+    padding: 1rem 0.75rem !important;
+  }
+
+  // Action column styling
+  :global(.action-cell) {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9) !important;
+    border-left: 3px solid #1e3a8a !important;
+    padding: 0 !important;
+    position: relative;
+
+    &:hover {
+      background: linear-gradient(135deg, #e2e8f0, #cbd5e1) !important;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(30, 58, 138, 0.02),
+        rgba(30, 58, 138, 0.05)
+      );
+      pointer-events: none;
+    }
+  }
+
+  // Pinned column styling
+  :global(.ag-pinned-right-cols-container) {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    border-left: 3px solid #1e3a8a;
+    box-shadow: -4px 0 20px rgba(30, 58, 138, 0.15);
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(30, 58, 138, 0.02),
+        rgba(30, 58, 138, 0.05)
+      );
+      pointer-events: none;
+    }
+  }
+
+  // Action column header styling
+  :global(.ag-header-cell[col-id="actions"]) {
+    background: linear-gradient(135deg, #1e3a8a, #1e40af) !important;
+    border-left: 3px solid #1e40af !important;
+    font-weight: 700 !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.05)
+      );
+      pointer-events: none;
+    }
+  }
+
+  // Action buttons container
+  :global(.action-buttons-container) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 2rem;
+    gap: 0.75rem;
+    min-height: 64px;
+    width: 100%;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(30, 58, 138, 0.1),
+        transparent
+      );
+      transform: translateY(-50%);
+    }
+
+    button {
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      min-width: 2rem;
+      min-height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: transparent;
+      border: 1px solid transparent;
+
+      &:hover {
+        transform: translateY(-1px);
+        background: rgba(0, 0, 0, 0.05);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      &:focus {
+        outline: 2px solid rgba(30, 58, 138, 0.3);
+        outline-offset: 2px;
+      }
+
+      // View button (blue)
+      &:nth-child(1) {
+        color: #3b82f6;
+        border-color: rgba(59, 130, 246, 0.2);
+
+        &:hover {
+          color: #2563eb;
+          background: rgba(59, 130, 246, 0.1);
+          border-color: rgba(59, 130, 246, 0.3);
+        }
+      }
+
+      // Edit button (green)
+      &:nth-child(2) {
+        color: #10b981;
+        border-color: rgba(16, 185, 129, 0.2);
+
+        &:hover {
+          color: #059669;
+          background: rgba(16, 185, 129, 0.1);
+          border-color: rgba(16, 185, 129, 0.3);
+        }
+      }
+
+      // Delete button (red)
+      &:nth-child(3) {
+        color: #ef4444;
+        border-color: rgba(239, 68, 68, 0.2);
+
+        &:hover {
+          color: #dc2626;
+          background: rgba(239, 68, 68, 0.1);
+          border-color: rgba(239, 68, 68, 0.3);
+        }
+      }
+    }
+  }
 }
