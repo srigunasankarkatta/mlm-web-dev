@@ -452,3 +452,16 @@
     flex-direction: column;
   }
 }
+
+// Table container styles
+.tableContainer {
+  background: $white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba($primary-500, 0.08);
+  border: 1px solid rgba($primary-200, 0.2);
+  overflow: hidden;
+}
+
+.agGridTable {
+  height: 600px;
+}

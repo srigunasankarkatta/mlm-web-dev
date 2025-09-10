@@ -1,8 +1,9 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ColDef } from "ag-grid-community";
+import { FiEye, FiEdit2, FiTrash2, FiPackage, FiDollarSign, FiUsers, FiCalendar } from "react-icons/fi";
 import AgGridTable from "../../components/ui/AgGridTable";
-import ActionsCell from "../../components/ui/ActionsCell";
+import ServerPagination from "../../components/ui/ServerPagination";
 import {
   usePackages,
   useDeletePackage,
@@ -14,6 +15,7 @@ const AllPackages: React.FC = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(15);
+  const [itemsPerPage] = useState(15);
   const [selectedPackages, setSelectedPackages] = useState<Package[]>([]);
 
   // API queries
@@ -80,6 +82,11 @@ const AllPackages: React.FC = () => {
     }
   }, []);
 
+  // Pagination handlers
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, []);
+
   // Column definitions for ag-grid
   const columnDefs = useMemo<ColDef[]>(
     () => [
@@ -88,16 +95,14 @@ const AllPackages: React.FC = () => {
         field: "name",
         cellRenderer: (params: any) => (
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-teal-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
-              <span className="text-sm font-bold text-white">
-                {params.data.name.charAt(0)}
-              </span>
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
+              <FiPackage className="w-5 h-5 text-white" />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="text-sm font-semibold text-teal-900 truncate">
+              <div className="text-sm font-semibold text-blue-900 truncate">
                 {params.data.name}
               </div>
-              <div className="text-xs text-teal-600">
+              <div className="text-xs text-blue-600">
                 Level {params.data.level_unlock}
               </div>
             </div>
@@ -112,13 +117,16 @@ const AllPackages: React.FC = () => {
         headerName: "Price",
         field: "price",
         cellRenderer: (params: any) => (
-          <span className="font-semibold text-teal-600">₹{params.value}</span>
+          <div className="flex items-center space-x-2">
+            <FiDollarSign className="w-4 h-4 text-blue-600" />
+            <span className="font-semibold text-blue-600">₹{params.value}</span>
+          </div>
         ),
         width: 120,
         minWidth: 100,
         sortable: true,
         resizable: true,
-        cellStyle: { color: "#059669", fontWeight: "600" },
+        cellStyle: { color: "#2563eb", fontWeight: "600" },
       },
       {
         headerName: "Level Unlock",
@@ -128,9 +136,12 @@ const AllPackages: React.FC = () => {
         sortable: true,
         resizable: true,
         cellRenderer: (params: any) => (
-          <span className="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-teal-100 text-teal-800">
-            Level {params.value}
-          </span>
+          <div className="flex items-center space-x-2">
+            <FiUsers className="w-4 h-4 text-blue-600" />
+            <span className="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+              Level {params.value}
+            </span>
+          </div>
         ),
       },
       {
@@ -142,7 +153,7 @@ const AllPackages: React.FC = () => {
         filter: true,
         resizable: true,
         cellRenderer: (params: any) => (
-          <div className="text-sm text-teal-600 truncate" title={params.value}>
+          <div className="text-sm text-blue-600 truncate" title={params.value}>
             {params.value || "No description"}
           </div>
         ),
@@ -154,17 +165,43 @@ const AllPackages: React.FC = () => {
         minWidth: 100,
         sortable: true,
         resizable: true,
-        valueFormatter: (params: any) =>
-          new Date(params.value).toLocaleDateString(),
+        cellRenderer: (params: any) => (
+          <div className="flex items-center space-x-2">
+            <FiCalendar className="w-4 h-4 text-gray-400" />
+            <span>{new Date(params.value).toLocaleDateString()}</span>
+          </div>
+        ),
       },
       {
         headerName: "Actions",
         field: "actions",
-        cellRenderer: ActionsCell,
-        cellRendererParams: {
-          onView: handleViewPackage,
-          onEdit: handleEditPackage,
-          onDelete: handleDeletePackage,
+        cellRenderer: (params: any) => {
+          const packageItem = params.data;
+          return (
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => handleViewPackage(packageItem)}
+                className="group p-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-all duration-200 hover:scale-110 hover:shadow-md"
+                title="View Details"
+              >
+                <FiEye className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => handleEditPackage(packageItem)}
+                className="group p-2 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 hover:text-green-700 transition-all duration-200 hover:scale-110 hover:shadow-md"
+                title="Edit Package"
+              >
+                <FiEdit2 className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => handleDeletePackage(packageItem.id)}
+                className="group p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 transition-all duration-200 hover:scale-110 hover:shadow-md"
+                title="Delete Package"
+              >
+                <FiTrash2 className="w-4 h-4" />
+              </button>
+            </div>
+          );
         },
         width: 150,
         minWidth: 120,
@@ -177,12 +214,12 @@ const AllPackages: React.FC = () => {
   );
 
   return (
-    <div className="bg-gradient-to-br from-teal-50 to-teal-100 min-h-screen">
+    <div className="bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="p-3 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl shadow-lg">
+            <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg">
               <svg
                 className="w-8 h-8 text-white"
                 fill="none"
@@ -198,10 +235,10 @@ const AllPackages: React.FC = () => {
               </svg>
             </div>
             <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-teal-900 to-teal-700 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-900 to-blue-700 bg-clip-text text-transparent">
                 All Packages
               </h1>
-              <p className="text-teal-600 mt-1">
+              <p className="text-blue-600 mt-1">
                 Manage and monitor all packages in your MLM network.
               </p>
             </div>
@@ -210,9 +247,9 @@ const AllPackages: React.FC = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-lg border border-teal-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+          <div className="bg-white rounded-xl shadow-lg border border-blue-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-center">
-              <div className="p-3 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl shadow-lg">
+              <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg">
                 <svg
                   className="w-6 h-6 text-white"
                   fill="none"
@@ -228,19 +265,19 @@ const AllPackages: React.FC = () => {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-teal-600">
+                <p className="text-sm font-medium text-blue-600">
                   Total Packages
                 </p>
-                <p className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-teal-800 bg-clip-text text-transparent">
+                <p className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
                   {packageStats?.total_packages || packages.length}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg border border-teal-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+          <div className="bg-white rounded-xl shadow-lg border border-blue-100 p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <div className="flex items-center">
-              <div className="p-3 bg-gradient-to-r from-teal-500 to-teal-600 rounded-xl shadow-lg">
+              <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg">
                 <svg
                   className="w-6 h-6 text-white"
                   fill="none"
@@ -256,10 +293,10 @@ const AllPackages: React.FC = () => {
                 </svg>
               </div>
               <div className="ml-4">
-                <p className="text-sm font-medium text-teal-600">
+                <p className="text-sm font-medium text-blue-600">
                   Users with Packages
                 </p>
-                <p className="text-2xl font-bold bg-gradient-to-r from-teal-600 to-teal-800 bg-clip-text text-transparent">
+                <p className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
                   {packageStats?.total_users_with_packages || 0}
                 </p>
               </div>
@@ -268,11 +305,11 @@ const AllPackages: React.FC = () => {
         </div>
 
         {/* Add Package Button */}
-        <div className="bg-white rounded-xl shadow-lg border border-teal-100 p-6 mb-6">
+        <div className="bg-white rounded-xl shadow-lg border border-blue-100 p-6 mb-6">
           <div className="flex justify-end">
             <button
               onClick={() => navigate("/admin/packages/create")}
-              className="px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-lg hover:from-teal-700 hover:to-teal-800 transition-all duration-200 font-medium flex items-center space-x-2"
+              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-medium flex items-center space-x-2"
             >
               <svg
                 className="w-5 h-5"
@@ -334,24 +371,38 @@ const AllPackages: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <AgGridTable
-                rowData={filteredPackages}
-                columnDefs={columnDefs}
-                height={600}
-                enablePagination={false}
-                enableSorting={true}
-                enableFiltering={false}
-                enableFloatingFilter={false}
-                enableSelection={true}
-                enableResizing={true}
-                enableColumnMoving={true}
-                selectionType="multiple"
-                selectedRows={selectedPackages}
-                onGridReady={handleGridReady}
-                onRowSelected={handleRowSelected}
-                loading={isLoading}
-                className="w-full"
-              />
+              <div>
+                <AgGridTable
+                  rowData={filteredPackages}
+                  columnDefs={columnDefs}
+                  height={600}
+                  enablePagination={false}
+                  enableSorting={true}
+                  enableFiltering={false}
+                  enableFloatingFilter={false}
+                  enableSelection={true}
+                  enableResizing={true}
+                  enableColumnMoving={true}
+                  selectionType="multiple"
+                  selectedRows={selectedPackages}
+                  onGridReady={handleGridReady}
+                  onRowSelected={handleRowSelected}
+                  loading={isLoading}
+                  className="w-full"
+                />
+                
+                {/* Server-side Pagination */}
+                {pagination && pagination.total > 0 && (
+                  <ServerPagination
+                    currentPage={currentPage}
+                    totalPages={pagination.last_page}
+                    totalItems={pagination.total}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={handlePageChange}
+                    loading={isLoading}
+                  />
+                )}
+              </div>
             )}
 
            
@@ -360,10 +411,10 @@ const AllPackages: React.FC = () => {
 
         {/* Custom Pagination Controls */}
         {pagination && (
-          <div className="bg-white border-t border-teal-200 px-6 py-4">
+          <div className="bg-white border-t border-blue-200 px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-teal-700">
+                <span className="text-sm text-blue-700">
                   Showing{" "}
                   {(pagination.current_page - 1) * pagination.per_page + 1} to{" "}
                   {Math.min(
@@ -377,7 +428,7 @@ const AllPackages: React.FC = () => {
               <div className="flex items-center space-x-2">
                 {/* Per Page Selector */}
                 <div className="flex items-center space-x-2">
-                  <label htmlFor="perPage" className="text-sm text-teal-700">
+                  <label htmlFor="perPage" className="text-sm text-blue-700">
                     Show:
                   </label>
                   <select
@@ -387,7 +438,7 @@ const AllPackages: React.FC = () => {
                       setPerPage(Number(e.target.value));
                       setCurrentPage(1); // Reset to first page when changing per page
                     }}
-                    className="px-2 py-1 border border-teal-300 rounded text-sm focus:ring-2 focus:ring-teal-500 focus:border-transparent text-teal-700"
+                    className="px-2 py-1 border border-blue-300 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent text-blue-700"
                   >
                     <option value={10}>10</option>
                     <option value={15}>15</option>
@@ -402,14 +453,14 @@ const AllPackages: React.FC = () => {
                   <button
                     onClick={() => setCurrentPage(1)}
                     disabled={pagination.current_page === 1}
-                    className="px-2 py-1 text-sm border border-teal-300 rounded hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed text-teal-700 transition-colors duration-200"
+                    className="px-2 py-1 text-sm border border-blue-300 rounded hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed text-blue-700 transition-colors duration-200"
                   >
                     First
                   </button>
                   <button
                     onClick={() => setCurrentPage(pagination.current_page - 1)}
                     disabled={pagination.current_page === 1}
-                    className="px-2 py-1 text-sm border border-teal-300 rounded hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed text-teal-700 transition-colors duration-200"
+                    className="px-2 py-1 text-sm border border-blue-300 rounded hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed text-blue-700 transition-colors duration-200"
                   >
                     Previous
                   </button>
@@ -439,8 +490,8 @@ const AllPackages: React.FC = () => {
                             onClick={() => setCurrentPage(pageNum)}
                             className={`px-3 py-1 text-sm border rounded transition-all duration-200 ${
                               pageNum === pagination.current_page
-                                ? "bg-teal-600 text-white border-teal-600 shadow-md"
-                                : "border-teal-300 hover:bg-teal-50 text-teal-700 hover:border-teal-400"
+                                ? "bg-blue-600 text-white border-blue-600 shadow-md"
+                                : "border-blue-300 hover:bg-blue-50 text-blue-700 hover:border-blue-400"
                             }`}
                           >
                             {pageNum}
@@ -453,14 +504,14 @@ const AllPackages: React.FC = () => {
                   <button
                     onClick={() => setCurrentPage(pagination.current_page + 1)}
                     disabled={pagination.current_page === pagination.last_page}
-                    className="px-2 py-1 text-sm border border-teal-300 rounded hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed text-teal-700 transition-colors duration-200"
+                    className="px-2 py-1 text-sm border border-blue-300 rounded hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed text-blue-700 transition-colors duration-200"
                   >
                     Next
                   </button>
                   <button
                     onClick={() => setCurrentPage(pagination.last_page)}
                     disabled={pagination.current_page === pagination.last_page}
-                    className="px-2 py-1 text-sm border border-teal-300 rounded hover:bg-teal-50 disabled:opacity-50 disabled:cursor-not-allowed text-teal-700 transition-colors duration-200"
+                    className="px-2 py-1 text-sm border border-blue-300 rounded hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed text-blue-700 transition-colors duration-200"
                   >
                     Last
                   </button>

@@ -1,10 +1,11 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ColDef } from "ag-grid-community";
+import { FiEye, FiEdit2, FiTrash2, FiMail, FiUsers, FiDollarSign, FiXCircle } from "react-icons/fi";
 import AgGridTable from "../../components/ui/AgGridTable";
+import ServerPagination from "../../components/ui/ServerPagination";
 import UserAvatarCell from "../../components/ui/UserAvatarCell";
 import StatusBadgeCell from "../../components/ui/StatusBadgeCell";
-import ActionsCell from "../../components/ui/ActionsCell";
 import { useUsers, useDeleteUser, useUserStats } from "../../queries/users";
 import type { User } from "../../api-services/user-service";
 import styles from "./AllUsers.module.scss";
@@ -21,6 +22,7 @@ const AllUsers: React.FC = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(15);
+  const [itemsPerPage] = useState(15);
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
   // API queries
@@ -97,6 +99,11 @@ const AllUsers: React.FC = () => {
     setSelectedUsers([]);
   }, []);
 
+  // Pagination handlers
+  const handlePageChange = useCallback((page: number) => {
+    setCurrentPage(page);
+  }, []);
+
   // Column definitions for the data grid
   const columnDefs: ColDef[] = useMemo(
     () => [
@@ -120,9 +127,12 @@ const AllUsers: React.FC = () => {
         cellRenderer: (params: any) => {
           const user = params.data;
           return (
-            <div className="flex flex-col">
-              <span className="font-medium text-gray-900">{user.email}</span>
-              <span className="text-sm text-gray-500">ID: {user.id}</span>
+            <div className="flex items-center space-x-2">
+              <FiMail className="w-4 h-4 text-gray-400" />
+              <div className="flex flex-col">
+                <span className="font-medium text-gray-900">{user.email}</span>
+                <span className="text-sm text-gray-500">ID: {user.id}</span>
+              </div>
             </div>
           );
         },
@@ -146,12 +156,21 @@ const AllUsers: React.FC = () => {
         width: 150,
         cellRenderer: (params: any) => {
           const sponsor = params.data.sponsor;
-          if (!sponsor)
-            return <span className="text-gray-400">No sponsor</span>;
+          if (!sponsor) {
+            return (
+              <div className="flex items-center space-x-2">
+                <FiXCircle className="w-4 h-4 text-gray-400" />
+                <span className="text-gray-400">No sponsor</span>
+              </div>
+            );
+          }
           return (
-            <div className="flex flex-col">
-              <span className="font-medium text-gray-900">{sponsor.name}</span>
-              <span className="text-sm text-gray-500">{sponsor.email}</span>
+            <div className="flex items-center space-x-2">
+              <FiUsers className="w-4 h-4 text-gray-400" />
+              <div className="flex flex-col">
+                <span className="font-medium text-gray-900">{sponsor.name}</span>
+                <span className="text-sm text-gray-500">{sponsor.email}</span>
+              </div>
             </div>
           );
         },
@@ -162,11 +181,21 @@ const AllUsers: React.FC = () => {
         width: 120,
         cellRenderer: (params: any) => {
           const pkg = params.data.package;
-          if (!pkg) return <span className="text-gray-400">No package</span>;
+          if (!pkg) {
+            return (
+              <div className="flex items-center space-x-2">
+                <FiXCircle className="w-4 h-4 text-gray-400" />
+                <span className="text-gray-400">No package</span>
+              </div>
+            );
+          }
           return (
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-              {pkg.name}
-            </span>
+            <div className="flex items-center space-x-2">
+              <FiDollarSign className="w-4 h-4 text-gray-400" />
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                {pkg.name}
+              </span>
+            </div>
           );
         },
       },
@@ -188,12 +217,34 @@ const AllUsers: React.FC = () => {
       {
         field: "actions",
         headerName: "Actions",
-        width: 120,
-        cellRenderer: ActionsCell,
-        cellRendererParams: {
-          onView: handleViewUser,
-          onEdit: handleEditUser,
-          onDelete: handleDeleteUser,
+        width: 150,
+        cellRenderer: (params: any) => {
+          const user = params.data;
+          return (
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => handleViewUser(user.id)}
+                className="group p-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 transition-all duration-200 hover:scale-110 hover:shadow-md"
+                title="View Details"
+              >
+                <FiEye className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => handleEditUser(user.id)}
+                className="group p-2 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 hover:text-green-700 transition-all duration-200 hover:scale-110 hover:shadow-md"
+                title="Edit User"
+              >
+                <FiEdit2 className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => handleDeleteUser(user.id)}
+                className="group p-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 transition-all duration-200 hover:scale-110 hover:shadow-md"
+                title="Delete User"
+              >
+                <FiTrash2 className="w-4 h-4" />
+              </button>
+            </div>
+          );
         },
         sortable: false,
         filter: false,
@@ -432,106 +483,34 @@ const AllUsers: React.FC = () => {
         {/* Data Grid */}
         {!isLoading && !error && (
           <div className="bg-white rounded-lg shadow">
-            <AgGridTable
-              rowData={filteredUsers}
-              columnDefs={columnDefs}
-              enablePagination={true}
-              paginationPageSize={perPage}
-            />
+            <div className={styles.tableContainer}>
+              <AgGridTable
+                rowData={filteredUsers}
+                columnDefs={columnDefs}
+                enablePagination={false}
+                enableSorting={true}
+                enableFiltering={false}
+                enableSelection={false}
+                height={600}
+                className={styles.agGridTable}
+              />
+            </div>
+            
+            {/* Server-side Pagination */}
+            {pagination && pagination.total > 0 && (
+              <ServerPagination
+                currentPage={currentPage}
+                totalPages={pagination.last_page}
+                totalItems={pagination.total}
+                itemsPerPage={itemsPerPage}
+                onPageChange={handlePageChange}
+                loading={isLoading}
+              />
+            )}
           </div>
         )}
 
-        {/* Pagination */}
-        {pagination && (
-          <div className={styles.paginationContainer}>
-            <div className={styles.paginationInfo}>
-              <span className={styles.paginationText}>
-                Showing{" "}
-                {(pagination.current_page - 1) * pagination.per_page + 1} to{" "}
-                {Math.min(
-                  pagination.current_page * pagination.per_page,
-                  pagination.total
-                )}{" "}
-                of {pagination.total} users
-              </span>
-              <div className={styles.perPageSelector}>
-                <label htmlFor="perPage" className={styles.perPageLabel}>
-                  Show:
-                </label>
-                <select
-                  id="perPage"
-                  value={perPage}
-                  onChange={(e) => {
-                    setPerPage(parseInt(e.target.value));
-                    setCurrentPage(1);
-                  }}
-                  className={styles.perPageSelect}
-                >
-                  <option value={10}>10</option>
-                  <option value={15}>15</option>
-                  <option value={25}>25</option>
-                  <option value={50}>50</option>
-                </select>
-              </div>
-            </div>
-
-            <div className={styles.paginationButtons}>
-              <button
-                onClick={() => setCurrentPage(1)}
-                disabled={currentPage === 1}
-                className={styles.paginationButton}
-              >
-                First
-              </button>
-              <button
-                onClick={() => setCurrentPage(currentPage - 1)}
-                disabled={currentPage === 1}
-                className={styles.paginationButton}
-              >
-                Previous
-              </button>
-
-              {/* Page Numbers */}
-              {Array.from({ length: pagination.last_page }, (_, i) => i + 1)
-                .filter(
-                  (page) =>
-                    page === 1 ||
-                    page === pagination.last_page ||
-                    (page >= currentPage - 2 && page <= currentPage + 2)
-                )
-                .map((page, index, array) => (
-                  <React.Fragment key={page}>
-                    {index > 0 && array[index - 1] !== page - 1 && (
-                      <span className="px-2 py-1 text-gray-500">...</span>
-                    )}
-                    <button
-                      onClick={() => setCurrentPage(page)}
-                      className={`${styles.paginationButton} ${
-                        currentPage === page ? styles.activePage : ""
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  </React.Fragment>
-                ))}
-
-              <button
-                onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={currentPage === pagination.last_page}
-                className={styles.paginationButton}
-              >
-                Next
-              </button>
-              <button
-                onClick={() => setCurrentPage(pagination.last_page)}
-                disabled={currentPage === pagination.last_page}
-                className={styles.paginationButton}
-              >
-                Last
-              </button>
-            </div>
-          </div>
-        )}
+       
       </div>
     </div>
   );
