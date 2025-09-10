@@ -186,6 +186,16 @@ const RegisterPage: React.FC = () => {
             )}
           </Formik>
 
+          {/* Login Link */}
+          <div className={styles.formFooter}>
+            <p className={styles.footerText}>
+              Already have an account?{" "}
+              <Link to="/login" className={styles.footerLink}>
+                Sign in here
+              </Link>
+            </p>
+          </div>
+
           {/* Header */}
           <div className={styles.registerHeader}>
             <Link to="/customer" className={styles.backLink}>

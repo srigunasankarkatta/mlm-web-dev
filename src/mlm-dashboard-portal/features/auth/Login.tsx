@@ -3,10 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { useAdminLogin } from "../../queries/admin-auth";
 import { getDefaultRouteByRole } from "../../queries/types/admin-auth";
-import {
-  COLOR_CLASSES,
-  COMMON_COMBINATIONS,
-} from "../../../constants/colorClasses";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -110,16 +106,27 @@ const Login: React.FC = () => {
 
   return (
     <div
-      className={`min-h-screen ${COLOR_CLASSES.gradient.secondary} flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8`}
+      data-admin-login
+      className="min-h-screen flex items-center justify-center py-4 px-4 sm:px-6 lg:px-8"
+      style={{ 
+        height: '100vh',
+        minHeight: '100vh',
+        maxHeight: '100vh',
+        background: 'linear-gradient(135deg, rgba(240, 244, 248, 0.3) 0%, rgba(217, 226, 236, 0.1) 100%)'
+      }}
     >
-      <div className="max-w-md w-full space-y-8">
+      <div className="max-w-sm w-full space-y-4">
         {/* Header */}
         <div className="text-center">
           <div
-            className={`mx-auto h-16 w-16 ${COLOR_CLASSES.gradient.primary} rounded-full flex items-center justify-center mb-6`}
+            className="mx-auto h-12 w-12 rounded-full flex items-center justify-center mb-4"
+            style={{
+              background: 'linear-gradient(135deg, #486581 0%, #334e68 100%)',
+              boxShadow: '0 8px 25px rgba(72, 101, 129, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+            }}
           >
             <svg
-              className="h-8 w-8 text-white"
+              className="h-6 w-6 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -133,23 +140,32 @@ const Login: React.FC = () => {
             </svg>
           </div>
           <h2
-            className={`text-3xl font-bold ${COLOR_CLASSES.text.primary} mb-2`}
+            className="text-2xl font-bold mb-1"
+            style={{ color: '#0f243e' }}
           >
             Admin Login
           </h2>
-          <p className={COLOR_CLASSES.text.secondary}>
+          <p className="text-sm" style={{ color: '#1e3a5f' }}>
             Sign in to your MLM Dashboard Admin Panel
           </p>
         </div>
 
         {/* Login Form */}
-        <div className={`${COMMON_COMBINATIONS.card} rounded-2xl p-8`}>
-          <form className="space-y-6" onSubmit={handleSubmit}>
+        <div 
+          className="rounded-xl p-6"
+          style={{
+            background: '#ffffff',
+            boxShadow: '0 15px 30px rgba(72, 101, 129, 0.15), 0 5px 15px rgba(0, 0, 0, 0.1)',
+            border: '1px solid rgba(188, 204, 220, 0.2)'
+          }}
+        >
+          <form className="space-y-4" onSubmit={handleSubmit}>
             {/* Email Field */}
             <div>
               <label
                 htmlFor="email"
-                className={`block text-sm font-medium ${COLOR_CLASSES.text.primary} mb-2`}
+                className="block text-xs font-medium mb-1"
+                style={{ color: '#0f243e' }}
               >
                 Email Address
               </label>
@@ -161,15 +177,15 @@ const Login: React.FC = () => {
                 required
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-opacity-50 transition-colors text-gray-900 ${
-                  errors.email
-                    ? COLOR_CLASSES.input.error
-                    : COLOR_CLASSES.input.default
-                }`}
+                className="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-opacity-50 transition-colors text-gray-900 text-sm"
+                style={{
+                  borderColor: errors.email ? '#ef4444' : 'rgba(188, 204, 220, 0.3)',
+                  background: 'rgba(240, 244, 248, 0.3)'
+                }}
                 placeholder="Enter your email"
               />
               {errors.email && (
-                <p className={`mt-1 text-sm ${COLOR_CLASSES.text.error}`}>
+                <p className="mt-1 text-xs" style={{ color: '#ef4444' }}>
                   {errors.email}
                 </p>
               )}
@@ -179,7 +195,8 @@ const Login: React.FC = () => {
             <div>
               <label
                 htmlFor="password"
-                className={`block text-sm font-medium ${COLOR_CLASSES.text.primary} mb-2`}
+                className="block text-xs font-medium mb-1"
+                style={{ color: '#0f243e' }}
               >
                 Password
               </label>
@@ -192,11 +209,11 @@ const Login: React.FC = () => {
                   required
                   value={formData.password}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-opacity-50 transition-colors text-gray-900 ${
-                    errors.password
-                      ? COLOR_CLASSES.input.error
-                      : COLOR_CLASSES.input.default
-                  }`}
+                  className="w-full px-3 py-2 pr-10 border rounded-md focus:ring-2 focus:ring-opacity-50 transition-colors text-gray-900 text-sm"
+                  style={{
+                    borderColor: errors.password ? '#ef4444' : 'rgba(188, 204, 220, 0.3)',
+                    background: 'rgba(240, 244, 248, 0.3)'
+                  }}
                   placeholder="Enter your password"
                 />
                 <button
@@ -205,14 +222,14 @@ const Login: React.FC = () => {
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-teal-600" />
+                    <EyeOff className="h-4 w-4 text-gray-400 hover:text-blue-600" />
                   ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-teal-600" />
+                    <Eye className="h-4 w-4 text-gray-400 hover:text-blue-600" />
                   )}
                 </button>
               </div>
               {errors.password && (
-                <p className={`mt-1 text-sm ${COLOR_CLASSES.text.error}`}>
+                <p className="mt-1 text-xs" style={{ color: '#ef4444' }}>
                   {errors.password}
                 </p>
               )}
@@ -227,11 +244,13 @@ const Login: React.FC = () => {
                   type="checkbox"
                   checked={formData.rememberMe}
                   onChange={handleInputChange}
-                  className={`h-4 w-4 ${COLOR_CLASSES.ring.primary} border-gray-300 rounded`}
+                  className="h-3 w-3 border-gray-300 rounded"
+                  style={{ accentColor: '#486581' }}
                 />
                 <label
                   htmlFor="remember-me"
-                  className={`ml-2 block text-sm ${COLOR_CLASSES.text.primary}`}
+                  className="ml-2 block text-xs"
+                  style={{ color: '#0f243e' }}
                 >
                   Remember me
                 </label>
@@ -239,7 +258,10 @@ const Login: React.FC = () => {
               <button
                 type="button"
                 onClick={handleForgotPassword}
-                className={`text-sm ${COLOR_CLASSES.text.info} hover:text-teal-600 font-medium ${COLOR_CLASSES["transition-colors"]}`}
+                className="text-xs font-medium transition-colors"
+                style={{ color: '#486581' }}
+                onMouseEnter={(e) => ((e.target as HTMLButtonElement).style.color = '#334e68')}
+                onMouseLeave={(e) => ((e.target as HTMLButtonElement).style.color = '#486581')}
               >
                 Forgot password?
               </button>
@@ -247,8 +269,14 @@ const Login: React.FC = () => {
 
             {/* General Error */}
             {errors.general && (
-              <div className={`${COLOR_CLASSES.alert.error} rounded-lg p-3`}>
-                <p className={`text-sm ${COLOR_CLASSES.text.error}`}>
+              <div 
+                className="rounded-md p-2"
+                style={{
+                  background: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid rgba(239, 68, 68, 0.3)'
+                }}
+              >
+                <p className="text-xs" style={{ color: '#ef4444' }}>
                   {errors.general}
                 </p>
               </div>
@@ -256,8 +284,16 @@ const Login: React.FC = () => {
 
             {/* Success Message */}
             {successMessage && (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                <p className="text-sm text-green-800">{successMessage}</p>
+              <div 
+                className="rounded-md p-2"
+                style={{
+                  background: 'rgba(34, 197, 94, 0.1)',
+                  border: '1px solid rgba(34, 197, 94, 0.3)'
+                }}
+              >
+                <p className="text-xs" style={{ color: '#16a34a' }}>
+                  {successMessage}
+                </p>
               </div>
             )}
 
@@ -265,12 +301,28 @@ const Login: React.FC = () => {
             <button
               type="submit"
               disabled={adminLoginMutation.isPending}
-              className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white ${COLOR_CLASSES.gradient.primary} hover:from-teal-700 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed ${COLOR_CLASSES.transition}`}
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              style={{
+                background: 'linear-gradient(135deg, #486581 0%, #334e68 100%)',
+                boxShadow: '0 6px 20px rgba(72, 101, 129, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+              }}
+              onMouseEnter={(e) => {
+                if (!adminLoginMutation.isPending) {
+                  (e.target as HTMLButtonElement).style.background = 'linear-gradient(135deg, #334e68 0%, #243b53 100%)';
+                  (e.target as HTMLButtonElement).style.transform = 'translateY(-1px)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!adminLoginMutation.isPending) {
+                  (e.target as HTMLButtonElement).style.background = 'linear-gradient(135deg, #486581 0%, #334e68 100%)';
+                  (e.target as HTMLButtonElement).style.transform = 'translateY(0)';
+                }
+              }}
             >
               {adminLoginMutation.isPending ? (
                 <div className="flex items-center">
                   <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -298,16 +350,21 @@ const Login: React.FC = () => {
           </form>
 
           {/* Divider */}
-          <div className="mt-6">
+          <div className="mt-4">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div
-                  className={`w-full border-t ${COLOR_CLASSES.border.light}`}
+                  className="w-full border-t"
+                  style={{ borderColor: '#d9e2ec' }}
                 />
               </div>
-              <div className="relative flex justify-center text-sm">
+              <div className="relative flex justify-center text-xs">
                 <span
-                  className={`px-2 ${COLOR_CLASSES.background.card} ${COLOR_CLASSES.text.tertiary}`}
+                  className="px-2"
+                  style={{ 
+                    background: '#ffffff',
+                    color: '#243b53'
+                  }}
                 >
                   Or continue with
                 </span>
@@ -316,12 +373,27 @@ const Login: React.FC = () => {
           </div>
 
           {/* Social Login Buttons */}
-          <div className="mt-6 grid grid-cols-2 gap-3">
+          <div className="mt-4 grid grid-cols-2 gap-2">
             <button
               type="button"
-              className={`w-full inline-flex justify-center py-2 px-4 ${COLOR_CLASSES.border.light} rounded-lg shadow-sm ${COLOR_CLASSES.background.card} text-sm font-medium ${COLOR_CLASSES.text.tertiary} hover:bg-teal-50 ${COLOR_CLASSES["transition-colors"]}`}
+              className="w-full inline-flex justify-center py-2 px-3 rounded-md shadow-sm text-xs font-medium transition-colors"
+              style={{
+                background: 'rgba(240, 244, 248, 0.5)',
+                border: '2px solid rgba(188, 204, 220, 0.3)',
+                color: '#243b53'
+              }}
+              onMouseEnter={(e) => {
+                (e.target as HTMLButtonElement).style.background = 'rgba(240, 244, 248, 0.7)';
+                (e.target as HTMLButtonElement).style.borderColor = 'rgba(188, 204, 220, 0.5)';
+                (e.target as HTMLButtonElement).style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                (e.target as HTMLButtonElement).style.background = 'rgba(240, 244, 248, 0.5)';
+                (e.target as HTMLButtonElement).style.borderColor = 'rgba(188, 204, 220, 0.3)';
+                (e.target as HTMLButtonElement).style.transform = 'translateY(0)';
+              }}
             >
-              <svg className="h-5 w-5" viewBox="0 0 24 24">
+              <svg className="h-4 w-4" viewBox="0 0 24 24">
                 <path
                   fill="currentColor"
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -339,28 +411,46 @@ const Login: React.FC = () => {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              <span className="ml-2">Google</span>
+              <span className="ml-1">Google</span>
             </button>
 
             <button
               type="button"
-              className={`w-full inline-flex justify-center py-2 px-4 ${COLOR_CLASSES.border.light} rounded-lg shadow-sm ${COLOR_CLASSES.background.card} text-sm font-medium ${COLOR_CLASSES.text.tertiary} hover:bg-teal-50 ${COLOR_CLASSES["transition-colors"]}`}
+              className="w-full inline-flex justify-center py-2 px-3 rounded-md shadow-sm text-xs font-medium transition-colors"
+              style={{
+                background: 'rgba(240, 244, 248, 0.5)',
+                border: '2px solid rgba(188, 204, 220, 0.3)',
+                color: '#243b53'
+              }}
+              onMouseEnter={(e) => {
+                (e.target as HTMLButtonElement).style.background = 'rgba(240, 244, 248, 0.7)';
+                (e.target as HTMLButtonElement).style.borderColor = 'rgba(188, 204, 220, 0.5)';
+                (e.target as HTMLButtonElement).style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                (e.target as HTMLButtonElement).style.background = 'rgba(240, 244, 248, 0.5)';
+                (e.target as HTMLButtonElement).style.borderColor = 'rgba(188, 204, 220, 0.3)';
+                (e.target as HTMLButtonElement).style.transform = 'translateY(0)';
+              }}
             >
-              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
               </svg>
-              <span className="ml-2">Twitter</span>
+              <span className="ml-1">Twitter</span>
             </button>
           </div>
         </div>
 
         {/* Footer */}
         <div className="text-center">
-          <p className={`text-sm ${COLOR_CLASSES.text.secondary}`}>
+          <p className="text-xs" style={{ color: '#1e3a5f' }}>
             Don't have an account?{" "}
             <button
               type="button"
-              className={`font-medium ${COLOR_CLASSES.text.info} hover:text-teal-600 ${COLOR_CLASSES["transition-colors"]}`}
+              className="font-medium transition-colors"
+              style={{ color: '#486581' }}
+                onMouseEnter={(e) => ((e.target as HTMLButtonElement).style.color = '#334e68')}
+                onMouseLeave={(e) => ((e.target as HTMLButtonElement).style.color = '#486581')}
             >
               Contact your administrator
             </button>

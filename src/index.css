@@ -14,6 +14,7 @@ body.loading {
   overflow: hidden;
 }
 
+
 /* Gradient Text Utility */
 .gradient-text {
   background: linear-gradient(135deg, #3b82f6 0%, #f97316 100%);

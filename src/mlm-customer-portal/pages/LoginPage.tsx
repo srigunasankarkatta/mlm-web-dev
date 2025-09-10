@@ -45,7 +45,7 @@ const LoginPage: React.FC = () => {
           <div className={styles.formHeader}>
             <h2 className={styles.formTitle}>Welcome Back</h2>
             <p className={styles.formSubtitle}>
-              Sign in to access your dashboard and start earning
+              Sign in to access your dashboard and start earning..
             </p>
           </div>
 
@@ -82,6 +82,16 @@ const LoginPage: React.FC = () => {
               {loginMutation.isPending ? "Signing In..." : "Sign In"}
             </button>
           </form>
+
+          {/* Register Link */}
+          <div className={styles.formFooter}>
+            <p className={styles.footerText}>
+              Don't have an account?{" "}
+              <Link to="/register" className={styles.footerLink}>
+                Create one here
+              </Link>
+            </p>
+          </div>
 
           {/* Header */}
           <div className={styles.loginHeader}>
