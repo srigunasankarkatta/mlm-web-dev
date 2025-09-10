@@ -195,7 +195,7 @@ const WithdrawalForm: React.FC<WithdrawalFormProps> = ({
             onChange={(e) => handleInputChange("wallet_type", e.target.value)}
             className={styles.formSelect}
           >
-            <option value="earning">Earning Wallet</option>
+            <option value="earning">Earning Wallet...</option>
             <option value="bonus">Bonus Wallet</option>
             <option value="reward">Reward Wallet</option>
             <option value="commission">Commission Wallet</option>

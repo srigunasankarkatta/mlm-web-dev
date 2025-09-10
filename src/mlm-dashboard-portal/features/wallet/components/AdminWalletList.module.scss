@@ -1,31 +1,68 @@
 @import "../../dashboard/styles/color-palette.scss";
 
-.walletList {
-  .tableContainer {
-    background: $white;
-    border-radius: 1rem;
-    box-shadow: 0 4px 20px rgba($primary-500, 0.08);
-    border: 1px solid rgba($primary-200, 0.2);
-    overflow: hidden;
+.walletContainer {
+  background: linear-gradient(135deg, $primary-50, $primary-100);
+  min-height: 100vh;
+  padding: 1.5rem;
+}
+
+.headerSection {
+  margin-bottom: 2rem;
+}
+
+.headerCard {
+  background: linear-gradient(135deg, $primary-600, $primary-700);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  color: $text-white;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 15px -3px rgba($primary-500, 0.1),
+    0 4px 6px -2px rgba($primary-500, 0.05);
+
+  .headerContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
   }
 
-  .agGridTable {
-    height: 600px;
+  .headerTitle {
+    font-size: 1.875rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, $primary-900, $primary-700);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    margin-bottom: 0.5rem;
   }
 
-  // Icon styles
-  .userIcon,
-  .walletIcon,
-  .actionIcon {
-    width: 16px;
-    height: 16px;
-    color: $text-secondary;
+  .headerSubtitle {
+    color: $primary-100;
+    margin-top: 0.25rem;
   }
 
-  .actionIcon {
-    width: 14px;
-    height: 14px;
+  .headerIcon {
+    width: 3rem;
+    height: 3rem;
+    background: linear-gradient(135deg, $primary-500, $primary-600);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 4px 12px rgba($primary-500, 0.3);
   }
+}
+
+.tableContainer {
+  padding: 0;
 }
 
 .filters {
@@ -38,6 +75,224 @@
   border-radius: 1rem;
   box-shadow: 0 4px 20px rgba($primary-500, 0.08);
   border: 1px solid rgba($primary-200, 0.2);
+}
+
+.agGridTable {
+  width: 100%;
+  min-width: 100%;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 4px 6px rgba($primary-500, 0.05);
+}
+
+// Global Ag-Grid styling
+:global(.ag-root-wrapper) {
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid rgba($primary-200, 0.1);
+}
+
+:global(.ag-header) {
+  background: linear-gradient(135deg, $primary-600, $primary-700);
+  color: white;
+  border-bottom: 2px solid rgba($primary-500, 0.2);
+  box-shadow: 0 2px 4px rgba($primary-500, 0.1);
+}
+
+:global(.ag-header-cell) {
+  background: transparent;
+  color: white !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 0.75rem;
+  font-size: 0.75rem;
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+:global(.ag-row) {
+  border-bottom: 1px solid rgba($primary-200, 0.05);
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba($primary-50, 0.02);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba($primary-500, 0.1);
+  }
+
+  &:nth-child(even) {
+    background: rgba($primary-50, 0.01);
+  }
+}
+
+:global(.ag-cell) {
+  border-right: 1px solid rgba($primary-200, 0.05);
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: $primary-900;
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+// Fixed action column styling
+:global(.action-cell) {
+  background: linear-gradient(
+    135deg,
+    rgba($primary-50, 0.02) 0%,
+    rgba($primary-50, 0.05) 100%
+  );
+  border-left: 2px solid rgba($primary-200, 0.1);
+  position: sticky;
+  right: 0;
+  z-index: 10;
+}
+
+:global(.ag-pinned-right-cols-container) {
+  background: linear-gradient(
+    135deg,
+    rgba($primary-50, 0.02) 0%,
+    rgba($primary-50, 0.05) 100%
+  );
+  border-left: 2px solid rgba($primary-200, 0.1);
+  box-shadow: -4px 0 8px rgba($primary-500, 0.1);
+}
+
+:global(.ag-header-cell[col-id="actions"]) {
+  background: linear-gradient(135deg, $primary-600, $primary-700);
+  border-left: 2px solid rgba(255, 255, 255, 0.2);
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+:global(.action-buttons-container) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  min-height: 3rem;
+  width: 100%;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba($primary-50, 0.02) 0%,
+      rgba($primary-50, 0.05) 100%
+    );
+    border-radius: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
+
+  button {
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    min-width: 2rem;
+    min-height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: transparent;
+    border: 1px solid transparent;
+
+    &:hover {
+      transform: translateY(-1px);
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &:focus {
+      outline: 2px solid rgba($primary-500, 0.3);
+      outline-offset: 2px;
+    }
+
+    // View button (blue)
+    &:nth-child(1) {
+      color: #3b82f6;
+      border-color: rgba(59, 130, 246, 0.2);
+
+      &:hover {
+        color: #2563eb;
+        background: rgba(59, 130, 246, 0.1);
+        border-color: rgba(59, 130, 246, 0.3);
+      }
+    }
+
+    // Edit button (green)
+    &:nth-child(2) {
+      color: #10b981;
+      border-color: rgba(16, 185, 129, 0.2);
+
+      &:hover {
+        color: #059669;
+        background: rgba(16, 185, 129, 0.1);
+        border-color: rgba(16, 185, 129, 0.3);
+      }
+    }
+  }
+}
+
+// Horizontal scrolling
+:global(.ag-body-viewport) {
+  overflow-x: auto !important;
+}
+
+:global(.ag-body-horizontal-scroll) {
+  background: linear-gradient(
+    135deg,
+    rgba($primary-50, 0.05) 0%,
+    rgba($primary-50, 0.02) 100%
+  );
+  border-top: 1px solid rgba($primary-200, 0.1);
+}
+
+:global(.ag-body-horizontal-scroll-viewport) {
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba($primary-50, 0.05);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, $primary-600, $primary-700);
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    &:hover {
+      background: linear-gradient(135deg, $primary-700, $primary-800);
+    }
+  }
 }
 
 .filterGroup {
@@ -367,41 +622,72 @@
   gap: 0.25rem;
 }
 
-.loadingContainer,
+// Loading and error states
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  background: linear-gradient(135deg, $primary-50, $primary-100);
+  border-radius: 0.75rem;
+  color: $primary-600;
+  font-size: 1.125rem;
+  font-weight: 500;
+
+  .spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 3px solid $primary-200;
+    border-top: 3px solid $primary-600;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+  }
+}
+
 .errorContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4rem 2rem;
+  min-height: 400px;
+  background: linear-gradient(135deg, $primary-50, $primary-100);
+  border-radius: 0.75rem;
   text-align: center;
-  grid-column: 1 / -1;
-
-  .spinner {
-    width: 3rem;
-    height: 3rem;
-    border: 3px solid rgba($primary-200, 0.3);
-    border-top: 3px solid $primary-500;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1rem;
-  }
+  padding: 2rem;
 
   .errorIcon {
-    font-size: 3rem;
+    font-size: 4rem;
     margin-bottom: 1rem;
   }
 
-  h3 {
+  .errorTitle {
     font-size: 1.5rem;
     font-weight: 600;
-    color: $text-primary;
-    margin: 0 0 0.5rem 0;
+    color: $error-600;
+    margin-bottom: 0.5rem;
   }
 
-  p {
-    color: $text-muted;
-    margin: 0;
+  .errorMessage {
+    color: $gray-600;
+    margin-bottom: 2rem;
+  }
+
+  .retryButton {
+    padding: 0.75rem 1.5rem;
+    background: $primary-600;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $primary-700;
+      transform: translateY(-1px);
+    }
   }
 }
 

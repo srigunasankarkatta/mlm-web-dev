@@ -19,7 +19,7 @@ const WalletCard: React.FC<WalletCardProps> = ({
   className = "",
 }) => {
   const { formatCurrency, getWalletIcon, getWalletColor } = useWalletUtils();
-
+console.log("wallet", wallet);
   const handleClick = () => {
     if (onClick) {
       onClick();
@@ -56,7 +56,7 @@ const WalletCard: React.FC<WalletCardProps> = ({
           {formatCurrency(wallet.balance)}
         </div>
         <div className={styles.availableBalance}>
-          Available: {formatCurrency(wallet.available_balance)}
+          Available: {formatCurrency(wallet.balance)}
         </div>
       </div>
 

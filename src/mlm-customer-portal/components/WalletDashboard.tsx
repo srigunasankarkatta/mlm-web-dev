@@ -100,48 +100,9 @@ const WalletDashboard: React.FC<WalletDashboardProps> = ({
     );
   }
 
-  const wallets = walletBalance.data?.wallets || {
-    earning: {
-      display_name: "Earning",
-      balance: "0.00",
-      available_balance: "0.00",
-      withdrawal_enabled: true,
-      icon: "dollar-sign",
-      color: "green",
-    },
-    bonus: {
-      display_name: "Bonus",
-      balance: "0.00",
-      available_balance: "0.00",
-      withdrawal_enabled: true,
-      icon: "gift",
-      color: "blue",
-    },
-    reward: {
-      display_name: "Reward",
-      balance: "0.00",
-      available_balance: "0.00",
-      withdrawal_enabled: true,
-      icon: "star",
-      color: "yellow",
-    },
-    holding: {
-      display_name: "Holding",
-      balance: "0.00",
-      available_balance: "0.00",
-      withdrawal_enabled: false,
-      icon: "lock",
-      color: "gray",
-    },
-    commission: {
-      display_name: "Commission",
-      balance: "0.00",
-      available_balance: "0.00",
-      withdrawal_enabled: true,
-      icon: "percent",
-      color: "purple",
-    },
-  };
+  console.log(walletBalance?.data?.wallets);
+
+  const wallets = walletBalance.data?.wallets || {};
   const stats = {
     overview: dashboardStats.data?.overview || {
       total_balance: "0.00",
@@ -157,7 +118,7 @@ const WalletDashboard: React.FC<WalletDashboardProps> = ({
       {/* Header */}
       <div className={styles.dashboardHeader}>
         <div className={styles.headerContent}>
-          <h1>Wallet Dashboard</h1>
+          <h1>Wallet Dashboard..</h1>
           <p>Manage your earnings, transactions, and withdrawals</p>
         </div>
         <div className={styles.headerActions}>
