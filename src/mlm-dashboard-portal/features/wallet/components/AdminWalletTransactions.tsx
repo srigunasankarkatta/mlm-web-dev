@@ -226,7 +226,7 @@ const AdminWalletTransactions: React.FC = () => {
               }`}
             >
               {isCredit ? "+" : "-"}
-              {formatCurrency(transaction.amount)}
+              {(transaction.amount)}
             </span>
           );
         },

@@ -153,7 +153,7 @@ const TransactionList: React.FC<TransactionListProps> = ({
                           }`}
                         >
                           {transaction.type === "credit" ? "+" : "-"}
-                          {formatCurrency(transaction.amount)}
+                          {(transaction.amount)}
                         </span>
                       </div>
                     </div>

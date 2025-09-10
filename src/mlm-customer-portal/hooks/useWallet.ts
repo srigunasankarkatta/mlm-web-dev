@@ -169,7 +169,7 @@ export const useWalletUtils = () => {
             bonus: 'gift',
             reward: 'star',
             holding: 'lock',
-            commission: 'percent',
+            commission: 'trending-up',
         };
         return icons[walletType] || 'wallet';
     };
@@ -180,7 +180,7 @@ export const useWalletUtils = () => {
             bonus: 'blue',
             reward: 'yellow',
             holding: 'gray',
-            commission: 'purple',
+            commission: 'orange',
         };
         return colors[walletType] || 'gray';
     };

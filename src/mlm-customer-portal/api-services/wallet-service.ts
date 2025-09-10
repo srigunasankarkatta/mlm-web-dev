@@ -2,9 +2,14 @@ import { defaultApiService } from './api-service-factory';
 
 // Wallet Types
 export interface WalletBalance {
+    type: string;
     display_name: string;
     balance: string;
+    pending_balance: string;
+    withdrawn_balance: string;
     available_balance: string;
+    total_balance: string;
+    is_active: boolean;
     withdrawal_enabled: boolean;
     icon: string;
     color: string;
