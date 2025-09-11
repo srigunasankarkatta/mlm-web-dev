@@ -42,16 +42,16 @@ class TopEarnersService {
      */
     async getTopEarners(params?: TopEarnersParams): Promise<TopEarnersResponse> {
         const queryParams = new URLSearchParams();
-        
+
         if (params?.limit) {
             queryParams.append('limit', params.limit.toString());
         }
-        
+
         if (params?.period) {
             queryParams.append('period', params.period);
         }
 
-        const url = queryParams.toString() 
+        const url = queryParams.toString()
             ? `${this.baseUrl}?${queryParams.toString()}`
             : this.baseUrl;
 
