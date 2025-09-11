@@ -136,12 +136,13 @@ const AllUsers: React.FC = () => {
         headerName: "User",
         width: 250,
         minWidth: 200,
+        maxWidth: 300,
         cellRenderer: (params: any) => {
           return <UserAvatarCell value={params.data.name} data={params.data} />;
         },
         sortable: false,
         filter: false,
-        resizable: false,
+        resizable: true,
         pinned: "left",
       },
       {
@@ -149,6 +150,7 @@ const AllUsers: React.FC = () => {
         headerName: "Email",
         flex: 1,
         minWidth: 200,
+        maxWidth: 300,
         cellRenderer: (params: any) => {
           const user = params.data;
           return (
@@ -161,12 +163,14 @@ const AllUsers: React.FC = () => {
             </div>
           );
         },
+        resizable: true,
       },
       {
         field: "referral_code",
         headerName: "Referral Code",
         width: 150,
         minWidth: 120,
+        maxWidth: 180,
         cellRenderer: (params: any) => {
           const code = params.value;
           return (
@@ -175,12 +179,14 @@ const AllUsers: React.FC = () => {
             </span>
           );
         },
+        resizable: true,
       },
       {
         field: "sponsor",
         headerName: "Sponsor",
         width: 200,
         minWidth: 150,
+        maxWidth: 250,
         cellRenderer: (params: any) => {
           const sponsor = params.value;
           if (!sponsor) {
@@ -198,12 +204,14 @@ const AllUsers: React.FC = () => {
             </div>
           );
         },
+        resizable: true,
       },
       {
         field: "package",
         headerName: "Package",
         width: 160,
         minWidth: 120,
+        maxWidth: 200,
         cellRenderer: (params: any) => {
           const pkg = params.value;
           if (!pkg) {
@@ -216,12 +224,14 @@ const AllUsers: React.FC = () => {
             </div>
           );
         },
+        resizable: true,
       },
       {
         field: "roles",
         headerName: "Role",
         width: 120,
         minWidth: 100,
+        maxWidth: 150,
         cellRenderer: (params: any) => {
           const roles = params.value;
           if (!roles || roles.length === 0) {
@@ -233,24 +243,28 @@ const AllUsers: React.FC = () => {
             </span>
           );
         },
+        resizable: true,
       },
       {
         field: "directs_count",
         headerName: "Directs",
         width: 100,
         minWidth: 80,
+        maxWidth: 120,
         cellRenderer: (params: any) => {
           const count = params.value || 0;
           return (
             <span className="text-sm font-medium text-gray-900">{count}</span>
           );
         },
+        resizable: true,
       },
       {
         field: "total_income",
         headerName: "Income",
         width: 120,
         minWidth: 100,
+        maxWidth: 150,
         cellRenderer: (params: any) => {
           const income = params.value || "0.00";
           return (
@@ -259,12 +273,14 @@ const AllUsers: React.FC = () => {
             </span>
           );
         },
+        resizable: true,
       },
       {
         field: "created_at",
         headerName: "Joined",
         width: 140,
         minWidth: 120,
+        maxWidth: 180,
         cellRenderer: (params: any) => {
           const date = new Date(params.value);
           return (
@@ -273,12 +289,14 @@ const AllUsers: React.FC = () => {
             </span>
           );
         },
+        resizable: true,
       },
       {
         field: "actions",
         headerName: "Actions",
         width: 180,
         minWidth: 160,
+        maxWidth: 200,
         pinned: "right",
         cellRenderer: (params: any) => {
           const user = params.data;
@@ -399,6 +417,15 @@ const AllUsers: React.FC = () => {
                 alwaysShowHorizontalScroll: true,
                 suppressColumnVirtualisation: false,
                 suppressRowVirtualisation: false,
+                headerHeight: 56,
+                rowHeight: 64,
+                suppressRowClickSelection: true,
+                suppressRowTransform: false,
+                suppressMenuHide: false,
+                suppressContextMenu: false,
+                suppressClipboardPaste: false,
+                suppressCopyRowsToClipboard: false,
+                suppressCopySingleCellRanges: false,
               }}
             />
           </div>
