@@ -1,88 +1,88 @@
-// Navy Blue Color Palette
-// Based on the main color palette
+// Modern Blue Color Palette
+// Professional and vibrant blue theme
 
-// Primary Colors - Navy Blue Palette
-$primary-50: #f0f4f8; // Very light navy
-$primary-100: #d9e2ec; // Light navy
-$primary-200: #bcccdc; // Medium light navy
-$primary-300: #9fb3c8; // Medium navy
-$primary-400: #829ab1; // Medium dark navy
-$primary-500: #486581; // Primary navy
-$primary-600: #334e68; // Dark navy
-$primary-700: #243b53; // Darker navy
-$primary-800: #1a365d; // Very dark navy
-$primary-900: #0f243e; // Darkest navy
+// Primary Colors - Modern Blue Palette
+$primary-50: #eff6ff; // Very light blue
+$primary-100: #dbeafe; // Light blue
+$primary-200: #bfdbfe; // Medium light blue
+$primary-300: #93c5fd; // Medium blue
+$primary-400: #60a5fa; // Medium dark blue
+$primary-500: #3b82f6; // Primary blue (main brand color)
+$primary-600: #2563eb; // Dark blue
+$primary-700: #1d4ed8; // Darker blue
+$primary-800: #1e40af; // Very dark blue
+$primary-900: #1e3a8a; // Darkest blue
 
-// Secondary Colors - Deep Navy Blue Palette
-$secondary-50: #e8f0f7; // Very light deep navy
-$secondary-100: #c7d6e3; // Light deep navy
-$secondary-200: #a3b8cc; // Medium light deep navy
-$secondary-300: #7d9bb5; // Medium deep navy
-$secondary-400: #5a7a9e; // Medium dark deep navy
-$secondary-500: #2c5282; // Secondary deep navy
-$secondary-600: #2a4a7c; // Dark deep navy
-$secondary-700: #1e3a5f; // Darker deep navy
-$secondary-800: #1a2d4a; // Very dark deep navy (main sidebar color)
-$secondary-900: #0f1f35; // Darkest deep navy
+// Secondary Colors - Deep Blue Palette
+$secondary-50: #f0f9ff; // Very light deep blue
+$secondary-100: #e0f2fe; // Light deep blue
+$secondary-200: #bae6fd; // Medium light deep blue
+$secondary-300: #7dd3fc; // Medium deep blue
+$secondary-400: #38bdf8; // Medium dark deep blue
+$secondary-500: #0ea5e9; // Secondary deep blue
+$secondary-600: #0284c7; // Dark deep blue
+$secondary-700: #0369a1; // Darker deep blue
+$secondary-800: #075985; // Very dark deep blue (main sidebar color)
+$secondary-900: #0c4a6e; // Darkest deep blue
 
-// Accent Colors (Complementary)
-$accent-50: #f0f4f8; // Very light navy
-$accent-100: #d9e2ec; // Light navy
-$accent-200: #bcccdc; // Medium light navy
-$accent-300: #9fb3c8; // Medium navy
-$accent-400: #829ab1; // Medium dark navy
-$accent-500: #486581; // Accent navy
-$accent-600: #334e68; // Dark navy
-$accent-700: #243b53; // Darker navy
-$accent-800: #1a365d; // Very dark navy
-$accent-900: #0f243e; // Darkest navy
+// Accent Colors - Electric Blue Palette
+$accent-50: #f0f9ff; // Very light electric blue
+$accent-100: #e0f2fe; // Light electric blue
+$accent-200: #bae6fd; // Medium light electric blue
+$accent-300: #7dd3fc; // Medium electric blue
+$accent-400: #38bdf8; // Medium dark electric blue
+$accent-500: #0ea5e9; // Accent electric blue
+$accent-600: #0284c7; // Dark electric blue
+$accent-700: #0369a1; // Darker electric blue
+$accent-800: #075985; // Very dark electric blue
+$accent-900: #0c4a6e; // Darkest electric blue
 
 // Background Colors
-$bg-primary: #f0f4f8; // Very light navy background
-$bg-secondary: #e8f0f7; // Light navy background
-$bg-tertiary: #d9e2ec; // Medium light navy background
-$bg-dark: #0f243e; // Very dark navy background
-$background-light: #f0f4f8;
+$bg-primary: #eff6ff; // Very light blue background
+$bg-secondary: #f0f9ff; // Light blue background
+$bg-tertiary: #e0f2fe; // Medium light blue background
+$bg-dark: #0c4a6e; // Very dark blue background
+$background-light: #eff6ff;
 
 // Text Colors
-$text-primary: #0f243e; // Darkest navy for primary text
-$text-secondary: #1e3a5f; // Darker navy for secondary text
-$text-tertiary: #243b53;
-$text-light: #f0f4f8; // Very light navy for light text
+$text-primary: #0c4a6e; // Darkest blue for primary text
+$text-secondary: #075985; // Darker blue for secondary text
+$text-tertiary: #0369a1;
+$text-light: #eff6ff; // Very light blue for light text
 $text-white: #ffffff; // Pure white
-$text-muted: #7d9bb5; // Medium navy for muted text
+$text-muted: #60a5fa; // Medium blue for muted text
 
 // Border Colors
-$border-light: #d9e2ec; // Light navy borders
-$border-medium: #bcccdc; // Medium navy borders
-$border-dark: #9fb3c8; // Dark navy borders
-$border-primary: #486581; // Primary navy borders
+$border-light: #bfdbfe; // Light blue borders
+$border-medium: #93c5fd; // Medium blue borders
+$border-dark: #60a5fa; // Dark blue borders
+$border-primary: #3b82f6; // Primary blue borders
 $error-500: #c72522;
 $error-600: #c72522;
 $error-700: #c72522;
 
-$success-50: #f0f4f8;
-$success-100: #d9e2ec;
-$success-200: #bcccdc;
-$success-300: #9fb3c8;
-$success-400: #829ab1;
-$success-500: #486581;
-$success-600: #334e68;
-$success-700: #243b53;
-$success-800: #1a365d;
-$success-900: #0f243e;
+$success-50: #f0fdf4;
+$success-100: #dcfce7;
+$success-200: #bbf7d0;
+$success-300: #86efac;
+$success-400: #4ade80;
+$success-500: #22c55e;
+$success-600: #16a34a;
+$success-700: #15803d;
+$success-800: #166534;
+$success-900: #14532d;
 
 // Warning Colors
-$warning-50: #f0f4f8;
-$warning-100: #d9e2ec;
-$warning-200: #bcccdc;
-$warning-300: #9fb3c8;
-$warning-400: #829ab1;
-$warning-500: #486581;
-$warning-600: #334e68;
-$warning-700: #243b53;
-$warning-800: #1a365d;
-$warning-900: #0f243e;
+$warning-50: #fffbeb;
+$warning-100: #fef3c7;
+$warning-200: #fde68a;
+$warning-300: #fcd34d;
+$warning-400: #fbbf24;
+$warning-500: #f59e0b;
+$warning-600: #d97706;
+$warning-700: #b45309;
+$warning-800: #92400e;
+$warning-900: #78350f;
 
 // Error Colors
 $error-50: #fef2f2;
@@ -121,22 +121,22 @@ $gray-800: #1e293b;
 $gray-900: #0f172a;
 
 // Shadow Colors
-$shadow-light: rgba(15, 36, 62, 0.1); // Light navy shadow
-$shadow-medium: rgba(15, 36, 62, 0.2); // Medium navy shadow
-$shadow-dark: rgba(15, 36, 62, 0.4); // Dark navy shadow
+$shadow-light: rgba(59, 130, 246, 0.1); // Light blue shadow
+$shadow-medium: rgba(59, 130, 246, 0.2); // Medium blue shadow
+$shadow-dark: rgba(59, 130, 246, 0.4); // Dark blue shadow
 
 // Status Colors
-$success: #486581; // Primary navy for success
-$warning: #bcccdc; // Medium light navy for warning
-$error: #d9e2ec; // Light navy for error (soft)
-$info: #9fb3c8; // Medium navy for info
+$success: #22c55e; // Green for success
+$warning: #f59e0b; // Orange for warning
+$error: #ef4444; // Red for error
+$info: #3b82f6; // Blue for info
 
 // Gradients
 $gradient-primary: linear-gradient(135deg, $primary-500 0%, $primary-600 100%);
 $gradient-secondary: linear-gradient(
   135deg,
-  $secondary-600 0%,
-  $secondary-700 100%
+  $secondary-500 0%,
+  $secondary-600 100%
 );
 $gradient-accent: linear-gradient(135deg, $accent-500 0%, $accent-600 100%);
 $gradient-light: linear-gradient(135deg, $primary-50 0%, $primary-100 100%);
@@ -163,18 +163,18 @@ $white: #ffffff;
   background: $gradient-dark;
 }
 
-@mixin navy-shadow {
+@mixin blue-shadow {
   box-shadow: 0 4px 20px $shadow-medium;
 }
 
-@mixin navy-border {
+@mixin blue-border {
   border: 1px solid $border-medium;
 }
 
-@mixin navy-focus {
+@mixin blue-focus {
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(72, 101, 129, 0.3);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
   }
 }
 

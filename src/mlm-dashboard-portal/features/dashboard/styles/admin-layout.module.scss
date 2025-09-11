@@ -55,7 +55,6 @@
   height: 100vh;
   position: relative;
   overflow: hidden;
-  z-index: 1;
 }
 
 // Sidebar Container - Fixed width and position, full viewport height
@@ -64,13 +63,16 @@
   min-width: 280px;
   max-width: 280px;
   height: 100vh; // Full viewport height
-  @include dark-gradient;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 4px 0 20px $shadow-dark;
+  background: linear-gradient(
+    135deg,
+    $primary-800 0%,
+    $primary-900 100%
+  ); // Use new blue gradient
+  border-right: 1px solid rgba($primary-300, 0.2); // Use blue border
+  box-shadow: 4px 0 20px rgba($primary-500, 0.15); // Use blue shadow
   position: fixed; // Fixed positioning for full height
   top: 1rem; // Account for container padding
   left: 1rem; // Account for container padding
-  z-index: 100;
   overflow-y: auto;
   overflow-x: hidden;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -82,16 +84,16 @@
   }
 
   &::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba($primary-200, 0.1); // Use blue track
     border-radius: 3px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba($primary-400, 0.4); // Use blue thumb
     border-radius: 3px;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba($primary-400, 0.6); // Use blue hover
     }
   }
 }
@@ -178,7 +180,11 @@
 .admin-page-content .navbar {
   margin: 0; // Remove margins for sticky positioning
   border-radius: 12px 12px 0 0; // Rounded top corners only
-  @include dark-gradient; // Keep navbar with sidebar dark colors
+  background: linear-gradient(
+    135deg,
+    $secondary-800 0%,
+    $secondary-900 100%
+  ); // Use new blue gradient
   position: sticky; // Make navbar sticky
   top: 0;
   z-index: 1000;
@@ -318,7 +324,7 @@
     top: 0;
     left: 0;
     border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba($primary-300, 0.2);
     border-radius: 12px 12px 0 0; // Rounded top corners only
   }
 
@@ -471,7 +477,7 @@
 }
 
 .admin-sidebar-container {
-  z-index: 100;
+  z-index: 9;
 }
 
 .admin-page-content {

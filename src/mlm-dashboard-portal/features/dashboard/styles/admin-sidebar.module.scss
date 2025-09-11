@@ -4,7 +4,11 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: $gradient-dark; // Use navy dark gradient
+  background: linear-gradient(
+    135deg,
+    $primary-800 0%,
+    $primary-900 100%
+  ); // Use new blue gradient
   color: $text-white;
   overflow: hidden;
   position: relative;
@@ -25,7 +29,7 @@
     transform: translateX(-50%);
     width: 40px;
     height: 3px;
-    background: $primary-400;
+    background: $primary-400; // Use new blue accent
     border-radius: 2px;
   }
 
@@ -144,7 +148,7 @@
     left: 1.5rem;
     width: 20px;
     height: 1px;
-    background: $primary-400;
+    background: $primary-400; // Use new blue accent
     border-radius: 1px;
   }
 }
@@ -162,8 +166,8 @@
   width: 100%;
   background: linear-gradient(
     135deg,
-    rgba($primary-800, 0.9),
-    rgba($primary-900, 0.9)
+    rgba($primary-700, 0.8),
+    rgba($primary-800, 0.8)
   );
   text-align: start;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -203,14 +207,14 @@
   &:hover {
     background: linear-gradient(
       135deg,
-      rgba($primary-700, 0.95),
-      rgba($primary-800, 0.95)
+      rgba($primary-600, 0.9),
+      rgba($primary-700, 0.9)
     );
     color: $text-white;
     transform: translateX(4px);
     border-color: rgba(255, 255, 255, 0.15);
     border-left-color: $primary-400;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 15px rgba($primary-500, 0.3);
 
     &::before {
       transform: scaleY(1);
@@ -229,7 +233,7 @@
       rgba($primary-600, 0.9) 100%
     );
     color: $text-white;
-    box-shadow: 0 4px 20px rgba($primary-500, 0.3);
+    box-shadow: 0 4px 20px rgba($primary-500, 0.4);
     font-weight: 600;
     border-color: rgba($primary-400, 0.6);
     border-left-color: $primary-300;
@@ -283,7 +287,7 @@
 }
 
 .menuBadge {
-  background: $primary-400;
+  background: $primary-500; // Use primary blue for badges
   color: $text-white;
   font-size: 0.7rem;
   font-weight: 600;
@@ -550,14 +554,14 @@
   justify-content: center;
   padding: 0.875rem 1rem;
   background: linear-gradient(135deg, $bg-primary, $bg-primary);
-  color: #3333;
+  color: $text-primary;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px #051c14;
+  box-shadow: 0 2px 8px rgba($primary-500, 0.2);
   position: relative;
   overflow: hidden;
 
@@ -578,9 +582,9 @@
   }
 
   &:hover {
-    background: linear-gradient(135deg, #b91c1c, #991b1b);
+    background: linear-gradient(135deg, $error-600, $error-700);
     transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+    box-shadow: 0 4px 15px rgba($error-500, 0.4);
     border-color: rgba(255, 255, 255, 0.2);
 
     &::before {
@@ -594,7 +598,7 @@
 
   &:active {
     transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+    box-shadow: 0 2px 8px rgba($error-500, 0.3);
   }
 
   &:focus {
@@ -606,11 +610,11 @@
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
-    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
+    box-shadow: 0 2px 8px rgba($error-500, 0.2);
 
     &:hover {
       transform: none;
-      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      background: linear-gradient(135deg, $error-500, $error-600);
     }
   }
 }
