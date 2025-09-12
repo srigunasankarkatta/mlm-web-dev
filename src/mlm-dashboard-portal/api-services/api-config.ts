@@ -2,13 +2,13 @@
 export const API_CONFIG = {
     // Base URLs for different environments
     baseURL: {
-        development: import.meta.env.VITE_API_BASE_URL || 'http://192.168.1.16:8000/api',
+        development: import.meta.env.VITE_API_BASE_URL || 'https://trust.fylo.life/api',
         staging: import.meta.env.VITE_API_BASE_URL || 'https://staging-api.mlmportal.com/api',
-        production: import.meta.env.VITE_API_BASE_URL || 'https://api.mlmportal.com/api',
+        production: import.meta.env.VITE_API_BASE_URL || 'https://trust.fylo.life/api',
     },
 
     // Admin API Base URL
-    adminBaseURL: import.meta.env.VITE_ADMIN_API_BASE_URL || 'http://192.168.1.16:8000/api',
+    adminBaseURL: import.meta.env.VITE_ADMIN_API_BASE_URL || 'https://trust.fylo.life/api',
 
     // API endpoints
     endpoints: {

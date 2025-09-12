@@ -8,7 +8,7 @@
     "dev:development": "vite --mode development",
     "dev:staging": "vite --mode staging",
     "dev:production": "vite --mode production",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "build:development": "tsc -b && vite build --mode development",
     "build:staging": "tsc -b && vite build --mode staging",
     "build:production": "tsc -b && vite build --mode production",

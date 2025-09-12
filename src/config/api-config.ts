@@ -2,7 +2,7 @@
 export const API_CONFIG = {
     // Base URLs for different environments
     baseURL: {
-        development: 'http://192.168.1.16:8000/api',
+        development: 'https://trust.fylo.life/api',
         staging: 'https://staging-api.yourapp.com/api',
         production: 'https://api.yourapp.com/api',
     },
